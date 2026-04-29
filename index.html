@@ -32,9 +32,10 @@
 
         .time-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 15px; }
         .time-item { background: white; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .status-toggle { cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; text-align: center; min-width: 80px; }
+        .status-toggle { cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; text-align: center; min-width: 90px; }
         .on { background: #d4edda; color: #155724; }
         .off { background: #f8d7da; color: #721c24; }
+        .loading { background: #eee; color: #999; cursor: wait; }
 
         #adminPanel, #loginForm { display: none; }
         footer { text-align: center; padding: 50px; font-size: 0.9rem; color: #888; }
@@ -88,7 +89,7 @@
 
         <section id="adminPanel" class="card">
             <h2>Gestión de Disponibilidad</h2>
-            <p>Selecciona una fecha para activar o desactivar horarios específicos:</p>
+            <p>Haz clic en las horas para cambiar entre <b>Disponible</b> y <b>Bloqueado</b>:</p>
             <input type="date" id="adminDate" onchange="cargarHorasAdmin()">
 
             <div id="adminTimeSettings" style="display:none;">
@@ -108,31 +109,27 @@
     <footer>&copy; 2026 EcoSpark LLC. Todos los derechos reservados.</footer>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwkKbB4yRwEnsmRssjkcRuWBp97IHUnhNdhf_J8wwPo3vB4BnUj2YfmGKR-bE45WrH2kA/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsAcfd1bZLhQN_bQ4f9elYFEz6BgRq-jg7oP7P2NHOTby_qSkZnQMebINEng99UTtM8g/exec";
         let bloqueosReales = [];
         const horasBase = ["9", "10", "11", "12"];
 
-        // Al cargar la página, traemos los datos de Google Sheets
         async function fetchBaseDeDatos() {
             try {
                 const response = await fetch(SCRIPT_URL);
                 bloqueosReales = await response.json();
             } catch (e) {
-                console.log("Iniciando base de datos...");
+                console.error("Error al cargar datos:", e);
                 bloqueosReales = [];
             }
         }
 
-        // Navegación
         function showLogin() {
             document.getElementById('clientView').style.display = 'none';
             document.getElementById('loginForm').style.display = 'block';
         }
 
         function checkLogin() {
-            const u = document.getElementById('user').value;
-            const p = document.getElementById('pass').value;
-            if(u === "kamalishsantos" && p === "Kamalish22_") {
+            if(document.getElementById('user').value === "kamalishsantos" && document.getElementById('pass').value === "Kamalish22_") {
                 document.getElementById('loginForm').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
                 document.getElementById('navBtn').style.display = 'none';
@@ -141,14 +138,14 @@
 
         // --- LÓGICA ADMIN ---
         async function cargarHorasAdmin() {
-            await fetchBaseDeDatos();
             const fecha = document.getElementById('adminDate').value;
             if(!fecha) return;
+            
             document.getElementById('adminTimeSettings').style.display = 'block';
+            await fetchBaseDeDatos(); // Refrescamos datos antes de mostrar
             
             horasBase.forEach(h => {
                 const btn = document.getElementById('s-' + h);
-                // Buscamos si existe una fila en la hoja de cálculo con esa fecha y hora como BLOQUEADO
                 const estaBloqueado = bloqueosReales.some(row => row[1] == fecha && row[2] == h);
                 
                 if(estaBloqueado) {
@@ -165,23 +162,40 @@
             const fecha = document.getElementById('adminDate').value;
             if(!fecha) return;
 
-            // Enviamos el cambio a Google Sheets
+            const btn = document.getElementById('s-' + hora);
+            const textoOriginal = btn.innerText;
+            btn.innerText = "GUA...";
+            btn.className = "status-toggle loading";
+
             try {
+                // Enviamos los datos con no-cors para evitar bloqueos del navegador
                 await fetch(SCRIPT_URL, {
                     method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action: "bloquear", fecha: fecha, hora: hora })
                 });
-                await cargarHorasAdmin(); // Refrescar vista
+                
+                // Esperamos un segundo para que la hoja se actualice antes de pedir los datos de nuevo
+                setTimeout(async () => {
+                    await cargarHorasAdmin();
+                }, 1500);
+
             } catch (e) {
-                alert("Error al guardar en la nube");
+                console.error("Error:", e);
+                alert("Error de conexión");
+                btn.innerText = textoOriginal;
+                btn.className = textoOriginal === "BLOQUEADO" ? "status-toggle off" : "status-toggle on";
             }
         }
 
         // --- LÓGICA CLIENTE ---
         async function actualizarHorasDisponibles() {
-            await fetchBaseDeDatos();
             const fecha = document.getElementById('cDate').value;
             const select = document.getElementById('cTime');
+            select.innerHTML = "<option>Cargando disponibilidad...</option>";
+
+            await fetchBaseDeDatos();
             select.innerHTML = "";
 
             if(!fecha) return;
@@ -210,8 +224,8 @@
         function realizarReserva(e) {
             e.preventDefault();
             const h = document.getElementById('cTime').value;
-            if(h.includes("Sin disponibilidad")) {
-                alert("Por favor selecciona otra fecha.");
+            if(!h || h.includes("Sin disponibilidad") || h.includes("selecciona")) {
+                alert("Por favor selecciona un horario válido.");
             } else {
                 alert("¡Reserva solicitada para las " + h + "! Nos comunicaremos para confirmar.");
             }
