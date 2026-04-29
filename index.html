@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoSpark LLC - Servicios de Limpieza</title>
+    <style>
+        :root {
+            --primary-green: #345e3d;
+            --light-green: #e9f5ec;
+            --accent-green: #4a7c59;
+            --white: #ffffff;
+            --text-dark: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--white);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .logo-section img {
+            max-width: 150px;
+        }
+
+        .hero-text h1 {
+            color: var(--primary-green);
+            font-size: 2.5rem;
+            margin: 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--accent-green);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .service-item {
+            background-color: var(--light-green);
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            border-left: 5px solid var(--primary-green);
+        }
+
+        .service-item span {
+            font-weight: bold;
+            color: var(--primary-green);
+        }
+
+        .booking-section {
+            background-color: var(--light-green);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .booking-section h2 {
+            text-align: center;
+            color: var(--primary-green);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--primary-green);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .time-slots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .time-slot {
+            background-color: var(--white);
+            border: 2px solid var(--primary-green);
+            color: var(--primary-green);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .time-slot:hover {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            background-color: var(--primary-green);
+            color: var(--white);
+            border: none;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 30px;
+            text-transform: uppercase;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #26462d;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-section">
+            <!-- Espacio para el logo -->
+            <div style="font-size: 2rem; font-weight: bold; color: var(--primary-green);">EcoSpark LLC</div>
+        </div>
+        <div class="hero-text">
+            <h1>Servicios de Limpieza</h1>
+            <p>Transforma tu espacio con un servicio de calidad</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="services-grid">
+            <div class="service-item"><span>✓</span> &nbsp; Limpieza Básica/Profunda</div>
+            <div class="service-item"><span>✓</span> &nbsp; Limpieza Comercial</div>
+            <div class="service-item"><span>✓</span> &nbsp; Limpieza Post Remodelación</div>
+            <div class="service-item"><span>✓</span> &nbsp; Limpieza de Airbnb's</div>
+            <div class="service-item"><span>✓</span> &nbsp; Limpieza de Ventanas</div>
+            <div class="service-item"><span>✓</span> &nbsp; Servicios de Organización</div>
+            <div class="service-item"><span>✓</span> &nbsp; Limpieza de Oficinas</div>
+            <div class="service-item) service-item"><span>✓</span> &nbsp; Limpieza para Mudanzas</div>
+        </div>
+
+        <section class="booking-section">
+            <h2>Reservas</h2>
+            <form>
+                <div class="form-group">
+                    <label>PASO 1: SELECCIONE FECHA</label>
+                    <input type="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label>PASO 2: SELECCIONE HORARIO</label>
+                    <div class="time-slots">
+                        <div class="time-slot">9:00 AM</div>
+                        <div class="time-slot">11:30 AM</div>
+                        <div class="time-slot">2:00 PM</div>
+                        <div class="time-slot">4:30 PM</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>PASO 3: SELECCIONE TIPO DE SERVICIO</label>
+                    <select required>
+                        <option value="">Seleccione un servicio...</option>
+                        <option>Limpieza Básica/Profunda</option>
+                        <option>Limpieza Comercial</option>
+                        <option>Limpieza Post Remodelación</option>
+                        <option>Limpieza de Airbnb's</option>
+                        <option>Limpieza de Ventanas</option>
+                        <option>Servicios de Organización</option>
+                        <option>Limpieza de Oficinas</option>
+                        <option>Limpieza para Mudanzas</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-submit">¡RESERVA YA!</button>
+            </form>
+        </section>
+    </div>
+
+    <footer>
+        &copy; 2026 EcoSpark LLC. Todos los derechos reservados.
+    </footer>
+
+</body>
+</html>
