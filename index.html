@@ -63,7 +63,7 @@
                     
                     <label>Horarios Disponibles</label>
                     <select id="cTime" required>
-                        <option value="">Primero selecciona una fecha...</option>
+                        <option value="">Selecciona una fecha...</option>
                     </select>
 
                     <label>Tipo de Servicio</label>
@@ -89,7 +89,7 @@
 
         <section id="adminPanel" class="card">
             <h2>Gestión de Disponibilidad</h2>
-            <p>Haz clic en las horas para cambiar entre <b>Disponible</b> y <b>Bloqueado</b>:</p>
+            <p>Selecciona fecha y toca la hora para Bloquear/Desbloquear:</p>
             <input type="date" id="adminDate" onchange="cargarHorasAdmin()">
 
             <div id="adminTimeSettings" style="display:none;">
@@ -103,23 +103,25 @@
 
             <button class="btn" style="background:#666; color:white; margin-top:40px;" onclick="location.reload()">Cerrar Sesión</button>
         </section>
-
     </div>
 
-    <footer>&copy; 2026 EcoSpark LLC. Todos los derechos reservados.</footer>
+    <footer>&copy; 2026 EcoSpark LLC. Made in PR</footer>
 
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsAcfd1bZLhQN_bQ4f9elYFEz6BgRq-jg7oP7P2NHOTby_qSkZnQMebINEng99UTtM8g/exec";
         let bloqueosReales = [];
         const horasBase = ["9", "10", "11", "12"];
 
+        // Función para limpiar caché y traer datos nuevos
         async function fetchBaseDeDatos() {
             try {
-                const response = await fetch(SCRIPT_URL);
+                // Añadimos un parámetro aleatorio para evitar que el navegador guarde una versión vieja
+                const response = await fetch(SCRIPT_URL + "?t=" + new Date().getTime());
                 bloqueosReales = await response.json();
+                return bloqueosReales;
             } catch (e) {
-                console.error("Error al cargar datos:", e);
-                bloqueosReales = [];
+                console.error("Error cargando base de datos", e);
+                return [];
             }
         }
 
@@ -136,17 +138,17 @@
             } else { alert("Credenciales incorrectas"); }
         }
 
-        // --- LÓGICA ADMIN ---
         async function cargarHorasAdmin() {
             const fecha = document.getElementById('adminDate').value;
             if(!fecha) return;
             
             document.getElementById('adminTimeSettings').style.display = 'block';
-            await fetchBaseDeDatos(); // Refrescamos datos antes de mostrar
+            await fetchBaseDeDatos();
             
             horasBase.forEach(h => {
                 const btn = document.getElementById('s-' + h);
-                const estaBloqueado = bloqueosReales.some(row => row[1] == fecha && row[2] == h);
+                // Comparamos fecha y hora (asegurándonos que sean strings)
+                const estaBloqueado = bloqueosReales.some(row => String(row[1]) === String(fecha) && String(row[2]) === String(h));
                 
                 if(estaBloqueado) {
                     btn.innerText = "BLOQUEADO";
@@ -163,46 +165,44 @@
             if(!fecha) return;
 
             const btn = document.getElementById('s-' + hora);
-            const textoOriginal = btn.innerText;
-            btn.innerText = "GUA...";
-            btn.className = "status-toggle loading";
+            const esBloqueoActual = btn.innerText === "BLOQUEADO";
+            
+            // Cambio visual inmediato (Optimismo)
+            btn.innerText = esBloqueoActual ? "DISPONIBLE" : "BLOQUEADO";
+            btn.className = esBloqueoActual ? "status-toggle on" : "status-toggle off";
 
             try {
-                // Enviamos los datos con no-cors para evitar bloqueos del navegador
                 await fetch(SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
+                    cache: 'no-cache',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action: "bloquear", fecha: fecha, hora: hora })
                 });
                 
-                // Esperamos un segundo para que la hoja se actualice antes de pedir los datos de nuevo
+                // Refrescamos la base de datos interna después de un breve delay
                 setTimeout(async () => {
-                    await cargarHorasAdmin();
-                }, 1500);
+                    await fetchBaseDeDatos();
+                }, 2000);
 
             } catch (e) {
-                console.error("Error:", e);
-                alert("Error de conexión");
-                btn.innerText = textoOriginal;
-                btn.className = textoOriginal === "BLOQUEADO" ? "status-toggle off" : "status-toggle on";
+                alert("Error al conectar con el servidor.");
+                cargarHorasAdmin(); // Revertir al estado real si falla
             }
         }
 
-        // --- LÓGICA CLIENTE ---
         async function actualizarHorasDisponibles() {
             const fecha = document.getElementById('cDate').value;
             const select = document.getElementById('cTime');
-            select.innerHTML = "<option>Cargando disponibilidad...</option>";
+            if(!fecha) return;
 
+            select.innerHTML = "<option>Verificando horarios...</option>";
             await fetchBaseDeDatos();
             select.innerHTML = "";
 
-            if(!fecha) return;
-
             let hayOpciones = false;
             horasBase.forEach(h => {
-                const estaBloqueado = bloqueosReales.some(row => row[1] == fecha && row[2] == h);
+                const estaBloqueado = bloqueosReales.some(row => String(row[1]) === String(fecha) && String(row[2]) === String(h));
                 
                 if(!estaBloqueado) {
                     const label = h === "12" ? "12:00 PM" : h.padStart(2, '0') + ":00 AM";
@@ -215,19 +215,17 @@
             });
 
             if(!hayOpciones) {
-                const op = document.createElement("option");
-                op.text = "Sin disponibilidad para este día";
-                select.appendChild(op);
+                select.innerHTML = "<option>Sin disponibilidad para hoy</option>";
             }
         }
 
         function realizarReserva(e) {
             e.preventDefault();
             const h = document.getElementById('cTime').value;
-            if(!h || h.includes("Sin disponibilidad") || h.includes("selecciona")) {
-                alert("Por favor selecciona un horario válido.");
+            if(!h || h.includes("Sin disponibilidad") || h.includes("Verificando")) {
+                alert("Por favor selecciona un horario disponible.");
             } else {
-                alert("¡Reserva solicitada para las " + h + "! Nos comunicaremos para confirmar.");
+                alert("Reserva solicitada para las " + h + ". Nos contactaremos pronto.");
             }
         }
 
