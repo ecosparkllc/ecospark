@@ -3,290 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoSpark LLC - Servicios de Limpieza</title>
+    <title>EcoSpark LLC - Gestión de Reservas</title>
     <style>
         :root {
             --primary-green: #345e3d;
             --light-green: #e9f5ec;
             --accent-green: #4a7c59;
             --white: #ffffff;
-            --dark-text: #2c3e50;
             --error-red: #d9534f;
         }
 
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--white);
-            color: var(--dark-text);
-            line-height: 1.6;
-        }
-
-        /* Utilidades */
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .btn { padding: 12px 25px; border-radius: 30px; border: none; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; width: 100%; font-size: 1rem; }
-        .btn-primary { background-color: var(--primary-green); color: white; }
-        .btn-primary:hover { background-color: #26462d; }
-        .btn-outline { background: transparent; border: 2px solid var(--primary-green); color: var(--primary-green); width: auto; font-size: 0.8rem; padding: 5px 15px; }
-
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--white); color: #333; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        
         /* Header */
-        header {
-            text-align: center;
-            padding: 80px 20px;
-            background: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), 
-                        url('https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=1200&q=80');
-            background-size: cover;
-            background-position: center;
-        }
+        header { text-align: center; padding: 50px 20px; background: var(--light-green); border-radius: 0 0 40px 40px; border-bottom: 4px solid var(--primary-green); }
+        h1 { color: var(--primary-green); margin: 0; text-transform: uppercase; letter-spacing: 2px; }
 
-        .logo-placeholder { font-size: 2.5rem; font-weight: 900; color: var(--primary-green); letter-spacing: -1px; }
-        .hero-title { font-size: 3rem; color: var(--primary-green); margin: 10px 0; text-transform: uppercase; }
-        .hero-subtitle { font-size: 1.2rem; color: var(--accent-green); font-style: italic; }
-
-        /* Servicios */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .service-card {
-            background-color: var(--light-green);
-            padding: 20px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            border-left: 6px solid var(--primary-green);
-            font-weight: 600;
-        }
-
-        .service-card span { margin-right: 10px; color: var(--primary-green); font-size: 1.2rem; }
-
-        /* Secciones de Contenido */
-        .main-card {
-            background: var(--light-green);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            margin-bottom: 40px;
-        }
-
-        h2 { text-align: center; color: var(--primary-green); margin-bottom: 30px; text-transform: uppercase; }
-
-        /* Formulario */
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--primary-green); font-size: 0.9rem; }
-        input, select { width: 100%; padding: 14px; border: 1px solid #ccc; border-radius: 10px; font-size: 1rem; box-sizing: border-box; }
+        .card { background: var(--light-green); padding: 30px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-top: 20px; }
         
-        .error-msg {
-            display: none;
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-            border: 1px solid #f5c6cb;
-        }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--primary-green); }
+        input, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 20px; box-sizing: border-box; font-size: 1rem; }
 
-        /* Admin Panels */
-        #adminArea, #loginForm { display: none; }
-        .admin-nav { display: flex; justify-content: flex-end; padding: 10px; }
-        
-        .blocked-list { list-style: none; padding: 0; }
-        .blocked-list li { 
-            background: white; padding: 15px; border-radius: 8px; 
-            margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
-            border: 1px solid #eee;
-        }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 30px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
+        .btn-reserve { background: var(--primary-green); color: white; }
+        .btn-admin-access { background: none; border: 1px solid var(--primary-green); color: var(--primary-green); width: auto; padding: 5px 15px; font-size: 0.8rem; }
 
-        footer { text-align: center; padding: 40px; color: #888; font-size: 0.9rem; }
+        /* Estilos de Disponibilidad en Admin */
+        .time-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .time-item { background: white; padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #ddd; }
+        .status-toggle { cursor: pointer; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; font-weight: bold; }
+        .on { background: #c3e6cb; color: #155724; }
+        .off { background: #f5c6cb; color: #721c24; }
+
+        #adminPanel, #loginForm { display: none; }
+        footer { text-align: center; padding: 40px; font-size: 0.8rem; color: #777; }
     </style>
 </head>
 <body>
 
-    <div class="admin-nav container">
-        <button class="btn btn-outline" id="toggleAdmin" onclick="showLogin()">Acceso Admin</button>
+    <div class="container" style="text-align: right;">
+        <button class="btn btn-admin-access" id="navBtn" onclick="showLogin()">Acceso Admin</button>
     </div>
 
     <header>
-        <div class="logo-placeholder">EcoSpark LLC</div>
-        <h1 class="hero-title">Servicios de Limpieza</h1>
-        <p class="hero-subtitle">Transforma tu espacio con un servicio de calidad</p>
+        <h1>EcoSpark LLC</h1>
+        <p>Servicios de Limpieza | Made in PR</p>
     </header>
 
     <div class="container">
         
-        <section id="servicesView">
-            <div class="services-grid">
-                <div class="service-card"><span>✓</span> Limpieza Básica/Profunda</div>
-                <div class="service-card"><span>✓</span> Limpieza Comercial</div>
-                <div class="service-card"><span>✓</span> Limpieza Post Remodelación</div>
-                <div class="service-card"><span>✓</span> Limpieza de Airbnb's</div>
-                <div class="service-card"><span>✓</span> Limpieza de Ventanas</div>
-                <div class="service-card"><span>✓</span> Servicios de Organización</div>
-                <div class="service-card"><span>✓</span> Limpieza de Oficinas</div>
-                <div class="service-card"><span>✓</span> Limpieza para Mudanzas</div>
-            </div>
+        <section id="clientView">
+            <div class="card">
+                <h2>Reserva tu Espacio</h2>
+                <form onsubmit="realizarReserva(event)">
+                    <label>Fecha</label>
+                    <input type="date" id="cDate" required onchange="actualizarHorasDisponibles()">
+                    
+                    <label>Horario Disponible</label>
+                    <select id="cTime" required>
+                        </select>
 
-            <div class="main-card" id="bookingFormSection">
-                <h2>Reservar Cita</h2>
-                <div id="noAvailabilityMsg" class="error-msg">
-                    Lo sentimos, no hay disponibilidad para la fecha seleccionada. Por favor intente con otro día.
-                </div>
-                <form onsubmit="processBooking(event)">
-                    <div class="form-group">
-                        <label>PASO 1: SELECCIONE FECHA</label>
-                        <input type="date" id="reservaFecha" required onchange="hideError()">
-                    </div>
-                    <div class="form-group">
-                        <label>PASO 2: SELECCIONE HORARIO</label>
-                        <select id="reservaHora">
-                            <option>09:00 AM</option>
-                            <option>11:30 AM</option>
-                            <option>02:00 PM</option>
-                            <option>04:30 PM</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>PASO 3: TIPO DE SERVICIO</label>
-                        <select id="reservaServicio">
-                            <option>Limpieza de Airbnb's</option>
-                            <option>Limpieza Comercial</option>
-                            <option>Limpieza Profunda</option>
-                            <option>Limpieza de Oficinas</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">¡RESERVA YA!</button>
+                    <label>Servicio</label>
+                    <select>
+                        <option>Limpieza Básica/Profunda</option>
+                        <option>Limpieza Comercial</option>
+                        <option>Limpieza Airbnb</option>
+                    </select>
+
+                    <button type="submit" class="btn btn-reserve">¡RESERVA YA!</button>
                 </form>
             </div>
         </section>
 
-        <section id="loginForm" class="main-card">
-            <h2>Ingreso Administrativo</h2>
-            <div class="form-group">
-                <label>Usuario</label>
-                <input type="text" id="adminUser">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="adminPass">
-            </div>
-            <button class="btn btn-primary" onclick="handleLogin()">Entrar al Panel</button>
-            <p style="text-align: center; margin-top: 15px;">
-                <a href="#" onclick="cancelLogin()" style="color: var(--accent-green);">Cancelar</a>
-            </p>
+        <section id="loginForm" class="card">
+            <h2>Acceso Administrativo</h2>
+            <input type="text" id="user" placeholder="Usuario">
+            <input type="password" id="pass" placeholder="Contraseña">
+            <button class="btn btn-reserve" onclick="checkLogin()">Entrar</button>
         </section>
 
-        <section id="adminArea">
-            <div class="main-card">
-                <h2>Panel de Control EcoSpark</h2>
-                <p>Usa esta herramienta para bloquear fechas en las que no estarás disponible.</p>
-                
-                <div class="form-group">
-                    <label>Bloquear Nueva Fecha</label>
-                    <input type="date" id="blockDateInput">
+        <section id="adminPanel" class="card">
+            <h2>Gestión de Horarios</h2>
+            <p>Selecciona una fecha para activar o desactivar horas:</p>
+            <input type="date" id="adminDate" onchange="cargarHorasAdmin()">
+
+            <div id="adminTimeSettings" style="display:none;">
+                <div class="time-grid">
+                    <div class="time-item">09:00 AM <span id="s-9" class="status-toggle on" onclick="toggleTime('9')">DISPONIBLE</span></div>
+                    <div class="time-item">10:00 AM <span id="s-10" class="status-toggle on" onclick="toggleTime('10')">DISPONIBLE</span></div>
+                    <div class="time-item">11:00 AM <span id="s-11" class="status-toggle on" onclick="toggleTime('11')">DISPONIBLE</span></div>
+                    <div class="time-item">12:00 PM <span id="s-12" class="status-toggle on" onclick="toggleTime('12')">DISPONIBLE</span></div>
                 </div>
-                <button class="btn" style="background-color: var(--error-red); color: white;" onclick="addBlockDate()">Bloquear Fecha</button>
-
-                <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ccc;">
-
-                <h3>Fechas sin Disponibilidad:</h3>
-                <ul id="blockedDatesList" class="blocked-list">
-                    </ul>
-
-                <button class="btn" style="background: #666; color: white; margin-top: 20px;" onclick="doLogout()">Cerrar Sesión</button>
             </div>
+
+            <button class="btn" style="background:#666; color:white; margin-top:30px;" onclick="location.reload()">Cerrar Sesión</button>
         </section>
 
     </div>
 
-    <footer>
-        &copy; 2026 EcoSpark LLC | San Juan, Puerto Rico | Made in PR
-    </footer>
+    <footer>&copy; 2026 EcoSpark LLC. Todos los derechos reservados.</footer>
 
     <script>
-        // Array para guardar fechas bloqueadas (En memoria local)
-        let disabledDates = [];
+        // Datos de disponibilidad: { "2026-05-10": ["9", "11"] } -> significa que solo 9 y 11 están bloqueados
+        let agendaData = {}; 
+        const horasBase = ["9", "10", "11", "12"];
 
-        // Funciones de Navegación
         function showLogin() {
-            document.getElementById('servicesView').style.display = 'none';
+            document.getElementById('clientView').style.display = 'none';
             document.getElementById('loginForm').style.display = 'block';
         }
 
-        function cancelLogin() {
-            document.getElementById('servicesView').style.display = 'block';
-            document.getElementById('loginForm').style.display = 'none';
-        }
-
-        // Manejo de Login
-        function handleLogin() {
-            const user = document.getElementById('adminUser').value;
-            const pass = document.getElementById('adminPass').value;
-
-            if(user === "kamalishsantos" && pass === "Kamalish22_") {
+        function checkLogin() {
+            const u = document.getElementById('user').value;
+            const p = document.getElementById('pass').value;
+            if(u === "kamalishsantos" && p === "Kamalish22_") {
                 document.getElementById('loginForm').style.display = 'none';
-                document.getElementById('adminArea').style.display = 'block';
-                document.getElementById('toggleAdmin').style.display = 'none';
-            } else {
-                alert("Usuario o contraseña incorrectos");
-            }
+                document.getElementById('adminPanel').style.display = 'block';
+            } else { alert("Error de acceso"); }
         }
 
-        // Lógica de Bloqueo (Admin)
-        function addBlockDate() {
-            const dateVal = document.getElementById('blockDateInput').value;
-            if(!dateVal) return;
+        // --- LÓGICA ADMIN ---
+        function cargarHorasAdmin() {
+            const fecha = document.getElementById('adminDate').value;
+            if(!fecha) return;
+            document.getElementById('adminTimeSettings').style.display = 'block';
+            
+            // Si no hay datos para esa fecha, inicializamos todo como disponible
+            if(!agendaData[fecha]) agendaData[fecha] = [];
 
-            if(!disabledDates.includes(dateVal)) {
-                disabledDates.push(dateVal);
-                renderBlockedDates();
-                alert("Fecha bloqueada correctamente");
-            }
-        }
-
-        function removeDate(date) {
-            disabledDates = disabledDates.filter(d => d !== date);
-            renderBlockedDates();
-        }
-
-        function renderBlockedDates() {
-            const list = document.getElementById('blockedDatesList');
-            list.innerHTML = "";
-            disabledDates.forEach(d => {
-                list.innerHTML += `
-                    <li>
-                        <strong>${d}</strong>
-                        <button onclick="removeDate('${d}')" style="color:red; background:none; border:none; cursor:pointer; font-weight:bold;">Eliminar</button>
-                    </li>
-                `;
+            horasBase.forEach(h => {
+                const btn = document.getElementById('s-' + h);
+                if(agendaData[fecha].includes(h)) {
+                    btn.innerText = "BLOQUEADO";
+                    btn.className = "status-toggle off";
+                } else {
+                    btn.innerText = "DISPONIBLE";
+                    btn.className = "status-toggle on";
+                }
             });
         }
 
-        // Lógica de Reserva (Cliente)
-        function processBooking(e) {
-            e.preventDefault();
-            const chosenDate = document.getElementById('reservaFecha').value;
-
-            if(disabledDates.includes(chosenDate)) {
-                document.getElementById('noAvailabilityMsg').style.display = 'block';
-                window.scrollTo({ top: document.getElementById('bookingFormSection').offsetTop - 20, behavior: 'smooth' });
+        function toggleTime(hora) {
+            const fecha = document.getElementById('adminDate').value;
+            if(agendaData[fecha].includes(hora)) {
+                // Desbloquear
+                agendaData[fecha] = agendaData[fecha].filter(h => h !== hora);
             } else {
-                alert("¡Gracias! Tu solicitud de reserva para el " + chosenDate + " ha sido enviada. Nos comunicaremos pronto.");
+                // Bloquear
+                agendaData[fecha].push(hora);
+            }
+            cargarHorasAdmin();
+        }
+
+        // --- LÓGICA CLIENTE ---
+        function actualizarHorasDisponibles() {
+            const fecha = document.getElementById('cDate').value;
+            const select = document.getElementById('cTime');
+            select.innerHTML = "";
+
+            if(!fecha) return;
+
+            const bloqueados = agendaData[fecha] || [];
+            let hayOpciones = false;
+
+            horasBase.forEach(h => {
+                if(!bloqueados.includes(h)) {
+                    const label = h === "12" ? "12:00 PM" : h.padStart(2, '0') + ":00 AM";
+                    const op = document.createElement("option");
+                    op.value = label;
+                    op.text = label;
+                    select.appendChild(op);
+                    hayOpciones = true;
+                }
+            });
+
+            if(!hayOpciones) {
+                const op = document.createElement("option");
+                op.text = "No hay horarios disponibles";
+                select.appendChild(op);
             }
         }
 
-        function hideError() {
-            document.getElementById('noAvailabilityMsg').style.display = 'none';
-        }
-
-        function doLogout() {
-            location.reload(); 
+        function realizarReserva(e) {
+            e.preventDefault();
+            const h = document.getElementById('cTime').value;
+            if(h === "No hay horarios disponibles") {
+                alert("Por favor selecciona otra fecha.");
+            } else {
+                alert("¡Reserva confirmada para las " + h + "!");
+            }
         }
     </script>
-
 </body>
 </html>
