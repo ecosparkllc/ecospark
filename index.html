@@ -9,49 +9,28 @@
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database-compat.js"></script>
     
     <style>
-        :root { 
-            --primary: #345e3d; 
-            --light: #e9f5ec; 
-            --white: #ffffff; 
-            --text: #333;
-        }
-        
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: var(--white); color: var(--text); }
+        :root { --primary: #345e3d; --light: #e9f5ec; --white: #ffffff; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--white); color: #333; }
         .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-        
-        header { 
-            text-align: center; 
-            padding: 40px; 
-            background: var(--light); 
-            border-radius: 0 0 40px 40px; 
-            border-bottom: 5px solid var(--primary); 
-        }
-        
-        h1 { color: var(--primary); margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+        header { text-align: center; padding: 40px; background: var(--light); border-radius: 0 0 40px 40px; border-bottom: 5px solid var(--primary); }
+        h1 { color: var(--primary); margin: 0; text-transform: uppercase; }
         .card { background: var(--light); padding: 30px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-top: 20px; }
-        
         label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--primary); }
         input, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 20px; box-sizing: border-box; }
-        
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 30px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 30px; cursor: pointer; font-weight: bold; text-transform: uppercase; }
         .btn-reserve { background: var(--primary); color: white; }
-        
-        /* Grid de Horarios Admin */
         .time-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 20px; }
         .time-item { background: white; padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #ddd; }
-        
         .status-toggle { cursor: pointer; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; font-weight: bold; }
-        .on { background: #d4edda; color: #155724; } /* Disponible */
-        .off { background: #f8d7da; color: #721c24; } /* Bloqueado */
-
+        .on { background: #d4edda; color: #155724; }
+        .off { background: #f8d7da; color: #721c24; }
         #adminPanel, #loginForm { display: none; }
-        footer { text-align: center; padding: 30px; font-size: 0.8rem; color: #777; }
     </style>
 </head>
 <body>
 
     <div class="container" style="text-align: right;">
-        <button onclick="showLogin()" style="background:none; border:1px solid var(--primary); color:var(--primary); padding:5px 12px; border-radius:20px; cursor:pointer; font-weight:bold;">⚙️ Admin</button>
+        <button onclick="showLogin()" style="background:none; border:1px solid var(--primary); color:var(--primary); padding:5px 12px; border-radius:20px; cursor:pointer;">Admin</button>
     </div>
 
     <header>
@@ -63,23 +42,13 @@
         <section id="clientView">
             <div class="card">
                 <h2>Reserva tu Espacio</h2>
-                <label>Paso 1: Selecciona Fecha</label>
+                <label>Fecha</label>
                 <input type="date" id="cDate" onchange="actualizarHorasDisponibles()">
-                
-                <label>Paso 2: Horarios Disponibles</label>
+                <label>Horarios Disponibles</label>
                 <select id="cTime">
                     <option>Seleccione una fecha primero...</option>
                 </select>
-                
-                <label>Paso 3: Tipo de Servicio</label>
-                <select id="cService">
-                    <option>Limpieza Básica/Profunda</option>
-                    <option>Limpieza Comercial</option>
-                    <option>Limpieza de Airbnb's</option>
-                    <option>Limpieza Post Remodelación</option>
-                </select>
-
-                <button class="btn btn-reserve" onclick="enviarReserva()">¡RESERVA YA!</button>
+                <button class="btn btn-reserve" onclick="alert('Solicitud enviada')">¡RESERVA YA!</button>
             </div>
         </section>
 
@@ -87,32 +56,24 @@
             <h2>Acceso Administrativo</h2>
             <input type="text" id="user" placeholder="Usuario">
             <input type="password" id="pass" placeholder="Contraseña">
-            <button class="btn btn-reserve" onclick="checkLogin()">Entrar al Panel</button>
-            <p align="center"><a href="#" onclick="location.reload()" style="color: var(--primary); font-size: 0.8rem;">Volver</a></p>
+            <button class="btn btn-reserve" onclick="checkLogin()">Entrar</button>
         </section>
 
         <section id="adminPanel" class="card">
-            <h2>Gestionar Disponibilidad</h2>
-            <p>Selecciona fecha y toca la hora para Bloquear/Desbloquear:</p>
+            <h2>Gestión de Horarios</h2>
             <input type="date" id="adminDate" onchange="cargarHorasAdmin()">
-            
             <div class="time-grid" id="adminTimeSettings" style="display:none;">
                 <div class="time-item">9:00 AM <span id="s-9" class="status-toggle on" onclick="toggleTime('9')">DISPONIBLE</span></div>
                 <div class="time-item">10:00 AM <span id="s-10" class="status-toggle on" onclick="toggleTime('10')">DISPONIBLE</span></div>
                 <div class="time-item">11:00 AM <span id="s-11" class="status-toggle on" onclick="toggleTime('11')">DISPONIBLE</span></div>
                 <div class="time-item">12:00 PM <span id="s-12" class="status-toggle on" onclick="toggleTime('12')">DISPONIBLE</span></div>
             </div>
-            
-            <button class="btn" style="background:#666; color:white; margin-top:30px;" onclick="location.reload()">Cerrar Sesión</button>
+            <button class="btn" style="background:#666; color:white; margin-top:30px;" onclick="location.reload()">Salir</button>
         </section>
     </div>
 
-    <footer>
-        &copy; 2026 EcoSpark LLC | Made in PR
-    </footer>
-
     <script>
-        // CONFIGURACIÓN DE FIREBASE (Tus datos integrados)
+        // Tu configuración de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBCsC16XwRHOO76eS4-BqhA0Y-8IH83maA",
             authDomain: "ecosparkllc.firebaseapp.com",
@@ -122,9 +83,15 @@
             appId: "1:403323212209:web:cf3a4adf96226a09d4ed90"
         };
 
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+        // INICIALIZACIÓN SEGURA
+        let db;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+            console.log("Firebase conectado correctamente");
+        } catch (e) {
+            console.error("Error al conectar con Firebase:", e);
+        }
 
         // NAVEGACIÓN
         function showLogin() {
@@ -141,75 +108,49 @@
             } else { alert("Acceso denegado"); }
         }
 
-        // --- LÓGICA DE ADMINISTRACIÓN ---
+        // LÓGICA ADMIN
         function toggleTime(h) {
             const fecha = document.getElementById('adminDate').value;
-            if(!fecha) return;
-            
+            if(!fecha || !db) return;
             const ref = db.ref('reservas/' + fecha + '/' + h);
             ref.once('value', snapshot => {
-                if(snapshot.exists()) {
-                    ref.remove(); // Habilitar
-                } else {
-                    ref.set(true); // Bloquear
-                }
+                if(snapshot.exists()) ref.remove(); else ref.set(true);
             });
         }
 
         function cargarHorasAdmin() {
             const fecha = document.getElementById('adminDate').value;
-            if(!fecha) return;
+            if(!fecha || !db) return;
             document.getElementById('adminTimeSettings').style.display = 'grid';
-
-            // Escuchar cambios en tiempo real de Firebase
             db.ref('reservas/' + fecha).on('value', snapshot => {
                 const bloqueados = snapshot.val() || {};
                 ["9", "10", "11", "12"].forEach(h => {
                     const btn = document.getElementById('s-' + h);
-                    if(bloqueados[h]) {
-                        btn.innerText = "BLOQUEADO";
-                        btn.className = "status-toggle off";
-                    } else {
-                        btn.innerText = "DISPONIBLE";
-                        btn.className = "status-toggle on";
-                    }
+                    const isB = bloqueados[h];
+                    btn.innerText = isB ? "BLOQUEADO" : "DISPONIBLE";
+                    btn.className = isB ? "status-toggle off" : "status-toggle on";
                 });
             });
         }
 
-        // --- LÓGICA DE CLIENTE ---
+        // LÓGICA CLIENTE
         function actualizarHorasDisponibles() {
             const fecha = document.getElementById('cDate').value;
-            const select = document.getElementById('cTime');
-            if(!fecha) return;
-
+            if(!fecha || !db) return;
             db.ref('reservas/' + fecha).on('value', snapshot => {
                 const bloqueados = snapshot.val() || {};
+                const select = document.getElementById('cTime');
                 select.innerHTML = "";
                 let count = 0;
-
                 ["9", "10", "11", "12"].forEach(h => {
                     if(!bloqueados[h]) {
                         const label = h === "12" ? "12:00 PM" : h + ":00 AM";
-                        const opt = new Option(label, label);
-                        select.options.add(opt);
+                        select.options.add(new Option(label, label));
                         count++;
                     }
                 });
-
-                if(count === 0) {
-                    select.options.add(new Option("Sin disponibilidad hoy", ""));
-                }
+                if(count === 0) select.options.add(new Option("Sin disponibilidad hoy", ""));
             });
-        }
-
-        function enviarReserva() {
-            const hora = document.getElementById('cTime').value;
-            if(!hora || hora.includes("Sin disponibilidad") || hora.includes("Seleccione")) {
-                alert("Por favor elija un horario válido.");
-            } else {
-                alert("¡Gracias! Su solicitud de reserva para las " + hora + " ha sido enviada.");
-            }
         }
     </script>
 </body>
