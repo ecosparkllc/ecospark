@@ -10,221 +10,283 @@
             --light-green: #e9f5ec;
             --accent-green: #4a7c59;
             --white: #ffffff;
-            --text-dark: #333333;
+            --dark-text: #2c3e50;
+            --error-red: #d9534f;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: var(--white);
-            color: var(--text-dark);
+            color: var(--dark-text);
             line-height: 1.6;
         }
 
+        /* Utilidades */
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .btn { padding: 12px 25px; border-radius: 30px; border: none; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; width: 100%; font-size: 1rem; }
+        .btn-primary { background-color: var(--primary-green); color: white; }
+        .btn-primary:hover { background-color: #26462d; }
+        .btn-outline { background: transparent; border: 2px solid var(--primary-green); color: var(--primary-green); width: auto; font-size: 0.8rem; padding: 5px 15px; }
+
+        /* Header */
         header {
             text-align: center;
-            padding: 40px 20px;
-            background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            padding: 80px 20px;
+            background: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), 
+                        url('https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=1200&q=80');
             background-size: cover;
             background-position: center;
         }
 
-        .logo-section img {
-            max-width: 150px;
-        }
+        .logo-placeholder { font-size: 2.5rem; font-weight: 900; color: var(--primary-green); letter-spacing: -1px; }
+        .hero-title { font-size: 3rem; color: var(--primary-green); margin: 10px 0; text-transform: uppercase; }
+        .hero-subtitle { font-size: 1.2rem; color: var(--accent-green); font-style: italic; }
 
-        .hero-text h1 {
-            color: var(--primary-green);
-            font-size: 2.5rem;
-            margin: 10px 0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .hero-text p {
-            font-size: 1.2rem;
-            font-style: italic;
-            color: var(--accent-green);
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
+        /* Servicios */
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
-            margin-bottom: 50px;
+            margin: 40px 0;
         }
 
-        .service-item {
+        .service-card {
             background-color: var(--light-green);
-            padding: 15px;
-            border-radius: 8px;
+            padding: 20px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
-            border-left: 5px solid var(--primary-green);
+            border-left: 6px solid var(--primary-green);
+            font-weight: 600;
         }
 
-        .service-item span {
-            font-weight: bold;
-            color: var(--primary-green);
-        }
+        .service-card span { margin-right: 10px; color: var(--primary-green); font-size: 1.2rem; }
 
-        .booking-section {
-            background-color: var(--light-green);
+        /* Secciones de Contenido */
+        .main-card {
+            background: var(--light-green);
             padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .booking-section h2 {
-            text-align: center;
-            color: var(--primary-green);
-            margin-bottom: 30px;
-            text-transform: uppercase;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: var(--primary-green);
-        }
-
-        input, select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        .time-slots {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .time-slot {
-            background-color: var(--white);
-            border: 2px solid var(--primary-green);
-            color: var(--primary-green);
-            padding: 8px 15px;
             border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
         }
 
-        .time-slot:hover {
-            background-color: var(--primary-green);
-            color: var(--white);
-        }
+        h2 { text-align: center; color: var(--primary-green); margin-bottom: 30px; text-transform: uppercase; }
 
-        .btn-submit {
-            display: block;
-            width: 100%;
-            background-color: var(--primary-green);
-            color: var(--white);
-            border: none;
+        /* Formulario */
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--primary-green); font-size: 0.9rem; }
+        input, select { width: 100%; padding: 14px; border: 1px solid #ccc; border-radius: 10px; font-size: 1rem; box-sizing: border-box; }
+        
+        .error-msg {
+            display: none;
+            background-color: #f8d7da;
+            color: #721c24;
             padding: 15px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 30px;
-            cursor: pointer;
-            margin-top: 30px;
-            text-transform: uppercase;
-            transition: background 0.3s;
-        }
-
-        .btn-submit:hover {
-            background-color: #26462d;
-        }
-
-        footer {
+            border-radius: 10px;
+            margin-bottom: 20px;
             text-align: center;
-            padding: 20px;
-            font-size: 0.9rem;
-            color: #666;
+            border: 1px solid #f5c6cb;
         }
+
+        /* Admin Panels */
+        #adminArea, #loginForm { display: none; }
+        .admin-nav { display: flex; justify-content: flex-end; padding: 10px; }
+        
+        .blocked-list { list-style: none; padding: 0; }
+        .blocked-list li { 
+            background: white; padding: 15px; border-radius: 8px; 
+            margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
+            border: 1px solid #eee;
+        }
+
+        footer { text-align: center; padding: 40px; color: #888; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
+    <div class="admin-nav container">
+        <button class="btn btn-outline" id="toggleAdmin" onclick="showLogin()">Acceso Admin</button>
+    </div>
+
     <header>
-        <div class="logo-section">
-            <!-- Espacio para el logo -->
-            <div style="font-size: 2rem; font-weight: bold; color: var(--primary-green);">EcoSpark LLC</div>
-        </div>
-        <div class="hero-text">
-            <h1>Servicios de Limpieza</h1>
-            <p>Transforma tu espacio con un servicio de calidad</p>
-        </div>
+        <div class="logo-placeholder">EcoSpark LLC</div>
+        <h1 class="hero-title">Servicios de Limpieza</h1>
+        <p class="hero-subtitle">Transforma tu espacio con un servicio de calidad</p>
     </header>
 
     <div class="container">
-        <div class="services-grid">
-            <div class="service-item"><span>✓</span> &nbsp; Limpieza Básica/Profunda</div>
-            <div class="service-item"><span>✓</span> &nbsp; Limpieza Comercial</div>
-            <div class="service-item"><span>✓</span> &nbsp; Limpieza Post Remodelación</div>
-            <div class="service-item"><span>✓</span> &nbsp; Limpieza de Airbnb's</div>
-            <div class="service-item"><span>✓</span> &nbsp; Limpieza de Ventanas</div>
-            <div class="service-item"><span>✓</span> &nbsp; Servicios de Organización</div>
-            <div class="service-item"><span>✓</span> &nbsp; Limpieza de Oficinas</div>
-            <div class="service-item) service-item"><span>✓</span> &nbsp; Limpieza para Mudanzas</div>
-        </div>
+        
+        <section id="servicesView">
+            <div class="services-grid">
+                <div class="service-card"><span>✓</span> Limpieza Básica/Profunda</div>
+                <div class="service-card"><span>✓</span> Limpieza Comercial</div>
+                <div class="service-card"><span>✓</span> Limpieza Post Remodelación</div>
+                <div class="service-card"><span>✓</span> Limpieza de Airbnb's</div>
+                <div class="service-card"><span>✓</span> Limpieza de Ventanas</div>
+                <div class="service-card"><span>✓</span> Servicios de Organización</div>
+                <div class="service-card"><span>✓</span> Limpieza de Oficinas</div>
+                <div class="service-card"><span>✓</span> Limpieza para Mudanzas</div>
+            </div>
 
-        <section class="booking-section">
-            <h2>Reservas</h2>
-            <form>
-                <div class="form-group">
-                    <label>PASO 1: SELECCIONE FECHA</label>
-                    <input type="date" required>
+            <div class="main-card" id="bookingFormSection">
+                <h2>Reservar Cita</h2>
+                <div id="noAvailabilityMsg" class="error-msg">
+                    Lo sentimos, no hay disponibilidad para la fecha seleccionada. Por favor intente con otro día.
                 </div>
-
-                <div class="form-group">
-                    <label>PASO 2: SELECCIONE HORARIO</label>
-                    <div class="time-slots">
-                        <div class="time-slot">9:00 AM</div>
-                        <div class="time-slot">11:30 AM</div>
-                        <div class="time-slot">2:00 PM</div>
-                        <div class="time-slot">4:30 PM</div>
+                <form onsubmit="processBooking(event)">
+                    <div class="form-group">
+                        <label>PASO 1: SELECCIONE FECHA</label>
+                        <input type="date" id="reservaFecha" required onchange="hideError()">
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label>PASO 3: SELECCIONE TIPO DE SERVICIO</label>
-                    <select required>
-                        <option value="">Seleccione un servicio...</option>
-                        <option>Limpieza Básica/Profunda</option>
-                        <option>Limpieza Comercial</option>
-                        <option>Limpieza Post Remodelación</option>
-                        <option>Limpieza de Airbnb's</option>
-                        <option>Limpieza de Ventanas</option>
-                        <option>Servicios de Organización</option>
-                        <option>Limpieza de Oficinas</option>
-                        <option>Limpieza para Mudanzas</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="btn-submit">¡RESERVA YA!</button>
-            </form>
+                    <div class="form-group">
+                        <label>PASO 2: SELECCIONE HORARIO</label>
+                        <select id="reservaHora">
+                            <option>09:00 AM</option>
+                            <option>11:30 AM</option>
+                            <option>02:00 PM</option>
+                            <option>04:30 PM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>PASO 3: TIPO DE SERVICIO</label>
+                        <select id="reservaServicio">
+                            <option>Limpieza de Airbnb's</option>
+                            <option>Limpieza Comercial</option>
+                            <option>Limpieza Profunda</option>
+                            <option>Limpieza de Oficinas</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">¡RESERVA YA!</button>
+                </form>
+            </div>
         </section>
+
+        <section id="loginForm" class="main-card">
+            <h2>Ingreso Administrativo</h2>
+            <div class="form-group">
+                <label>Usuario</label>
+                <input type="text" id="adminUser">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="adminPass">
+            </div>
+            <button class="btn btn-primary" onclick="handleLogin()">Entrar al Panel</button>
+            <p style="text-align: center; margin-top: 15px;">
+                <a href="#" onclick="cancelLogin()" style="color: var(--accent-green);">Cancelar</a>
+            </p>
+        </section>
+
+        <section id="adminArea">
+            <div class="main-card">
+                <h2>Panel de Control EcoSpark</h2>
+                <p>Usa esta herramienta para bloquear fechas en las que no estarás disponible.</p>
+                
+                <div class="form-group">
+                    <label>Bloquear Nueva Fecha</label>
+                    <input type="date" id="blockDateInput">
+                </div>
+                <button class="btn" style="background-color: var(--error-red); color: white;" onclick="addBlockDate()">Bloquear Fecha</button>
+
+                <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ccc;">
+
+                <h3>Fechas sin Disponibilidad:</h3>
+                <ul id="blockedDatesList" class="blocked-list">
+                    </ul>
+
+                <button class="btn" style="background: #666; color: white; margin-top: 20px;" onclick="doLogout()">Cerrar Sesión</button>
+            </div>
+        </section>
+
     </div>
 
     <footer>
-        &copy; 2026 EcoSpark LLC. Todos los derechos reservados.
+        &copy; 2026 EcoSpark LLC | San Juan, Puerto Rico | Made in PR
     </footer>
+
+    <script>
+        // Array para guardar fechas bloqueadas (En memoria local)
+        let disabledDates = [];
+
+        // Funciones de Navegación
+        function showLogin() {
+            document.getElementById('servicesView').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        }
+
+        function cancelLogin() {
+            document.getElementById('servicesView').style.display = 'block';
+            document.getElementById('loginForm').style.display = 'none';
+        }
+
+        // Manejo de Login
+        function handleLogin() {
+            const user = document.getElementById('adminUser').value;
+            const pass = document.getElementById('adminPass').value;
+
+            if(user === "kamalishsantos" && pass === "Kamalish22_") {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('adminArea').style.display = 'block';
+                document.getElementById('toggleAdmin').style.display = 'none';
+            } else {
+                alert("Usuario o contraseña incorrectos");
+            }
+        }
+
+        // Lógica de Bloqueo (Admin)
+        function addBlockDate() {
+            const dateVal = document.getElementById('blockDateInput').value;
+            if(!dateVal) return;
+
+            if(!disabledDates.includes(dateVal)) {
+                disabledDates.push(dateVal);
+                renderBlockedDates();
+                alert("Fecha bloqueada correctamente");
+            }
+        }
+
+        function removeDate(date) {
+            disabledDates = disabledDates.filter(d => d !== date);
+            renderBlockedDates();
+        }
+
+        function renderBlockedDates() {
+            const list = document.getElementById('blockedDatesList');
+            list.innerHTML = "";
+            disabledDates.forEach(d => {
+                list.innerHTML += `
+                    <li>
+                        <strong>${d}</strong>
+                        <button onclick="removeDate('${d}')" style="color:red; background:none; border:none; cursor:pointer; font-weight:bold;">Eliminar</button>
+                    </li>
+                `;
+            });
+        }
+
+        // Lógica de Reserva (Cliente)
+        function processBooking(e) {
+            e.preventDefault();
+            const chosenDate = document.getElementById('reservaFecha').value;
+
+            if(disabledDates.includes(chosenDate)) {
+                document.getElementById('noAvailabilityMsg').style.display = 'block';
+                window.scrollTo({ top: document.getElementById('bookingFormSection').offsetTop - 20, behavior: 'smooth' });
+            } else {
+                alert("¡Gracias! Tu solicitud de reserva para el " + chosenDate + " ha sido enviada. Nos comunicaremos pronto.");
+            }
+        }
+
+        function hideError() {
+            document.getElementById('noAvailabilityMsg').style.display = 'none';
+        }
+
+        function doLogout() {
+            location.reload(); 
+        }
+    </script>
 
 </body>
 </html>
