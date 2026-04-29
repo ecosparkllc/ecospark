@@ -3,126 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoSpark LLC - Gestión de Reservas</title>
+    <title>EcoSpark LLC - Reserva Garantizada</title>
     <style>
-        :root {
-            --primary-green: #345e3d;
-            --light-green: #e9f5ec;
-            --accent-green: #4a7c59;
-            --white: #ffffff;
-            --error-red: #d9534f;
-        }
-
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--white); color: #333; line-height: 1.6; }
-        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-        
-        header { text-align: center; padding: 60px 20px; background: var(--light-green); border-radius: 0 0 40px 40px; border-bottom: 5px solid var(--primary-green); }
-        h1 { color: var(--primary-green); margin: 0; text-transform: uppercase; letter-spacing: 2px; font-size: 2.5rem; }
-
-        .card { background: var(--light-green); padding: 30px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-top: 20px; border: 1px solid rgba(0,0,0,0.05); }
-        h2 { color: var(--primary-green); text-align: center; margin-top: 0; }
-
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--primary-green); }
-        input, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 20px; box-sizing: border-box; font-size: 1rem; }
-
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 30px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; font-size: 1rem; }
-        .btn-reserve { background: var(--primary-green); color: white; }
-        .btn-reserve:hover { background: #26462d; }
-        .btn-admin-access { background: none; border: 1px solid var(--primary-green); color: var(--primary-green); width: auto; padding: 8px 20px; font-size: 0.8rem; }
-
-        .time-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 15px; }
-        .time-item { background: white; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .status-toggle { cursor: pointer; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; text-align: center; min-width: 90px; }
+        :root { --primary: #345e3d; --light: #e9f5ec; --white: #ffffff; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--white); color: #333; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        header { text-align: center; padding: 40px; background: var(--light); border-radius: 0 0 40px 40px; border-bottom: 5px solid var(--primary); }
+        .card { background: var(--light); padding: 30px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-top: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--primary); }
+        input, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 20px; box-sizing: border-box; }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 30px; cursor: pointer; font-weight: bold; text-transform: uppercase; }
+        .btn-reserve { background: var(--primary); color: white; }
+        .time-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+        .time-item { background: white; padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #ddd; }
+        .status-toggle { cursor: pointer; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; font-weight: bold; }
         .on { background: #d4edda; color: #155724; }
         .off { background: #f8d7da; color: #721c24; }
-        .loading { background: #eee; color: #999; cursor: wait; }
-
         #adminPanel, #loginForm { display: none; }
-        footer { text-align: center; padding: 50px; font-size: 0.9rem; color: #888; }
     </style>
 </head>
 <body>
 
     <div class="container" style="text-align: right;">
-        <button class="btn btn-admin-access" id="navBtn" onclick="showLogin()">⚙️ Acceso Admin</button>
+        <button onclick="showLogin()" style="background:none; border:1px solid var(--primary); color:var(--primary); padding:5px 10px; border-radius:15px; cursor:pointer;">Admin</button>
     </div>
 
     <header>
-        <h1>EcoSpark LLC</h1>
-        <p>Servicios de Limpieza | Made in PR</p>
+        <h1 style="color: var(--primary); margin:0;">ECOSPARK LLC</h1>
+        <p>Servicios de Limpieza | San Juan, PR</p>
     </header>
 
     <div class="container">
-        
         <section id="clientView">
             <div class="card">
                 <h2>Reserva tu Espacio</h2>
-                <form onsubmit="realizarReserva(event)">
-                    <label>Selecciona la Fecha</label>
-                    <input type="date" id="cDate" required onchange="actualizarHorasDisponibles()">
-                    
-                    <label>Horarios Disponibles</label>
-                    <select id="cTime" required>
-                        <option value="">Selecciona una fecha...</option>
-                    </select>
-
-                    <label>Tipo de Servicio</label>
-                    <select required>
-                        <option>Limpieza de Airbnb's</option>
-                        <option>Limpieza Comercial</option>
-                        <option>Limpieza Profunda</option>
-                        <option>Limpieza para Mudanzas</option>
-                    </select>
-
-                    <button type="submit" class="btn btn-reserve">¡RESERVA YA!</button>
-                </form>
+                <label>Fecha</label>
+                <input type="date" id="cDate" onchange="actualizarHorasDisponibles()">
+                <label>Horarios Disponibles</label>
+                <select id="cTime">
+                    <option>Seleccione una fecha...</option>
+                </select>
+                <button class="btn btn-reserve" onclick="alert('Solicitud enviada')">¡RESERVA YA!</button>
             </div>
         </section>
 
         <section id="loginForm" class="card">
-            <h2>Acceso Administrativo</h2>
+            <h2>Acceso Admin</h2>
             <input type="text" id="user" placeholder="Usuario">
             <input type="password" id="pass" placeholder="Contraseña">
-            <button class="btn btn-reserve" onclick="checkLogin()">Entrar al Panel</button>
-            <p align="center"><a href="#" onclick="location.reload()" style="color: var(--accent-green); font-size: 0.8rem;">Volver al sitio</a></p>
+            <button class="btn btn-reserve" onclick="checkLogin()">Entrar</button>
         </section>
 
         <section id="adminPanel" class="card">
-            <h2>Gestión de Disponibilidad</h2>
-            <p>Selecciona fecha y toca la hora para Bloquear/Desbloquear:</p>
+            <h2>Gestión de Horarios</h2>
             <input type="date" id="adminDate" onchange="cargarHorasAdmin()">
-
-            <div id="adminTimeSettings" style="display:none;">
-                <div class="time-grid">
-                    <div class="time-item">09:00 AM <span id="s-9" class="status-toggle on" onclick="toggleTime('9')">DISPONIBLE</span></div>
-                    <div class="time-item">10:00 AM <span id="s-10" class="status-toggle on" onclick="toggleTime('10')">DISPONIBLE</span></div>
-                    <div class="time-item">11:00 AM <span id="s-11" class="status-toggle on" onclick="toggleTime('11')">DISPONIBLE</span></div>
-                    <div class="time-item">12:00 PM <span id="s-12" class="status-toggle on" onclick="toggleTime('12')">DISPONIBLE</span></div>
-                </div>
+            <div class="time-grid" id="adminTimeSettings" style="display:none; margin-top:20px;">
+                <div class="time-item">9:00 AM <span id="s-9" class="status-toggle on" onclick="toggleTime('9')">DISPONIBLE</span></div>
+                <div class="time-item">10:00 AM <span id="s-10" class="status-toggle on" onclick="toggleTime('10')">DISPONIBLE</span></div>
+                <div class="time-item">11:00 AM <span id="s-11" class="status-toggle on" onclick="toggleTime('11')">DISPONIBLE</span></div>
+                <div class="time-item">12:00 PM <span id="s-12" class="status-toggle on" onclick="toggleTime('12')">DISPONIBLE</span></div>
             </div>
-
-            <button class="btn" style="background:#666; color:white; margin-top:40px;" onclick="location.reload()">Cerrar Sesión</button>
+            <button class="btn" style="background:#666; color:white; margin-top:30px;" onclick="location.reload()">Cerrar Sesión</button>
         </section>
     </div>
 
-    <footer>&copy; 2026 EcoSpark LLC. Made in PR</footer>
-
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsAcfd1bZLhQN_bQ4f9elYFEz6BgRq-jg7oP7P2NHOTby_qSkZnQMebINEng99UTtM8g/exec";
-        let bloqueosReales = [];
-        const horasBase = ["9", "10", "11", "12"];
+        let bloqueos = [];
 
-        // Función para limpiar caché y traer datos nuevos
-        async function fetchBaseDeDatos() {
+        async function fetchBD() {
             try {
-                // Añadimos un parámetro aleatorio para evitar que el navegador guarde una versión vieja
-                const response = await fetch(SCRIPT_URL + "?t=" + new Date().getTime());
-                bloqueosReales = await response.json();
-                return bloqueosReales;
-            } catch (e) {
-                console.error("Error cargando base de datos", e);
-                return [];
-            }
+                const r = await fetch(SCRIPT_URL + "?nocache=" + new Date().getTime());
+                bloqueos = await r.json();
+            } catch (e) { console.error(e); }
         }
 
         function showLogin() {
@@ -134,23 +87,28 @@
             if(document.getElementById('user').value === "kamalishsantos" && document.getElementById('pass').value === "Kamalish22_") {
                 document.getElementById('loginForm').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
-                document.getElementById('navBtn').style.display = 'none';
-            } else { alert("Credenciales incorrectas"); }
+            } else { alert("Error"); }
+        }
+
+        // --- LÓGICA COMPARTIDA ---
+        function estaBloqueado(fecha, hora) {
+            // Limpieza de datos para asegurar comparación exacta
+            return bloqueos.some(row => {
+                const fRow = String(row[1]).trim();
+                const hRow = String(row[2]).trim();
+                return fRow === String(fecha).trim() && hRow === String(hora).trim();
+            });
         }
 
         async function cargarHorasAdmin() {
             const fecha = document.getElementById('adminDate').value;
             if(!fecha) return;
+            document.getElementById('adminTimeSettings').style.display = 'grid';
+            await fetchBD();
             
-            document.getElementById('adminTimeSettings').style.display = 'block';
-            await fetchBaseDeDatos();
-            
-            horasBase.forEach(h => {
+            ["9", "10", "11", "12"].forEach(h => {
                 const btn = document.getElementById('s-' + h);
-                // Comparamos fecha y hora (asegurándonos que sean strings)
-                const estaBloqueado = bloqueosReales.some(row => String(row[1]) === String(fecha) && String(row[2]) === String(h));
-                
-                if(estaBloqueado) {
+                if(estaBloqueado(fecha, h)) {
                     btn.innerText = "BLOQUEADO";
                     btn.className = "status-toggle off";
                 } else {
@@ -162,33 +120,21 @@
 
         async function toggleTime(hora) {
             const fecha = document.getElementById('adminDate').value;
-            if(!fecha) return;
-
             const btn = document.getElementById('s-' + hora);
-            const esBloqueoActual = btn.innerText === "BLOQUEADO";
-            
-            // Cambio visual inmediato (Optimismo)
-            btn.innerText = esBloqueoActual ? "DISPONIBLE" : "BLOQUEADO";
-            btn.className = esBloqueoActual ? "status-toggle on" : "status-toggle off";
+            const esBloqueo = btn.innerText === "BLOQUEADO";
 
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    cache: 'no-cache',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: "bloquear", fecha: fecha, hora: hora })
-                });
-                
-                // Refrescamos la base de datos interna después de un breve delay
-                setTimeout(async () => {
-                    await fetchBaseDeDatos();
-                }, 2000);
+            // UI inmediata
+            btn.innerText = esBloqueo ? "DISPONIBLE" : "BLOQUEADO";
+            btn.className = esBloqueo ? "status-toggle on" : "status-toggle off";
 
-            } catch (e) {
-                alert("Error al conectar con el servidor.");
-                cargarHorasAdmin(); // Revertir al estado real si falla
-            }
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({ action: "bloquear", fecha: fecha, hora: hora })
+            });
+
+            // Actualizar lista local después de un momento
+            setTimeout(fetchBD, 1500);
         }
 
         async function actualizarHorasDisponibles() {
@@ -196,40 +142,23 @@
             const select = document.getElementById('cTime');
             if(!fecha) return;
 
-            select.innerHTML = "<option>Verificando horarios...</option>";
-            await fetchBaseDeDatos();
+            select.innerHTML = "<option>Cargando...</option>";
+            await fetchBD();
             select.innerHTML = "";
 
-            let hayOpciones = false;
-            horasBase.forEach(h => {
-                const estaBloqueado = bloqueosReales.some(row => String(row[1]) === String(fecha) && String(row[2]) === String(h));
-                
-                if(!estaBloqueado) {
-                    const label = h === "12" ? "12:00 PM" : h.padStart(2, '0') + ":00 AM";
-                    const op = document.createElement("option");
-                    op.value = label;
-                    op.text = label;
-                    select.appendChild(op);
-                    hayOpciones = true;
+            let opciones = 0;
+            ["9", "10", "11", "12"].forEach(h => {
+                if(!estaBloqueado(fecha, h)) {
+                    let label = h === "12" ? "12:00 PM" : h.padStart(2, '0') + ":00 AM";
+                    select.options.add(new Option(label, label));
+                    opciones++;
                 }
             });
 
-            if(!hayOpciones) {
-                select.innerHTML = "<option>Sin disponibilidad para hoy</option>";
-            }
+            if(opciones === 0) select.options.add(new Option("Sin disponibilidad", ""));
         }
 
-        function realizarReserva(e) {
-            e.preventDefault();
-            const h = document.getElementById('cTime').value;
-            if(!h || h.includes("Sin disponibilidad") || h.includes("Verificando")) {
-                alert("Por favor selecciona un horario disponible.");
-            } else {
-                alert("Reserva solicitada para las " + h + ". Nos contactaremos pronto.");
-            }
-        }
-
-        window.onload = fetchBaseDeDatos;
+        window.onload = fetchBD;
     </script>
 </body>
 </html>
