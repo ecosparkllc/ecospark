@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoSpark LLC - Reservas Online</title>
     
-    <!-- SDKs de Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database-compat.js"></script>
     
     <style>
         :root { --primary: #345e3d; --light: #e9f5ec; --white: #ffffff; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--white); color: #333; }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
         header { text-align: center; padding: 40px; background: var(--light); border-radius: 0 0 40px 40px; border-bottom: 5px solid var(--primary); }
         h1 { color: var(--primary); margin: 0; text-transform: uppercase; }
         .card { background: var(--light); padding: 30px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-top: 20px; }
@@ -20,8 +19,13 @@
         input, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 20px; box-sizing: border-box; }
         .btn { width: 100%; padding: 15px; border: none; border-radius: 30px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
         .btn-reserve { background: var(--primary); color: white; }
-        .btn-reserve:hover { background: #26462d; }
         .btn-home { background: white; color: var(--primary); border: 2px solid var(--primary); margin-top: 10px; }
+        
+        /* Admin Table */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; border-radius: 10px; overflow: hidden; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        th { background: var(--primary); color: white; }
+
         .time-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 20px; }
         .time-item { background: white; padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #ddd; }
         .status-toggle { cursor: pointer; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; font-weight: bold; }
@@ -47,6 +51,12 @@
         <section id="clientView">
             <div class="card">
                 <h2>Reserva tu Espacio</h2>
+                <label>Nombre Completo</label>
+                <input type="text" id="cNombre" placeholder="Ej. Juan del Pueblo" required>
+
+                <label>Teléfono de Contacto</label>
+                <input type="tel" id="cTel" placeholder="Ej. 787-000-0000" required>
+
                 <label>Fecha</label>
                 <input type="date" id="cDate" onchange="actualizarHorasDisponibles()">
                 
@@ -55,16 +65,16 @@
                     <option>Seleccione una fecha primero...</option>
                 </select>
 
-                <label>Servicios</label>
+                <label>Servicio Deseado</label>
                 <select id="cService">
-                    <option value="Limpieza Basica">Limpieza Basica</option>
-                    <option value="Limpieza Profunda">Limpieza Profunda</option>
-                    <option value="Limpieza Post Remodelacion">Limpieza Post Remodelacion</option>
-                    <option value="Limpieza de Oficinas">Limpieza de Oficinas</option>
-                    <option value="Limpieza Comercial">Limpieza Comercial</option>
-                    <option value="Limpieza de Airbnb's">Limpieza de Airbnb's</option>
-                    <option value="Servicios de Organizacion">Servicios de Organizacion</option>
-                    <option value="Limpieza para Mudanzas">Limpieza para Mudanzas</option>
+                    <option>Limpieza Basica</option>
+                    <option>Limpieza Profunda</option>
+                    <option>Limpieza Post Remodelacion</option>
+                    <option>Limpieza de Oficinas</option>
+                    <option>Limpieza Comercial</option>
+                    <option>Limpieza de Airbnb's</option>
+                    <option>Servicios de Organizacion</option>
+                    <option>Limpieza para Mudanzas</option>
                 </select>
 
                 <button class="btn btn-reserve" onclick="enviarReserva()">¡RESERVA YA!</button>
@@ -81,23 +91,41 @@
         </section>
 
         <!-- PANEL ADMIN -->
-        <section id="adminPanel" class="card">
-            <h2>Gestión de Horarios</h2>
-            <input type="date" id="adminDate" onchange="cargarHorasAdmin()">
-            <div class="time-grid" id="adminTimeSettings" style="display:none;">
-                <div class="time-item">9:00 AM <span id="s-9" class="status-toggle on" onclick="toggleTime('9')">DISPONIBLE</span></div>
-                <div class="time-item">10:00 AM <span id="s-10" class="status-toggle on" onclick="toggleTime('10')">DISPONIBLE</span></div>
-                <div class="time-item">11:00 AM <span id="s-11" class="status-toggle on" onclick="toggleTime('11')">DISPONIBLE</span></div>
-                <div class="time-item">12:00 PM <span id="s-12" class="status-toggle on" onclick="toggleTime('12')">DISPONIBLE</span></div>
+        <section id="adminPanel">
+            <div class="card">
+                <h2>Listado de Reservas</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Teléfono</th>
+                            <th>Fecha/Hora</th>
+                            <th>Servicio</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaReservasCuerpo">
+                        <!-- Se llena desde Firebase -->
+                    </tbody>
+                </table>
             </div>
-            <button class="btn" style="background:#666; color:white; margin-top:30px;" onclick="location.reload()">Cerrar Sesión</button>
+
+            <div class="card">
+                <h2>Gestionar Disponibilidad</h2>
+                <input type="date" id="adminDate" onchange="cargarHorasAdmin()">
+                <div class="time-grid" id="adminTimeSettings" style="display:none;">
+                    <div class="time-item">9:00 AM <span id="s-9" class="status-toggle on" onclick="toggleTime('9')">DISPONIBLE</span></div>
+                    <div class="time-item">10:00 AM <span id="s-10" class="status-toggle on" onclick="toggleTime('10')">DISPONIBLE</span></div>
+                    <div class="time-item">11:00 AM <span id="s-11" class="status-toggle on" onclick="toggleTime('11')">DISPONIBLE</span></div>
+                    <div class="time-item">12:00 PM <span id="s-12" class="status-toggle on" onclick="toggleTime('12')">DISPONIBLE</span></div>
+                </div>
+            </div>
+            <button class="btn" style="background:#666; color:white; margin:30px 0;" onclick="location.reload()">Cerrar Sesión</button>
         </section>
     </div>
 
     <footer>&copy; 2026 EcoSpark LLC | Made in PR</footer>
 
     <script>
-        // Configuración de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBCsC16XwRHOO76eS4-BqhA0Y-8IH83maA",
             authDomain: "ecosparkllc.firebaseapp.com",
@@ -110,28 +138,80 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // NAVEGACIÓN
         function showLogin() {
             document.getElementById('clientView').style.display = 'none';
             document.getElementById('loginForm').style.display = 'block';
         }
 
         function checkLogin() {
-            const u = document.getElementById('user').value;
-            const p = document.getElementById('pass').value;
-            if(u === "kamalishsantos" && p === "Kamalish22_") {
+            if(document.getElementById('user').value === "kamalishsantos" && document.getElementById('pass').value === "Kamalish22_") {
                 document.getElementById('loginForm').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
+                cargarListadoReservas();[cite: 1]
             } else { alert("Acceso denegado"); }
         }
 
-        // LÓGICA ADMIN
+        // --- LÓGICA CLIENTE ---
+        function actualizarHorasDisponibles() {
+            const fecha = document.getElementById('cDate').value;
+            if(!fecha) return;
+            db.ref('reservas/' + fecha).on('value', snap => {
+                const bloqueados = snap.val() || {};
+                const select = document.getElementById('cTime');
+                select.innerHTML = "";
+                ["9", "10", "11", "12"].forEach(h => {
+                    if(!bloqueados[h]) {
+                        const label = h === "12" ? "12:00 PM" : h + ":00 AM";
+                        select.options.add(new Option(label, h));
+                    }
+                });
+            });
+        }
+
+        function enviarReserva() {
+            const nombre = document.getElementById('cNombre').value;[cite: 1]
+            const tel = document.getElementById('cTel').value;[cite: 1]
+            const fecha = document.getElementById('cDate').value;
+            const hora = document.getElementById('cTime').value;
+            const serv = document.getElementById('cService').value;[cite: 1]
+
+            if(!nombre || !tel || !fecha || !hora) { alert("Complete todos los campos"); return; }
+
+            // Guardar datos del cliente para el admin
+            db.ref('listadoReservas').push({[cite: 1]
+                nombre, tel, fecha, hora, servicio: serv[cite: 1]
+            });[cite: 1]
+
+            // Bloquear horario
+            db.ref('reservas/' + fecha + '/' + hora).set(true).then(() => {
+                alert("¡Reserva confirmada!");
+                location.reload();
+            });
+        }
+
+        // --- LÓGICA ADMIN ---
+        function cargarListadoReservas() {[cite: 1]
+            db.ref('listadoReservas').on('value', snap => {[cite: 1]
+                const cuerpo = document.getElementById('listaReservasCuerpo');[cite: 1]
+                cuerpo.innerHTML = "";[cite: 1]
+                snap.forEach(child => {[cite: 1]
+                    const r = child.val();[cite: 1]
+                    cuerpo.innerHTML += `<tr>
+                        <td>${r.nombre}</td>
+                        <td>${r.tel}</td>
+                        <td>${r.fecha} (${r.hora}:00)</td>[cite: 1]
+                        <td>${r.servicio}</td>[cite: 1]
+                    </tr>`;[cite: 1]
+                });
+            });
+        }
+
         function toggleTime(h) {
             const fecha = document.getElementById('adminDate').value;
             if(!fecha) return;
             const ref = db.ref('reservas/' + fecha + '/' + h);
-            ref.once('value', snapshot => {
-                if(snapshot.exists()) ref.remove(); else ref.set(true);
+            ref.once('value', snap => {
+                if(snap.exists()) ref.remove(); else ref.set(true);
             });
         }
 
@@ -139,53 +219,14 @@
             const fecha = document.getElementById('adminDate').value;
             if(!fecha) return;
             document.getElementById('adminTimeSettings').style.display = 'grid';
-            db.ref('reservas/' + fecha).on('value', snapshot => {
-                const bloqueados = snapshot.val() || {};
+            db.ref('reservas/' + fecha).on('value', snap => {
+                const bloqueados = snap.val() || {};
                 ["9", "10", "11", "12"].forEach(h => {
                     const btn = document.getElementById('s-' + h);
                     const isB = bloqueados[h];
                     btn.innerText = isB ? "BLOQUEADO" : "DISPONIBLE";
                     btn.className = isB ? "status-toggle off" : "status-toggle on";
                 });
-            });
-        }
-
-        // LÓGICA CLIENTE
-        function actualizarHorasDisponibles() {
-            const fecha = document.getElementById('cDate').value;
-            if(!fecha) return;
-            db.ref('reservas/' + fecha).on('value', snapshot => {
-                const bloqueados = snapshot.val() || {};
-                const select = document.getElementById('cTime');
-                select.innerHTML = "";
-                let count = 0;
-                ["9", "10", "11", "12"].forEach(h => {
-                    if(!bloqueados[h]) {
-                        const label = h === "12" ? "12:00 PM" : h + ":00 AM";
-                        select.options.add(new Option(label, h));
-                        count++;
-                    }
-                });
-                if(count === 0) select.options.add(new Option("Sin disponibilidad hoy", ""));
-            });
-        }
-
-        function enviarReserva() {
-            const fecha = document.getElementById('cDate').value;
-            const h = document.getElementById('cTime').value;
-            const serv = document.getElementById('cService').value;
-
-            if(!fecha || !h || h === "" || h.includes("Sin disponibilidad")) {
-                alert("Por favor seleccione fecha y hora válida.");
-                return;
-            }
-
-            // Bloquear automáticamente en Firebase
-            const ref = db.ref('reservas/' + fecha + '/' + h);
-            ref.set(true).then(() => {
-                alert(`¡Reserva confirmada!\nServicio: ${serv}\nHora: ${h}:00`);
-            }).catch(e => {
-                alert("Error al procesar reserva.");
             });
         }
     </script>
