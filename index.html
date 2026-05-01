@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoSpark LLC - Reservas</title>
+    <title>EcoSpark LLC - Sistema de Reservas</title>
     
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database-compat.js"></script>
     
     <style>
         :root { --primary: #345e3d; --light: #e9f5ec; --white: #ffffff; }
         body { font-family: sans-serif; margin: 0; background: var(--white); color: #333; }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
         header { text-align: center; padding: 30px; background: var(--light); border-bottom: 4px solid var(--primary); border-radius: 0 0 20px 20px; }
         .card { background: var(--light); padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-top: 20px; }
         label { display: block; margin: 10px 0 5px; font-weight: bold; color: var(--primary); }
@@ -36,7 +37,7 @@
 <body>
 
     <div class="container" style="text-align: right;">
-        <button class="btn-admin" id="btnIrLogin" onclick="verLogin()">Admin</button>
+        <button class="btn-admin" onclick="abrirLogin()">Admin</button>
     </div>
 
     <header>
@@ -49,33 +50,36 @@
         <section id="clientSection">
             <div class="card">
                 <h2>Reserva tu Cita</h2>
-                <label>Nombre</label>
-                <input type="text" id="nombreCliente" placeholder="Tu nombre">
-                <label>Telefono</label>
-                <input type="tel" id="telCliente" placeholder="787-000-0000">
+                <label>Nombre Completo</label>
+                <input type="text" id="cNombre" placeholder="Nombre y Apellido">
+                <label>Teléfono</label>
+                <input type="tel" id="cTel" placeholder="787-000-0000">
                 <label>Fecha</label>
-                <input type="date" id="fechaCliente" onchange="cargarHorasCliente()">
-                <label>Horas Disponibles</label>
-                <select id="horaCliente"><option value="">Seleccione fecha...</option></select>
-                <label>Servicio</label>
-                <select id="servicioCliente">
+                <input type="date" id="cFecha" onchange="cargarHorasCliente()">
+                <label>Horarios Disponibles</label>
+                <select id="cHora"><option value="">Seleccione una fecha primero...</option></select>
+                <label>Servicios</label>
+                <select id="cServicio">
                     <option>Limpieza Basica</option>
                     <option>Limpieza Profunda</option>
+                    <option>Limpieza Post Remodelacion</option>
                     <option>Limpieza de Oficinas</option>
                     <option>Limpieza Comercial</option>
                     <option>Limpieza de Airbnb's</option>
+                    <option>Servicios de Organizacion</option>
+                    <option>Limpieza para Mudanzas</option>
                 </select>
-                <button class="btn btn-reserve" onclick="finalizarReserva()">RESERVA YA</button>
+                <button class="btn btn-reserve" onclick="confirmarCita()">RESERVA YA</button>
             </div>
         </section>
 
         <!-- LOGIN -->
         <section id="loginSection" class="card">
-            <h2>Acceso Admin</h2>
-            <input type="text" id="userAdmin" placeholder="Usuario">
-            <input type="password" id="passAdmin" placeholder="Password">
-            <button class="btn btn-reserve" onclick="entrarAlPanel()">Entrar</button>
-            <button class="btn" style="background:#ccc;" onclick="location.reload()">Volver</button>
+            <h2>Acceso Administrativo</h2>
+            <input type="text" id="uAdmin" placeholder="Usuario">
+            <input type="password" id="pAdmin" placeholder="Contraseña">
+            <button class="btn btn-reserve" onclick="loginAdmin()">Entrar al Panel</button>
+            <button class="btn" style="background:#ccc;" onclick="location.reload()">Regresar</button>
         </section>
 
         <!-- PANEL ADMIN -->
@@ -87,21 +91,21 @@
                         <thead>
                             <tr><th>Nombre</th><th>Tel.</th><th>Fecha/Hora</th><th>Servicio</th></tr>
                         </thead>
-                        <tbody id="tablaCitas"></tbody>
+                        <tbody id="tablaCitasAdmin"></tbody>
                     </table>
                 </div>
             </div>
             <div class="card">
-                <h2>Gestionar Horas</h2>
-                <input type="date" id="fechaAdmin" onchange="cargarHorasAdmin()">
+                <h2>Control de Disponibilidad</h2>
+                <input type="date" id="fAdmin" onchange="cargarHorasAdmin()">
                 <div class="grid-horas" id="adminGrid" style="display:none;">
-                    <div class="hora-item">9:00 AM <span id="h-9" class="toggle disponible" onclick="cambiarHora('9')">DISPONIBLE</span></div>
-                    <div class="hora-item">10:00 AM <span id="h-10" class="toggle disponible" onclick="cambiarHora('10')">DISPONIBLE</span></div>
-                    <div class="hora-item">11:00 AM <span id="h-11" class="toggle disponible" onclick="cambiarHora('11')">DISPONIBLE</span></div>
-                    <div class="hora-item">12:00 PM <span id="h-12" class="toggle disponible" onclick="cambiarHora('12')">DISPONIBLE</span></div>
+                    <div class="hora-item">9:00 AM <span id="h-9" class="toggle disponible" onclick="cambiarEstado('9')">DISPONIBLE</span></div>
+                    <div class="hora-item">10:00 AM <span id="h-10" class="toggle disponible" onclick="cambiarEstado('10')">DISPONIBLE</span></div>
+                    <div class="hora-item">11:00 AM <span id="h-11" class="toggle disponible" onclick="cambiarEstado('11')">DISPONIBLE</span></div>
+                    <div class="hora-item">12:00 PM <span id="h-12" class="toggle disponible" onclick="cambiarEstado('12')">DISPONIBLE</span></div>
                 </div>
             </div>
-            <button class="btn" style="background:#666; color:white;" onclick="location.reload()">Cerrar Sesion</button>
+            <button class="btn" style="background:#666; color:white;" onclick="location.reload()">Cerrar Sesión</button>
         </section>
     </div>
 
@@ -118,92 +122,94 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // NAVEGACION
-        function verLogin() {
+        // NAVEGACIÓN
+        function abrirLogin() {
             document.getElementById('clientSection').style.display = 'none';
             document.getElementById('loginSection').style.display = 'block';
         }
 
-        function entrarAlPanel() {
-            const u = document.getElementById('userAdmin').value;
-            const p = document.getElementById('passAdmin').value;
+        function loginAdmin() {
+            const u = document.getElementById('uAdmin').value;
+            const p = document.getElementById('pAdmin').value;
             if(u === "kamalishsantos" && p === "Kamalish22_") {
                 document.getElementById('loginSection').style.display = 'none';
                 document.getElementById('adminSection').style.display = 'block';
-                document.getElementById('btnIrLogin').style.display = 'none';
-                mostrarCitasRecibidas();[cite: 1]
-            } else { alert("Error"); }
+                escucharNuevasCitas();
+            } else { alert("Acceso Incorrecto"); }
         }
 
         // CLIENTE
         function cargarHorasCliente() {
-            const f = document.getElementById('fechaCliente').value;
+            const f = document.getElementById('cFecha').value;
             if(!f) return;
-            db.ref('bloqueos/' + f).on('value', snap => {[cite: 1]
+            db.ref('bloqueos/' + f).on('value', snap => {
                 const b = snap.val() || {};
-                const s = document.getElementById('horaCliente');
+                const s = document.getElementById('cHora');
                 s.innerHTML = "";
-                let c = 0;
+                let count = 0;
                 ["9", "10", "11", "12"].forEach(h => {
                     if(!b[h]) {
                         const t = h === "12" ? "12:00 PM" : h + ":00 AM";
                         s.options.add(new Option(t, h));
-                        c++;
+                        count++;
                     }
                 });
-                if(c === 0) s.options.add(new Option("Sin disponibilidad", ""));
+                if(count === 0) s.options.add(new Option("Sin disponibilidad hoy", ""));
             });
         }
 
-        function finalizarReserva() {
-            const n = document.getElementById('nombreCliente').value;[cite: 1]
-            const t = document.getElementById('telCliente').value;[cite: 1]
-            const f = document.getElementById('fechaCliente').value;[cite: 1]
-            const h = document.getElementById('horaCliente').value;[cite: 1]
-            const s = document.getElementById('servicioCliente').value;[cite: 1]
+        function confirmarCita() {
+            const n = document.getElementById('cNombre').value;
+            const t = document.getElementById('cTel').value;
+            const f = document.getElementById('cFecha').value;
+            const h = document.getElementById('cHora').value;
+            const s = document.getElementById('cServicio').value;
 
-            if(!n || !t || !f || !h || h === "") { alert("Llene todo"); return; }
+            if(!n || !t || !f || !h || h === "") { alert("Por favor complete todos los datos"); return; }
 
-            db.ref('datosReservas').push({ nombre: n, tel: t, fecha: f, hora: h, servicio: s });[cite: 1]
-            db.ref('bloqueos/' + f + '/' + h).set(true).then(() => {[cite: 1]
-                alert("Confirmado");
+            // Guardamos la información del cliente para que la veas en el panel
+            db.ref('listadoReservas').push({ nombre: n, tel: t, fecha: f, hora: h, servicio: s });
+            
+            // Bloqueamos la hora automáticamente
+            db.ref('bloqueos/' + f + '/' + h).set(true).then(() => {
+                alert("¡Cita reservada con éxito!");
                 location.reload();
             });
         }
 
         // ADMIN
-        function mostrarCitasRecibidas() {[cite: 1]
-            db.ref('datosReservas').on('value', snap => {[cite: 1]
-                const b = document.getElementById('tablaCitas');[cite: 1]
-                b.innerHTML = "";[cite: 1]
-                snap.forEach(h => {[cite: 1]
-                    const d = h.val();[cite: 1]
-                    b.innerHTML += `<tr><td>${d.nombre}</td><td>${d.tel}</td><td>${d.fecha} (${d.hora}:00)</td><td>${d.servicio}</td></tr>`;[cite: 1]
+        function escucharNuevasCitas() {
+            db.ref('listadoReservas').on('value', snap => {
+                const tabla = document.getElementById('tablaCitasAdmin');
+                tabla.innerHTML = "";
+                snap.forEach(child => {
+                    const d = child.val();
+                    tabla.innerHTML += `<tr><td>${d.nombre}</td><td>${d.tel}</td><td>${d.fecha} (${d.hora}:00)</td><td>${d.servicio}</td></tr>`;
                 });
             });
         }
 
         function cargarHorasAdmin() {
-            const f = document.getElementById('fechaAdmin').value;
+            const f = document.getElementById('fAdmin').value;
             if(!f) return;
             document.getElementById('adminGrid').style.display = 'grid';
-            db.ref('bloqueos/' + f).on('value', snap => {[cite: 1]
+            db.ref('bloqueos/' + f).on('value', snap => {
                 const b = snap.val() || {};
                 ["9", "10", "11", "12"].forEach(h => {
-                    const e = document.getElementById('h-' + h);
+                    const el = document.getElementById('h-' + h);
                     const estaB = b[h];
-                    e.innerText = estaB ? "BLOQUEADO" : "DISPONIBLE";
-                    e.className = estaB ? "toggle bloqueado" : "toggle disponible";
+                    el.innerText = estaB ? "BLOQUEADO" : "DISPONIBLE";
+                    el.className = estaB ? "toggle bloqueado" : "toggle disponible";
                 });
             });
         }
 
-        function cambiarHora(h) {
-            const f = document.getElementById('fechaAdmin').value;
+        function cambiarEstado(h) {
+            const f = document.getElementById('fAdmin').value;
             if(!f) return;
-            const ref = db.ref('bloqueos/' + f + '/' + h);[cite: 1]
-            ref.once('value', snap => {[cite: 1]
-                if(snap.exists()) ref.remove(); else ref.set(true);[cite: 1]
+            const ref = db.ref('bloqueos/' + f + '/' + h);
+            ref.once('value', snap => {
+                if(snap.exists()) ref.remove(); else ref.set(true);
             });
         }
     </script>
