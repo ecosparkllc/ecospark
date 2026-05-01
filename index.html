@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoSpark LLC - Reservas</title>
     
-    <!-- Librerias de Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database-compat.js"></script>
     
@@ -22,13 +21,11 @@
         .btn-reserve { background: var(--primary); color: white; }
         .btn-home { background: white; color: var(--primary); border: 2px solid var(--primary); margin-top: 10px; }
         
-        /* Tabla Reservas */
         .table-wrap { overflow-x: auto; margin-top: 15px; }
         table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 0.85rem; }
         th { background: var(--primary); color: white; }
 
-        /* Grid Horas */
         .time-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 20px; }
         .time-item { background: white; padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #ddd; }
         .status-toggle { cursor: pointer; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; font-weight: bold; }
@@ -42,7 +39,7 @@
 <body>
 
     <div class="container" style="text-align: right;">
-        <button id="navAdmin" onclick="irAlLogin()" style="background:none; border:1px solid var(--primary); color:var(--primary); padding:5px 15px; border-radius:20px; cursor:pointer; font-weight:bold;">Admin</button>
+        <button id="navAdmin" onclick="mostrarLogin()" style="background:none; border:1px solid var(--primary); color:var(--primary); padding:5px 15px; border-radius:20px; cursor:pointer; font-weight:bold;">Admin</button>
     </div>
 
     <header>
@@ -51,7 +48,7 @@
     </header>
 
     <div class="container">
-        <!-- SECCION CLIENTE -->
+        <!-- VISTA CLIENTE -->
         <section id="clientView">
             <div class="card">
                 <h2>Reserva tu Espacio</h2>
@@ -60,7 +57,7 @@
                 <label>Telefono</label>
                 <input type="tel" id="cTel" placeholder="787-000-0000" required>
                 <label>Fecha</label>
-                <input type="date" id="cDate" onchange="verDisponibilidadCliente()">
+                <input type="date" id="cDate" onchange="verHorasCliente()">
                 <label>Horario</label>
                 <select id="cTime"><option value="">Seleccione fecha primero</option></select>
                 <label>Servicio</label>
@@ -74,20 +71,20 @@
                     <option>Servicios de Organizacion</option>
                     <option>Limpieza para Mudanzas</option>
                 </select>
-                <button class="btn btn-reserve" onclick="hacerReserva()">RESERVA YA</button>
+                <button class="btn btn-reserve" onclick="guardarReservaCliente()">RESERVA YA</button>
             </div>
         </section>
 
-        <!-- SECCION LOGIN -->
+        <!-- LOGIN -->
         <section id="loginForm" class="card">
             <h2>Acceso Admin</h2>
             <input type="text" id="user" placeholder="Usuario">
             <input type="password" id="pass" placeholder="Contrasena">
-            <button class="btn btn-reserve" onclick="entrarAdmin()">Entrar</button>
-            <button class="btn btn-home" onclick="location.reload()">Inicio</button>
+            <button class="btn btn-reserve" onclick="accederAdmin()">Entrar</button>
+            <button class="btn btn-home" onclick="location.reload()">Regresar al Inicio</button>
         </section>
 
-        <!-- SECCION PANEL ADMIN -->
+        <!-- PANEL ADMIN -->
         <section id="adminPanel">
             <div class="card">
                 <h2>Citas Recibidas</h2>
@@ -96,21 +93,21 @@
                         <thead>
                             <tr><th>Nombre</th><th>Telefono</th><th>Fecha/Hora</th><th>Servicio</th></tr>
                         </thead>
-                        <tbody id="tbodyReservas"></tbody>
+                        <tbody id="listaCitas"></tbody>
                     </table>
                 </div>
             </div>
             <div class="card">
                 <h2>Disponibilidad</h2>
-                <input type="date" id="adminDate" onchange="verDisponibilidadAdmin()">
+                <input type="date" id="adminDate" onchange="verHorasAdmin()">
                 <div class="time-grid" id="gridAdmin" style="display:none;">
-                    <div class="time-item">9:00 AM <span id="btn-9" class="status-toggle on" onclick="alternarHora('9')">DISPONIBLE</span></div>
-                    <div class="time-item">10:00 AM <span id="btn-10" class="status-toggle on" onclick="alternarHora('10')">DISPONIBLE</span></div>
-                    <div class="time-item">11:00 AM <span id="btn-11" class="status-toggle on" onclick="alternarHora('11')">DISPONIBLE</span></div>
-                    <div class="time-item">12:00 PM <span id="btn-12" class="status-toggle on" onclick="alternarHora('12')">DISPONIBLE</span></div>
+                    <div class="time-item">9:00 AM <span id="h-9" class="status-toggle on" onclick="cambiarEstado('9')">DISPONIBLE</span></div>
+                    <div class="time-item">10:00 AM <span id="h-10" class="status-toggle on" onclick="cambiarEstado('10')">DISPONIBLE</span></div>
+                    <div class="time-item">11:00 AM <span id="h-11" class="status-toggle on" onclick="cambiarEstado('11')">DISPONIBLE</span></div>
+                    <div class="time-item">12:00 PM <span id="h-12" class="status-toggle on" onclick="cambiarEstado('12')">DISPONIBLE</span></div>
                 </div>
             </div>
-            <button class="btn" style="background:#666; color:white; margin-top:20px;" onclick="location.reload()">Salir</button>
+            <button class="btn" style="background:#666; color:white; margin-top:20px;" onclick="location.reload()">Cerrar Sesion</button>
         </section>
     </div>
 
@@ -130,62 +127,62 @@
         const db = firebase.database();
 
         // NAVEGACION
-        function irAlLogin() {
+        function mostrarLogin() {
             document.getElementById('clientView').style.display = 'none';
             document.getElementById('loginForm').style.display = 'block';
         }
 
-        function entrarAdmin() {
+        function accederAdmin() {
             const u = document.getElementById('user').value;
             const p = document.getElementById('pass').value;
             if(u === "kamalishsantos" && p === "Kamalish22_") {
                 document.getElementById('loginForm').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
                 document.getElementById('navAdmin').style.display = 'none';
-                cargarTablaReservas();[cite: 1]
-            } else { alert("Datos incorrectos"); }
+                verListaReservas();[cite: 1]
+            } else { alert("Acceso denegado"); }
         }
 
         // CLIENTE
-        function verDisponibilidadCliente() {
+        function verHorasCliente() {
             const fecha = document.getElementById('cDate').value;
             if(!fecha) return;
             db.ref('bloqueos/' + fecha).on('value', snap => {[cite: 1]
-                const bloqueos = snap.val() || {};
+                const datos = snap.val() || {};
                 const select = document.getElementById('cTime');
                 select.innerHTML = "";
                 let count = 0;
                 ["9", "10", "11", "12"].forEach(h => {
-                    if(!bloqueos[h]) {
-                        const t = h === "12" ? "12:00 PM" : h + ":00 AM";
-                        select.options.add(new Option(t, h));
+                    if(!datos[h]) {
+                        const txt = h === "12" ? "12:00 PM" : h + ":00 AM";
+                        select.options.add(new Option(txt, h));
                         count++;
                     }
                 });
-                if(count === 0) select.options.add(new Option("Sin horarios", ""));
+                if(count === 0) select.options.add(new Option("No hay horarios", ""));
             });
         }
 
-        function hacerReserva() {
+        function guardarReservaCliente() {
             const n = document.getElementById('cNombre').value;[cite: 1]
             const t = document.getElementById('cTel').value;[cite: 1]
             const f = document.getElementById('cDate').value;[cite: 1]
             const h = document.getElementById('cTime').value;[cite: 1]
             const s = document.getElementById('cService').value;[cite: 1]
 
-            if(!n || !t || !f || !h || h === "") { alert("Llene todos los campos"); return; }
+            if(!n || !t || !f || !h || h === "") { alert("Por favor llene todos los campos"); return; }
 
-            db.ref('listaCitas').push({ nombre: n, tel: t, fecha: f, hora: h, servicio: s });[cite: 1]
+            db.ref('citasRecibidas').push({ nombre: n, tel: t, fecha: f, hora: h, servicio: s });[cite: 1]
             db.ref('bloqueos/' + f + '/' + h).set(true).then(() => {[cite: 1]
-                alert("Reserva confirmada");
+                alert("Reserva enviada exitosamente");
                 location.reload();
             });
         }
 
         // ADMIN
-        function cargarTablaReservas() {[cite: 1]
-            db.ref('listaCitas').on('value', snap => {[cite: 1]
-                const cuerpo = document.getElementById('tbodyReservas');[cite: 1]
+        function verListaReservas() {[cite: 1]
+            db.ref('citasRecibidas').on('value', snap => {[cite: 1]
+                const cuerpo = document.getElementById('listaCitas');[cite: 1]
                 cuerpo.innerHTML = "";[cite: 1]
                 snap.forEach(hijo => {[cite: 1]
                     const d = hijo.val();[cite: 1]
@@ -194,22 +191,22 @@
             });
         }
 
-        function verDisponibilidadAdmin() {
+        function verHorasAdmin() {
             const fecha = document.getElementById('adminDate').value;
             if(!fecha) return;
             document.getElementById('gridAdmin').style.display = 'grid';
             db.ref('bloqueos/' + fecha).on('value', snap => {[cite: 1]
-                const bloqueos = snap.val() || {};
+                const datos = snap.val() || {};
                 ["9", "10", "11", "12"].forEach(h => {
-                    const btn = document.getElementById('btn-' + h);
-                    const estaB = bloqueos[h];
+                    const btn = document.getElementById('h-' + h);
+                    const estaB = datos[h];
                     btn.innerText = estaB ? "BLOQUEADO" : "DISPONIBLE";
                     btn.className = estaB ? "status-toggle off" : "status-toggle on";
                 });
             });
         }
 
-        function alternarHora(h) {
+        function cambiarEstado(h) {
             const f = document.getElementById('adminDate').value;
             if(!f) return;
             const ref = db.ref('bloqueos/' + f + '/' + h);[cite: 1]
