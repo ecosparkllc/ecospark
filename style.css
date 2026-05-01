@@ -35,11 +35,11 @@ header h1 {
     font-weight: 700;
 }
 
-/* Tarjetas de Formulario */
+/* Tarjetas de Formulario - AJUSTE DE MARGEN */
 .card {
     background: white;
     max-width: 600px;
-    margin: -50px auto 40px;
+    margin: 20px auto 40px; /* Cambiado de -50px a 20px para evitar encimamientos */
     padding: 40px;
     border-radius: 25px;
     box-shadow: var(--shadow);
@@ -144,4 +144,9 @@ tr:hover td {
     border-radius: 8px;
     font-weight: bold;
     text-align: center;
+}
+
+/* REGLA DE VISIBILIDAD FORZADA - AJUSTE FINAL */
+#loginSection, #adminSection {
+    display: none !important;
 }
