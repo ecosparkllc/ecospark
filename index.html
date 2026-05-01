@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoSpark LLC - Reservas Online</title>
     
+    <!-- SDKs de Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database-compat.js"></script>
     
@@ -17,14 +18,17 @@
         .card { background: var(--light); padding: 30px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-top: 20px; }
         label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--primary); }
         input, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 20px; box-sizing: border-box; }
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 30px; cursor: pointer; font-weight: bold; text-transform: uppercase; }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 30px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
         .btn-reserve { background: var(--primary); color: white; }
+        .btn-reserve:hover { background: #26462d; }
+        .btn-home { background: white; color: var(--primary); border: 2px solid var(--primary); margin-top: 10px; }
         .time-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 20px; }
         .time-item { background: white; padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #ddd; }
         .status-toggle { cursor: pointer; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; font-weight: bold; }
         .on { background: #d4edda; color: #155724; }
         .off { background: #f8d7da; color: #721c24; }
         #adminPanel, #loginForm { display: none; }
+        footer { text-align: center; padding: 20px; font-size: 0.8rem; color: #888; }
     </style>
 </head>
 <body>
@@ -39,26 +43,44 @@
     </header>
 
     <div class="container">
+        <!-- VISTA CLIENTE -->
         <section id="clientView">
             <div class="card">
                 <h2>Reserva tu Espacio</h2>
                 <label>Fecha</label>
                 <input type="date" id="cDate" onchange="actualizarHorasDisponibles()">
+                
                 <label>Horarios Disponibles</label>
                 <select id="cTime">
                     <option>Seleccione una fecha primero...</option>
                 </select>
-                <button class="btn btn-reserve" onclick="alert('Solicitud enviada')">¡RESERVA YA!</button>
+
+                <label>Servicios</label>
+                <select id="cService">
+                    <option value="Limpieza Basica">Limpieza Basica</option>
+                    <option value="Limpieza Profunda">Limpieza Profunda</option>
+                    <option value="Limpieza Post Remodelacion">Limpieza Post Remodelacion</option>
+                    <option value="Limpieza de Oficinas">Limpieza de Oficinas</option>
+                    <option value="Limpieza Comercial">Limpieza Comercial</option>
+                    <option value="Limpieza de Airbnb's">Limpieza de Airbnb's</option>
+                    <option value="Servicios de Organizacion">Servicios de Organizacion</option>
+                    <option value="Limpieza para Mudanzas">Limpieza para Mudanzas</option>
+                </select>
+
+                <button class="btn btn-reserve" onclick="enviarReserva()">¡RESERVA YA!</button>
             </div>
         </section>
 
+        <!-- LOGIN ADMIN -->
         <section id="loginForm" class="card">
             <h2>Acceso Administrativo</h2>
             <input type="text" id="user" placeholder="Usuario">
             <input type="password" id="pass" placeholder="Contraseña">
             <button class="btn btn-reserve" onclick="checkLogin()">Entrar</button>
+            <button class="btn btn-home" onclick="location.reload()">Regresar al Inicio</button>
         </section>
 
+        <!-- PANEL ADMIN -->
         <section id="adminPanel" class="card">
             <h2>Gestión de Horarios</h2>
             <input type="date" id="adminDate" onchange="cargarHorasAdmin()">
@@ -68,12 +90,14 @@
                 <div class="time-item">11:00 AM <span id="s-11" class="status-toggle on" onclick="toggleTime('11')">DISPONIBLE</span></div>
                 <div class="time-item">12:00 PM <span id="s-12" class="status-toggle on" onclick="toggleTime('12')">DISPONIBLE</span></div>
             </div>
-            <button class="btn" style="background:#666; color:white; margin-top:30px;" onclick="location.reload()">Salir</button>
+            <button class="btn" style="background:#666; color:white; margin-top:30px;" onclick="location.reload()">Cerrar Sesión</button>
         </section>
     </div>
 
+    <footer>&copy; 2026 EcoSpark LLC | Made in PR</footer>
+
     <script>
-        // Tu configuración de Firebase
+        // Configuración de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBCsC16XwRHOO76eS4-BqhA0Y-8IH83maA",
             authDomain: "ecosparkllc.firebaseapp.com",
@@ -83,15 +107,8 @@
             appId: "1:403323212209:web:cf3a4adf96226a09d4ed90"
         };
 
-        // INICIALIZACIÓN SEGURA
-        let db;
-        try {
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.database();
-            console.log("Firebase conectado correctamente");
-        } catch (e) {
-            console.error("Error al conectar con Firebase:", e);
-        }
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
         // NAVEGACIÓN
         function showLogin() {
@@ -111,7 +128,7 @@
         // LÓGICA ADMIN
         function toggleTime(h) {
             const fecha = document.getElementById('adminDate').value;
-            if(!fecha || !db) return;
+            if(!fecha) return;
             const ref = db.ref('reservas/' + fecha + '/' + h);
             ref.once('value', snapshot => {
                 if(snapshot.exists()) ref.remove(); else ref.set(true);
@@ -120,7 +137,7 @@
 
         function cargarHorasAdmin() {
             const fecha = document.getElementById('adminDate').value;
-            if(!fecha || !db) return;
+            if(!fecha) return;
             document.getElementById('adminTimeSettings').style.display = 'grid';
             db.ref('reservas/' + fecha).on('value', snapshot => {
                 const bloqueados = snapshot.val() || {};
@@ -136,7 +153,7 @@
         // LÓGICA CLIENTE
         function actualizarHorasDisponibles() {
             const fecha = document.getElementById('cDate').value;
-            if(!fecha || !db) return;
+            if(!fecha) return;
             db.ref('reservas/' + fecha).on('value', snapshot => {
                 const bloqueados = snapshot.val() || {};
                 const select = document.getElementById('cTime');
@@ -145,11 +162,30 @@
                 ["9", "10", "11", "12"].forEach(h => {
                     if(!bloqueados[h]) {
                         const label = h === "12" ? "12:00 PM" : h + ":00 AM";
-                        select.options.add(new Option(label, label));
+                        select.options.add(new Option(label, h));
                         count++;
                     }
                 });
                 if(count === 0) select.options.add(new Option("Sin disponibilidad hoy", ""));
+            });
+        }
+
+        function enviarReserva() {
+            const fecha = document.getElementById('cDate').value;
+            const h = document.getElementById('cTime').value;
+            const serv = document.getElementById('cService').value;
+
+            if(!fecha || !h || h === "" || h.includes("Sin disponibilidad")) {
+                alert("Por favor seleccione fecha y hora válida.");
+                return;
+            }
+
+            // Bloquear automáticamente en Firebase
+            const ref = db.ref('reservas/' + fecha + '/' + h);
+            ref.set(true).then(() => {
+                alert(`¡Reserva confirmada!\nServicio: ${serv}\nHora: ${h}:00`);
+            }).catch(e => {
+                alert("Error al procesar reserva.");
             });
         }
     </script>
