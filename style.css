@@ -35,11 +35,11 @@ header h1 {
     font-weight: 700;
 }
 
-/* Tarjetas de Formulario - AJUSTE DE MARGEN */
+/* Tarjetas de Formulario */
 .card {
     background: white;
     max-width: 600px;
-    margin: 20px auto 40px; /* Cambiado de -50px a 20px para evitar encimamientos */
+    margin: 20px auto 40px; 
     padding: 40px;
     border-radius: 25px;
     box-shadow: var(--shadow);
@@ -79,7 +79,7 @@ input:focus, select:focus {
     background-color: #fff;
 }
 
-/* Botones con Efecto */
+/* Botones */
 .btn {
     width: 100%;
     padding: 18px;
@@ -101,7 +101,7 @@ input:focus, select:focus {
     transform: translateY(-3px);
 }
 
-/* Estilo del Panel Admin (Tabla) */
+/* Tabla */
 table {
     width: 100%;
     border-collapse: separate;
@@ -120,10 +120,6 @@ td {
     background: white;
     padding: 15px;
     border-top: 1px solid #eee;
-}
-
-tr:hover td {
-    background-color: #f0f7f0;
 }
 
 /* Grid de Horas */
@@ -146,7 +142,12 @@ tr:hover td {
     text-align: center;
 }
 
-/* REGLA DE VISIBILIDAD FORZADA - AJUSTE FINAL */
+/* --- LOGICA DE VISIBILIDAD --- */
 #loginSection, #adminSection {
     display: none !important;
+}
+
+/* Esta clase es la que permite que se vean al activarlas */
+#loginSection.visible, #adminSection.visible {
+    display: block !important;
 }
