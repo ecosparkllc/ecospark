@@ -61,7 +61,7 @@
             </div>
         </section>
 
-        <!-- LOGIN -->
+        <!-- LOGIN (Oculto por CSS) -->
         <section id="loginSection" class="card">
             <h2>Acceso Administrativo</h2>
             <input type="text" id="uAdmin" placeholder="Usuario">
@@ -70,7 +70,7 @@
             <button class="btn" style="background:#ccc; color: #333;" onclick="location.reload()">Regresar</button>
         </section>
 
-        <!-- PANEL ADMIN -->
+        <!-- PANEL ADMIN (Oculto por CSS) -->
         <section id="adminSection">
             <div class="card" style="max-width: 100%; margin-top: 20px;">
                 <h2>Citas Recibidas</h2>
@@ -121,9 +121,11 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        // NAVEGACIÓN ACTUALIZADA CON CLASES
         function abrirLogin() {
             document.getElementById('clientSection').style.display = 'none';
-            document.getElementById('loginSection').style.display = 'block';
+            // Activamos la clase visible definida en style.css
+            document.getElementById('loginSection').classList.add('visible');
             document.getElementById('btnAdminNav').style.display = 'none';
         }
 
@@ -131,8 +133,9 @@
             const u = document.getElementById('uAdmin').value;
             const p = document.getElementById('pAdmin').value;
             if(u === "kamalishsantos" && p === "Kamalish22_") {
-                document.getElementById('loginSection').style.display = 'none';
-                document.getElementById('adminSection').style.display = 'block';
+                document.getElementById('loginSection').classList.remove('visible');
+                // Activamos el panel administrativo con la clase visible
+                document.getElementById('adminSection').classList.add('visible');
                 escucharNuevasCitas();
             } else { alert("Acceso Incorrecto"); }
         }
