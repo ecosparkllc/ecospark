@@ -11,6 +11,10 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Montserrat', sans-serif;
     background-color: var(--soft-white);
@@ -141,6 +145,390 @@ textarea:focus {
 .btn-admin:hover {
     background: #3e7a36;
     transform: translateY(-2px);
+}
+
+/* HEADER BLANCO CON LOGO */
+.main-header {
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+    padding: 18px 20px !important;
+    border-radius: 0 0 28px 28px !important;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.08) !important;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.header-logo {
+    width: 155px;
+    max-width: 48vw;
+    height: auto;
+    display: block;
+}
+
+/* BOTÓN HAMBURGER */
+.hamburger-btn {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 14px;
+    background: #f8fbf8;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 6px;
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+
+.hamburger-btn:hover {
+    background: #eef7ee;
+    transform: translateY(-50%) scale(1.04);
+}
+
+.hamburger-btn span {
+    width: 24px;
+    height: 3px;
+    background: var(--primary-green);
+    border-radius: 20px;
+    transition: all 0.35s ease;
+}
+
+.hamburger-btn.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.hamburger-btn.active span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-10px);
+}
+
+.hamburger-btn.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+/* OVERLAY DEL MENÚ */
+.menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.35s ease;
+    z-index: 998;
+}
+
+.menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* PANEL DEL MENÚ */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -330px;
+    width: 300px;
+    max-width: 82vw;
+    height: 100vh;
+    background: #ffffff;
+    z-index: 1000;
+    box-shadow: 18px 0 45px rgba(0,0,0,0.18);
+    padding: 28px 22px;
+    transition: left 0.38s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.side-menu.active {
+    left: 0;
+}
+
+.menu-logo-box {
+    text-align: center;
+    padding: 10px 0 25px;
+    border-bottom: 1px solid rgba(45, 90, 39, 0.12);
+    margin-bottom: 18px;
+}
+
+.menu-logo-box img {
+    width: 145px;
+    height: auto;
+}
+
+.menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.menu-links a,
+.menu-links button {
+    width: 100%;
+    text-align: left;
+    text-decoration: none;
+    border: none;
+    background: transparent;
+    color: var(--primary-green);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 15px 14px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.menu-links a:hover,
+.menu-links button:hover {
+    background: #f0f7f0;
+    padding-left: 22px;
+    color: #1f421b;
+}
+
+.menu-admin-btn {
+    margin-top: 10px;
+    background: var(--primary-green) !important;
+    color: white !important;
+    text-align: center !important;
+    box-shadow: 0 8px 20px rgba(45, 90, 39, 0.22);
+}
+
+.menu-admin-btn:hover {
+    background: #3e7a36 !important;
+    padding-left: 14px !important;
+}
+
+/* SECCIÓN QUIÉNES SOMOS */
+.about-section {
+    max-width: 950px;
+    margin: 35px auto 45px;
+    padding: 0 15px;
+    scroll-margin-top: 120px;
+}
+
+.about-card {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fbf8 100%);
+    border-radius: 28px;
+    padding: 55px 48px;
+    box-shadow: 0 18px 45px rgba(0,0,0,0.08);
+    border: 1px solid rgba(45, 90, 39, 0.08);
+    animation: aboutFadeUp 0.9s ease both;
+}
+
+.about-card::before {
+    content: "";
+    position: absolute;
+    top: -90px;
+    right: -90px;
+    width: 220px;
+    height: 220px;
+    background: rgba(197, 160, 89, 0.14);
+    border-radius: 50%;
+    animation: aboutFloat 5s ease-in-out infinite;
+}
+
+.about-card::after {
+    content: "";
+    position: absolute;
+    bottom: -80px;
+    left: -80px;
+    width: 190px;
+    height: 190px;
+    background: rgba(45, 90, 39, 0.10);
+    border-radius: 50%;
+    animation: aboutFloat 6s ease-in-out infinite reverse;
+}
+
+.about-badge {
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    background: rgba(45, 90, 39, 0.08);
+    color: var(--primary-green);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 9px 16px;
+    border-radius: 50px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(45, 90, 39, 0.12);
+}
+
+.about-card h2 {
+    position: relative;
+    z-index: 2;
+    text-align: left;
+    margin-bottom: 22px;
+    font-size: 2rem;
+    color: var(--primary-green);
+}
+
+.about-card h2::after {
+    content: "";
+    display: block;
+    width: 75px;
+    height: 4px;
+    background: var(--accent-gold);
+    border-radius: 20px;
+    margin-top: 12px;
+}
+
+.about-card p {
+    position: relative;
+    z-index: 2;
+    color: #3f3f3f;
+    font-size: 1.02rem;
+    line-height: 1.9;
+    margin-bottom: 18px;
+}
+
+.about-card p:last-child {
+    margin-bottom: 0;
+}
+
+/* SECCIÓN ¿POR QUÉ ESCOGERNOS? */
+.why-section {
+    max-width: 1100px;
+    margin: 10px auto 45px;
+    padding: 0 15px;
+    scroll-margin-top: 120px;
+}
+
+.why-header {
+    text-align: center;
+    margin-bottom: 28px;
+    animation: whyFadeUp 0.8s ease both;
+}
+
+.why-badge {
+    display: inline-block;
+    background: rgba(45, 90, 39, 0.08);
+    color: var(--primary-green);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 9px 16px;
+    border-radius: 50px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(45, 90, 39, 0.12);
+}
+
+.why-title {
+    color: var(--primary-green);
+    font-size: 2rem;
+    margin: 0 0 10px;
+}
+
+.why-subtitle {
+    max-width: 760px;
+    margin: 0 auto;
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+.why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.why-card {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(145deg, #ffffff 0%, #f8fbf8 100%);
+    border-radius: 24px;
+    padding: 28px 24px;
+    box-shadow: 0 14px 35px rgba(0,0,0,0.07);
+    border: 1px solid rgba(45, 90, 39, 0.08);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    animation: whyFadeUp 0.9s ease both;
+}
+
+.why-card:nth-child(1) { animation-delay: 0.05s; }
+.why-card:nth-child(2) { animation-delay: 0.12s; }
+.why-card:nth-child(3) { animation-delay: 0.19s; }
+.why-card:nth-child(4) { animation-delay: 0.26s; }
+.why-card:nth-child(5) { animation-delay: 0.33s; }
+.why-card:nth-child(6) { animation-delay: 0.40s; }
+
+.why-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.12);
+}
+
+.why-card::before {
+    content: "";
+    position: absolute;
+    top: -35px;
+    right: -35px;
+    width: 100px;
+    height: 100px;
+    background: rgba(197, 160, 89, 0.10);
+    border-radius: 50%;
+}
+
+.why-icon {
+    width: 68px;
+    height: 68px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(45, 90, 39, 0.12), rgba(197, 160, 89, 0.18));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 2;
+    animation: whyFloat 4s ease-in-out infinite;
+}
+
+.why-icon svg {
+    width: 34px;
+    height: 34px;
+    stroke: var(--primary-green);
+    stroke-width: 2.2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.why-card h3 {
+    position: relative;
+    z-index: 2;
+    margin: 0 0 12px;
+    color: var(--primary-green);
+    font-size: 1.08rem;
+    line-height: 1.4;
+}
+
+.why-card p {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    color: #4b4b4b;
+    font-size: 0.97rem;
+    line-height: 1.75;
 }
 
 /* SECCIÓN DE COTIZACIÓN */
@@ -286,6 +674,51 @@ footer {
     font-size: 0.9rem;
 }
 
+/* Animaciones */
+@keyframes aboutFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(35px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes aboutFloat {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translateY(14px) scale(1.04);
+    }
+}
+
+@keyframes whyFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(28px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes whyFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
 /* --- LOGICA DE VISIBILIDAD --- */
 #loginSection, #adminSection {
     display: none !important;
@@ -308,6 +741,20 @@ footer {
         letter-spacing: 2px;
     }
 
+    .main-header {
+        padding: 14px 16px !important;
+    }
+
+    .header-logo {
+        width: 135px;
+    }
+
+    .hamburger-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+    }
+
     .card {
         padding: 28px 22px;
         border-radius: 20px;
@@ -316,6 +763,60 @@ footer {
 
     h2 {
         font-size: 1.5rem;
+    }
+
+    .about-section {
+        margin: 25px auto 35px;
+        padding: 0;
+        scroll-margin-top: 100px;
+    }
+
+    .about-card {
+        padding: 38px 25px;
+        border-radius: 24px;
+    }
+
+    .about-card h2 {
+        font-size: 1.65rem;
+    }
+
+    .about-card p {
+        font-size: 0.96rem;
+        line-height: 1.75;
+    }
+
+    .why-section {
+        margin: 5px auto 35px;
+        padding: 0;
+        scroll-margin-top: 100px;
+    }
+
+    .why-title {
+        font-size: 1.65rem;
+    }
+
+    .why-subtitle {
+        font-size: 0.95rem;
+        line-height: 1.7;
+    }
+
+    .why-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .why-card {
+        padding: 24px 20px;
+        border-radius: 22px;
+    }
+
+    .why-card h3 {
+        font-size: 1rem;
+    }
+
+    .why-card p {
+        font-size: 0.94rem;
+        line-height: 1.7;
     }
 
     .quote-grid {
