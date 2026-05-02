@@ -15,8 +15,177 @@
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database-compat.js"></script>
 
-    <!-- ESTILOS PARA LA SECCIÓN DE COTIZACIÓN -->
+    <!-- ESTILOS PARA HEADER, MENÚ Y COTIZACIÓN -->
     <style>
+        /* HEADER BLANCO CON LOGO */
+        .main-header {
+            background: #ffffff !important;
+            color: #1a1a1a !important;
+            padding: 18px 20px !important;
+            border-radius: 0 0 28px 28px !important;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.08) !important;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .header-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .header-logo {
+            width: 155px;
+            max-width: 48vw;
+            height: auto;
+            display: block;
+        }
+
+        /* BOTÓN HAMBURGER */
+        .hamburger-btn {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            border: none;
+            border-radius: 14px;
+            background: #f8fbf8;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 6px;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .hamburger-btn:hover {
+            background: #eef7ee;
+            transform: translateY(-50%) scale(1.04);
+        }
+
+        .hamburger-btn span {
+            width: 24px;
+            height: 3px;
+            background: #2d5a27;
+            border-radius: 20px;
+            transition: all 0.35s ease;
+        }
+
+        .hamburger-btn.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
+
+        .hamburger-btn.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+
+        .hamburger-btn.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+        }
+
+        /* OVERLAY DEL MENÚ */
+        .menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.35);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.35s ease;
+            z-index: 998;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* PANEL DEL MENÚ */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -330px;
+            width: 300px;
+            max-width: 82vw;
+            height: 100vh;
+            background: #ffffff;
+            z-index: 1000;
+            box-shadow: 18px 0 45px rgba(0,0,0,0.18);
+            padding: 28px 22px;
+            transition: left 0.38s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .side-menu.active {
+            left: 0;
+        }
+
+        .menu-logo-box {
+            text-align: center;
+            padding: 10px 0 25px;
+            border-bottom: 1px solid rgba(45, 90, 39, 0.12);
+            margin-bottom: 18px;
+        }
+
+        .menu-logo-box img {
+            width: 145px;
+            height: auto;
+        }
+
+        .menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .menu-links a,
+        .menu-links button {
+            width: 100%;
+            text-align: left;
+            text-decoration: none;
+            border: none;
+            background: transparent;
+            color: #2d5a27;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            padding: 15px 14px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .menu-links a:hover,
+        .menu-links button:hover {
+            background: #f0f7f0;
+            padding-left: 22px;
+            color: #1f421b;
+        }
+
+        .menu-admin-btn {
+            margin-top: 10px;
+            background: #2d5a27 !important;
+            color: white !important;
+            text-align: center !important;
+            box-shadow: 0 8px 20px rgba(45, 90, 39, 0.22);
+        }
+
+        .menu-admin-btn:hover {
+            background: #3e7a36 !important;
+            padding-left: 14px !important;
+        }
+
+        /* SECCIÓN DE COTIZACIÓN */
         .quote-card {
             border-top: 5px solid #28b463;
         }
@@ -79,18 +248,55 @@
             .quote-grid {
                 grid-template-columns: 1fr;
             }
+
+            .main-header {
+                padding: 14px 16px !important;
+            }
+
+            .header-logo {
+                width: 135px;
+            }
+
+            .hamburger-btn {
+                width: 44px;
+                height: 44px;
+                border-radius: 12px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="container" style="text-align: right; padding-top: 10px;">
-        <button class="btn-admin" id="btnAdminNav" onclick="abrirLogin()">Admin</button>
-    </div>
+    <!-- MENÚ HAMBURGER -->
+    <div class="menu-overlay" id="menuOverlay" onclick="cerrarMenu()"></div>
 
-    <header>
-        <h1>ECOSPARK LLC</h1>
-        <p>Servicios de Limpieza Profesional | San Juan, PR</p>
+    <nav class="side-menu" id="sideMenu">
+        <div class="menu-logo-box">
+            <img src="EcoSpark_logo.png" alt="EcoSpark LLC Logo">
+        </div>
+
+        <div class="menu-links">
+            <a href="#quienesSomos" onclick="cerrarMenu()">¿Quiénes somos?</a>
+            <a href="#porqueEscogernos" onclick="cerrarMenu()">¿Por qué escogernos?</a>
+            <a href="#servicios" onclick="cerrarMenu()">Servicios</a>
+            <a href="#cotizacion" onclick="cerrarMenu()">Cotización</a>
+            <a href="#sacarCita" onclick="cerrarMenu()">Sacar Cita</a>
+            <a href="#contacto" onclick="cerrarMenu()">Contacto</a>
+            <button type="button" class="menu-admin-btn" onclick="abrirLoginDesdeMenu()">Admin</button>
+        </div>
+    </nav>
+
+    <!-- HEADER BLANCO -->
+    <header class="main-header">
+        <div class="header-inner">
+            <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Abrir menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <img src="EcoSpark_logo.png" alt="EcoSpark LLC Logo" class="header-logo">
+        </div>
     </header>
 
     <div class="container">
@@ -98,7 +304,7 @@
         <section id="clientSection">
 
             <!-- SECCIÓN DE COTIZACIÓN -->
-            <div class="card quote-card">
+            <div class="card quote-card" id="cotizacion">
                 <h2>Solicita una Cotización</h2>
                 <p class="quote-intro">
                     Completa la información de la propiedad y adjunta imágenes para poder evaluar mejor el servicio.
@@ -118,18 +324,19 @@
 
                     <label>Pueblo</label>
                     <input type="text" name="Pueblo" placeholder="Ej. San Juan, Bayamón, Carolina" required>
+
                     <label>Servicio que desea cotizar</label>
                     <select name="Servicio que desea cotizar" required>
-                    <option value="">Seleccione un servicio...</option>
-                    <option>Limpieza Basica</option>
-                    <option>Limpieza Profunda</option>
-                    <option>Limpieza Post Remodelacion</option>
-                    <option>Limpieza de Oficinas</option>
-                    <option>Limpieza Comercial</option>
-                    <option>Limpieza de Airbnb's</option>
-                    <option>Servicios de Organizacion</option>
-                    <option>Limpieza para Mudanzas</option>
-</select>
+                        <option value="">Seleccione un servicio...</option>
+                        <option>Limpieza Basica</option>
+                        <option>Limpieza Profunda</option>
+                        <option>Limpieza Post Remodelacion</option>
+                        <option>Limpieza de Oficinas</option>
+                        <option>Limpieza Comercial</option>
+                        <option>Limpieza de Airbnb's</option>
+                        <option>Servicios de Organizacion</option>
+                        <option>Limpieza para Mudanzas</option>
+                    </select>
 
                     <div class="quote-grid">
                         <div>
@@ -186,7 +393,7 @@
             </div>
 
             <!-- SECCIÓN DE RESERVA EXISTENTE -->
-            <div class="card">
+            <div class="card" id="sacarCita">
                 <h2>Reserva tu Cita</h2>
                 <label>Nombre Completo</label>
                 <input type="text" id="cNombre" placeholder="Nombre y Apellido">
@@ -263,7 +470,7 @@
         </section>
     </div>
 
-    <footer>&copy; 2026 EcoSpark LLC | Made in PR</footer>
+    <footer id="contacto">&copy; 2026 EcoSpark LLC | Made in PR</footer>
 
     <script>
         const firebaseConfig = {
@@ -277,6 +484,24 @@
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+
+        // MENÚ HAMBURGER
+        function toggleMenu() {
+            document.getElementById('hamburgerBtn').classList.toggle('active');
+            document.getElementById('sideMenu').classList.toggle('active');
+            document.getElementById('menuOverlay').classList.toggle('active');
+        }
+
+        function cerrarMenu() {
+            document.getElementById('hamburgerBtn').classList.remove('active');
+            document.getElementById('sideMenu').classList.remove('active');
+            document.getElementById('menuOverlay').classList.remove('active');
+        }
+
+        function abrirLoginDesdeMenu() {
+            cerrarMenu();
+            abrirLogin();
+        }
 
         // Seguridad extra para que el formulario de cotización siempre salga como POST
         const quoteForm = document.getElementById('quoteForm');
@@ -293,7 +518,6 @@
         function abrirLogin() {
             document.getElementById('clientSection').style.display = 'none';
             document.getElementById('loginSection').classList.add('visible');
-            document.getElementById('btnAdminNav').style.display = 'none';
         }
 
         function loginAdmin() {
