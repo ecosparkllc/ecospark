@@ -104,12 +104,7 @@
                     Completa la información de la propiedad y adjunta imágenes para poder evaluar mejor el servicio.
                 </p>
 
-                <form 
-                    action="https://formsubmit.co/ecosparkcrew@gmail.com" 
-                    method="POST" 
-                    enctype="multipart/form-data"
-                    class="quote-form"
-                >
+                <form id="quoteForm" action="https://formsubmit.co/ecosparkcrew@gmail.com" method="POST" enctype="multipart/form-data" class="quote-form">
                     <!-- Configuración del correo -->
                     <input type="hidden" name="_subject" value="Nueva solicitud de cotización - EcoSpark LLC">
                     <input type="hidden" name="_template" value="table">
@@ -146,7 +141,7 @@
                                 <option value="">Seleccione...</option>
                                 <option value="1 nivel">1 nivel</option>
                                 <option value="2 niveles">2 niveles</option>
-                                <option value="3 niveles o mas">3 niveles o más</option>
+                                <option value="3 niveles o más">3 niveles o más</option>
                             </select>
                         </div>
                     </div>
@@ -271,10 +266,20 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        // Seguridad extra para que el formulario de cotización siempre salga como POST
+        const quoteForm = document.getElementById('quoteForm');
+
+        if (quoteForm) {
+            quoteForm.addEventListener('submit', function () {
+                quoteForm.setAttribute('method', 'POST');
+                quoteForm.setAttribute('enctype', 'multipart/form-data');
+                quoteForm.setAttribute('action', 'https://formsubmit.co/ecosparkcrew@gmail.com');
+            });
+        }
+
         // NAVEGACIÓN ACTUALIZADA CON CLASES
         function abrirLogin() {
             document.getElementById('clientSection').style.display = 'none';
-            // Activamos la clase visible definida en style.css
             document.getElementById('loginSection').classList.add('visible');
             document.getElementById('btnAdminNav').style.display = 'none';
         }
@@ -282,9 +287,9 @@
         function loginAdmin() {
             const u = document.getElementById('uAdmin').value;
             const p = document.getElementById('pAdmin').value;
+
             if(u === "kamalishsantos" && p === "Kamalish22_") {
                 document.getElementById('loginSection').classList.remove('visible');
-                // Activamos el panel administrativo con la clase visible
                 document.getElementById('adminSection').classList.add('visible');
                 escucharNuevasCitas();
             } else { 
