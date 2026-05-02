@@ -7,6 +7,10 @@
     --shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Montserrat', sans-serif;
     background-color: var(--soft-white);
@@ -33,6 +37,18 @@ header h1 {
     margin: 0;
     letter-spacing: 4px;
     font-weight: 700;
+}
+
+header p {
+    margin-top: 10px;
+    font-size: 1rem;
+}
+
+/* Contenedor general */
+.container {
+    width: 92%;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
 /* Tarjetas de Formulario */
@@ -63,7 +79,7 @@ label {
     text-transform: uppercase;
 }
 
-input, select {
+input, select, textarea {
     width: 100%;
     padding: 15px;
     margin-bottom: 25px;
@@ -71,9 +87,18 @@ input, select {
     border-radius: 12px;
     transition: all 0.3s ease;
     font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    background: white;
 }
 
-input:focus, select:focus {
+textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+input:focus, 
+select:focus,
+textarea:focus {
     border-color: var(--accent-gold);
     outline: none;
     background-color: #fff;
@@ -101,7 +126,103 @@ input:focus, select:focus {
     transform: translateY(-3px);
 }
 
+.btn-admin {
+    background: var(--primary-green);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s, background 0.3s;
+}
+
+.btn-admin:hover {
+    background: #3e7a36;
+    transform: translateY(-2px);
+}
+
+/* SECCIÓN DE COTIZACIÓN */
+.quote-card {
+    border-top: 6px solid var(--accent-gold);
+    position: relative;
+    overflow: hidden;
+}
+
+.quote-card::before {
+    content: "";
+    position: absolute;
+    top: -70px;
+    right: -70px;
+    width: 160px;
+    height: 160px;
+    background: rgba(197, 160, 89, 0.12);
+    border-radius: 50%;
+}
+
+.quote-intro {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #555;
+    margin: -15px 0 25px;
+    text-align: center;
+}
+
+.quote-form {
+    position: relative;
+    z-index: 2;
+}
+
+.quote-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.quote-grid input,
+.quote-grid select {
+    margin-bottom: 25px;
+}
+
+.quote-note {
+    font-size: 13px;
+    color: #666;
+    margin-top: -10px;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.quote-form input[type="file"] {
+    background: #f8fbf8;
+    padding: 14px;
+    border: 2px dashed rgba(45, 90, 39, 0.25);
+    border-radius: 12px;
+    cursor: pointer;
+    margin-bottom: 14px;
+}
+
+.quote-form input[type="file"]::file-selector-button {
+    background: var(--primary-green);
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-right: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.quote-form input[type="file"]::file-selector-button:hover {
+    background: #3e7a36;
+}
+
 /* Tabla */
+.table-wrap {
+    overflow-x: auto;
+}
+
 table {
     width: 100%;
     border-collapse: separate;
@@ -133,13 +254,36 @@ td {
     padding: 15px;
     border-radius: 15px;
     background: #fdfdfd;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
 }
 
 .toggle {
+    display: inline-block;
+    margin-top: 8px;
     padding: 8px 12px;
     border-radius: 8px;
     font-weight: bold;
     text-align: center;
+    cursor: pointer;
+    font-size: 0.75rem;
+}
+
+.disponible {
+    background: #dff5df;
+    color: #256b25;
+}
+
+.bloqueado {
+    background: #ffe1e1;
+    color: #9b1c1c;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 30px 15px;
+    color: #555;
+    font-size: 0.9rem;
 }
 
 /* --- LOGICA DE VISIBILIDAD --- */
@@ -150,4 +294,42 @@ td {
 /* Esta clase es la que permite que se vean al activarlas */
 #loginSection.visible, #adminSection.visible {
     display: block !important;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    header {
+        padding: 60px 20px;
+        border-radius: 0 0 35px 35px;
+    }
+
+    header h1 {
+        font-size: 2.1rem;
+        letter-spacing: 2px;
+    }
+
+    .card {
+        padding: 28px 22px;
+        border-radius: 20px;
+        margin: 20px auto 30px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .quote-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    input, select, textarea {
+        padding: 14px;
+        font-size: 0.95rem;
+    }
+
+    .btn {
+        padding: 16px;
+        font-size: 1rem;
+    }
 }
