@@ -1075,6 +1075,124 @@ textarea:focus {
     animation-delay: 0.15s;
 }
 
+/* SERVICIO LIMPIEZA POST-REMODELACIÓN */
+.remodeling-service-card {
+    margin-top: 34px;
+    background:
+        radial-gradient(circle at top right, rgba(197, 160, 89, 0.16), transparent 34%),
+        linear-gradient(145deg, #ffffff 0%, #f8fbf8 100%);
+}
+
+.remodeling-service-card::before {
+    background: rgba(45, 90, 39, 0.10);
+}
+
+.remodeling-service-card::after {
+    content: "";
+    position: absolute;
+    bottom: -90px;
+    left: -90px;
+    width: 210px;
+    height: 210px;
+    background: rgba(197, 160, 89, 0.10);
+    border-radius: 50%;
+}
+
+.remodeling-service-card .service-label {
+    background: rgba(45, 90, 39, 0.10);
+    color: var(--primary-green);
+}
+
+.remodeling-service-card .service-extra-note {
+    background: rgba(197, 160, 89, 0.10);
+    border-left: 4px solid var(--accent-gold);
+}
+
+.remodeling-list-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.remodeling-list-grid li {
+    margin-bottom: 0;
+    background: rgba(255,255,255,0.72);
+    border: 1px solid rgba(45, 90, 39, 0.08);
+    border-radius: 14px;
+    padding: 12px 12px 12px 38px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+}
+
+.remodeling-images {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+}
+
+.remodeling-image-box {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    box-shadow: 0 14px 35px rgba(0,0,0,0.12);
+    border: 1px solid rgba(45, 90, 39, 0.10);
+    background: white;
+    min-height: 230px;
+    animation: remodelingFadeUp 0.9s ease both;
+}
+
+.remodeling-image-box:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.remodeling-image-box span {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 3;
+    background: rgba(255,255,255,0.92);
+    color: var(--primary-green);
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 8px 13px;
+    border-radius: 50px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.10);
+}
+
+.remodeling-image-box img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.55s ease, filter 0.55s ease;
+}
+
+.remodeling-image-box:hover {
+    box-shadow: 0 24px 55px rgba(0,0,0,0.16);
+}
+
+.remodeling-image-box:hover img {
+    transform: scale(1.07);
+    filter: brightness(1.04);
+}
+
+/* Compatibilidad si en el HTML usaste service-images normal */
+.remodeling-service-card .service-images {
+    gap: 18px;
+}
+
+.remodeling-service-card .service-image-box {
+    animation: remodelingFadeUp 0.9s ease both;
+}
+
+.remodeling-service-card .service-image-box:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
 /* SECCIÓN DE COTIZACIÓN */
 .quote-card {
     border-top: 6px solid var(--accent-gold);
@@ -1449,6 +1567,20 @@ td {
     }
 }
 
+@keyframes remodelingFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(34px) scale(0.96);
+        filter: blur(2px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
 /* --- LOGICA DE VISIBILIDAD --- */
 #loginSection, #adminSection {
     display: none !important;
@@ -1676,6 +1808,31 @@ td {
     }
 
     .moving-image-box:hover img {
+        transform: scale(1.04);
+    }
+
+    .remodeling-service-card {
+        margin-top: 28px;
+    }
+
+    .remodeling-list-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .remodeling-images {
+        gap: 18px;
+    }
+
+    .remodeling-image-box {
+        min-height: 220px;
+        border-radius: 22px;
+    }
+
+    .remodeling-image-box img {
+        height: 220px;
+    }
+
+    .remodeling-image-box:hover img {
         transform: scale(1.04);
     }
 
