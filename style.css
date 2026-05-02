@@ -412,6 +412,7 @@ textarea:focus {
     margin: 10px auto 45px;
     padding: 0 15px;
     scroll-margin-top: 120px;
+    overflow: hidden;
 }
 
 .why-header {
@@ -449,9 +450,14 @@ textarea:focus {
 }
 
 .why-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
     gap: 22px;
+    width: max-content;
+    animation: whyCarouselMove 28s ease-in-out infinite alternate;
+}
+
+.why-grid:hover {
+    animation-play-state: paused;
 }
 
 .why-card {
@@ -464,6 +470,9 @@ textarea:focus {
     border: 1px solid rgba(45, 90, 39, 0.08);
     transition: transform 0.35s ease, box-shadow 0.35s ease;
     animation: whyFadeUp 0.9s ease both;
+    min-width: 320px;
+    max-width: 320px;
+    flex: 0 0 320px;
 }
 
 .why-card:nth-child(1) { animation-delay: 0.05s; }
@@ -925,6 +934,58 @@ footer {
     }
 }
 
+@keyframes whyCarouselMove {
+    0% {
+        transform: translateX(0);
+    }
+
+    18% {
+        transform: translateX(0);
+    }
+
+    38% {
+        transform: translateX(-342px);
+    }
+
+    58% {
+        transform: translateX(-684px);
+    }
+
+    78% {
+        transform: translateX(-1026px);
+    }
+
+    100% {
+        transform: translateX(-1026px);
+    }
+}
+
+@keyframes whyCarouselMobile {
+    0% {
+        transform: translateX(0);
+    }
+
+    18% {
+        transform: translateX(0);
+    }
+
+    38% {
+        transform: translateX(-303px);
+    }
+
+    58% {
+        transform: translateX(-606px);
+    }
+
+    78% {
+        transform: translateX(-909px);
+    }
+
+    100% {
+        transform: translateX(-909px);
+    }
+}
+
 @keyframes servicesFadeUp {
     from {
         opacity: 0;
@@ -1025,6 +1086,7 @@ footer {
         margin: 5px auto 35px;
         padding: 0;
         scroll-margin-top: 100px;
+        overflow: hidden;
     }
 
     .why-title {
@@ -1037,13 +1099,18 @@ footer {
     }
 
     .why-grid {
-        grid-template-columns: 1fr;
+        display: flex;
         gap: 18px;
+        width: max-content;
+        animation: whyCarouselMobile 26s ease-in-out infinite alternate;
     }
 
     .why-card {
         padding: 24px 20px;
         border-radius: 22px;
+        min-width: 285px;
+        max-width: 285px;
+        flex: 0 0 285px;
     }
 
     .why-card h3 {
