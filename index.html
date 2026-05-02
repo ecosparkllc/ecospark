@@ -1105,6 +1105,174 @@
             transform: translateY(-3px);
         }
 
+
+        /* SERVICIO LIMPIEZA POST-REMODELACIÓN */
+        .remodeling-service-card {
+            margin-top: 34px;
+        }
+
+        .remodeling-service-card::after {
+            content: "";
+            position: absolute;
+            bottom: -90px;
+            left: -90px;
+            width: 210px;
+            height: 210px;
+            background: rgba(45, 90, 39, 0.09);
+            border-radius: 50%;
+        }
+
+        .remodeling-list-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .remodeling-list-grid li {
+            margin-bottom: 0;
+            background: rgba(255,255,255,0.72);
+            border: 1px solid rgba(45, 90, 39, 0.08);
+            border-radius: 14px;
+            padding: 12px 12px 12px 38px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+        }
+
+        .remodeling-carousel-wrap {
+            position: relative;
+            width: 100%;
+            min-height: 390px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .remodeling-grid {
+            position: relative;
+            width: 100%;
+            height: 330px;
+            display: block;
+        }
+
+        .remodeling-image-card {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 315px;
+            max-width: 88%;
+            height: 315px;
+            overflow: hidden;
+            border-radius: 26px;
+            background: #ffffff;
+            border: 1px solid rgba(45, 90, 39, 0.10);
+            box-shadow: 0 14px 35px rgba(0,0,0,0.12);
+            opacity: 0;
+            pointer-events: none;
+            transition:
+                transform 0.75s ease,
+                opacity 0.75s ease,
+                filter 0.75s ease,
+                box-shadow 0.75s ease;
+        }
+
+        .remodeling-image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.55s ease;
+        }
+
+        .remodeling-image-card span {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            z-index: 3;
+            background: rgba(255,255,255,0.92);
+            color: #2d5a27;
+            font-weight: 700;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 13px;
+            border-radius: 50px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.10);
+        }
+
+        .remodeling-image-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.16));
+            pointer-events: none;
+        }
+
+        .remodeling-image-card.active {
+            transform: translateX(-50%) scale(1);
+            opacity: 1;
+            z-index: 5;
+            pointer-events: auto;
+            filter: blur(0);
+            box-shadow: 0 22px 50px rgba(0,0,0,0.16);
+        }
+
+        .remodeling-image-card.next {
+            transform: translateX(-15%) scale(0.88);
+            opacity: 0.55;
+            z-index: 4;
+            filter: blur(1px);
+        }
+
+        .remodeling-image-card.prev {
+            transform: translateX(-85%) scale(0.88);
+            opacity: 0.55;
+            z-index: 4;
+            filter: blur(1px);
+        }
+
+        .remodeling-image-card.hidden-card {
+            transform: translateX(-50%) scale(0.72);
+            opacity: 0;
+            z-index: 1;
+            filter: blur(3px);
+        }
+
+        .remodeling-image-card:hover {
+            box-shadow: 0 26px 58px rgba(0,0,0,0.20);
+        }
+
+        .remodeling-image-card:hover img {
+            transform: scale(1.07);
+        }
+
+        .remodeling-carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 14px;
+        }
+
+        .remodeling-carousel-btn {
+            width: 48px;
+            height: 48px;
+            border: none;
+            border-radius: 50%;
+            background: #2d5a27;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(45, 90, 39, 0.22);
+            transition: transform 0.25s ease, background 0.25s ease;
+        }
+
+        .remodeling-carousel-btn:hover {
+            background: #3e7a36;
+            transform: translateY(-3px);
+        }
+
         /* SECCIÓN DE COTIZACIÓN */
         .quote-card {
             border-top: 5px solid #28b463;
@@ -1510,6 +1678,39 @@
                 font-size: 1.25rem;
             }
 
+
+            .remodeling-list-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .remodeling-carousel-wrap {
+                min-height: 390px;
+            }
+
+            .remodeling-grid {
+                height: 320px;
+            }
+
+            .remodeling-image-card {
+                width: 285px;
+                height: 300px;
+                border-radius: 22px;
+            }
+
+            .remodeling-image-card.next {
+                transform: translateX(-20%) scale(0.86);
+            }
+
+            .remodeling-image-card.prev {
+                transform: translateX(-80%) scale(0.86);
+            }
+
+            .remodeling-carousel-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 1.25rem;
+            }
+
             .main-footer {
                 padding: 40px 18px 32px;
                 border-radius: 32px 32px 0 0;
@@ -1898,6 +2099,64 @@
                     </div>
                 </div>
 
+
+                <!-- LIMPIEZA POST-REMODELACIÓN -->
+                <div class="service-detail-card remodeling-service-card">
+                    <div class="service-content">
+                        <div class="service-label">Después de construcción o renovación</div>
+
+                        <h3>Limpieza Post-Remodelación</h3>
+
+                        <p>
+                            Nuestro servicio de limpieza post-remodelación está diseñado para transformar espacios recién construidos o renovados en áreas completamente limpias, seguras y listas para ser habitadas.
+                        </p>
+
+                        <p>
+                            Nos encargamos de eliminar a fondo el polvo fino de cemento y residuos de construcción que suelen acumularse en todas las superficies, incluyendo paredes, techos, ventanas, marcos, pisos y rincones de difícil acceso.
+                        </p>
+
+                        <p>
+                            Realizamos una limpieza detallada de gabinetes, topes, puertas, molduras y cualquier área afectada por el proceso de remodelación para lograr un acabado limpio, pulido y profesional.
+                        </p>
+
+                        <h4>Este servicio incluye:</h4>
+
+                        <ul class="service-list remodeling-list-grid">
+                            <li>Eliminación de polvo fino de cemento</li>
+                            <li>Remoción de residuos de construcción</li>
+                            <li>Limpieza de paredes, techos y superficies visibles</li>
+                            <li>Limpieza de ventanas, marcos y rincones difíciles</li>
+                            <li>Limpieza detallada de gabinetes: interior y exterior</li>
+                            <li>Limpieza de topes, puertas y molduras</li>
+                            <li>Remoción de manchas, residuos adheridos y partículas de obra</li>
+                            <li>Limpieza de pisos para un acabado limpio y profesional</li>
+                        </ul>
+
+                        <p class="service-extra-note">
+                            El resultado es un espacio renovado que pasa de ser una zona de obra a un ambiente fresco, ordenado y listo para disfrutar.
+                        </p>
+                    </div>
+
+                    <div class="remodeling-carousel-wrap">
+                        <div class="remodeling-grid">
+                            <div class="remodeling-image-card">
+                                <span>Zona de obra</span>
+                                <img src="remodelacion1.jpg" alt="Limpieza post-remodelación antes">
+                            </div>
+
+                            <div class="remodeling-image-card">
+                                <span>Espacio renovado</span>
+                                <img src="remodelacion2.jpg" alt="Resultado de limpieza post-remodelación">
+                            </div>
+                        </div>
+
+                        <div class="remodeling-carousel-controls">
+                            <button type="button" class="remodeling-carousel-btn" onclick="moverRemodelingCarousel(-1)">‹</button>
+                            <button type="button" class="remodeling-carousel-btn" onclick="moverRemodelingCarousel(1)">›</button>
+                        </div>
+                    </div>
+                </div>
+
             </section>
 
             <!-- SECCIÓN DE COTIZACIÓN -->
@@ -1926,7 +2185,7 @@
                         <option value="">Seleccione un servicio...</option>
                         <option>Limpieza Basica</option>
                         <option>Limpieza Profunda</option>
-                        <option>Limpieza Post Remodelacion</option>
+                        <option>Limpieza Post-Remodelación</option>
                         <option>Limpieza de Oficinas</option>
                         <option>Limpieza Comercial</option>
                         <option>Limpieza de Airbnb's</option>
@@ -2009,7 +2268,7 @@
                 <select id="cServicio">
                     <option>Limpieza Basica</option>
                     <option>Limpieza Profunda</option>
-                    <option>Limpieza Post Remodelacion</option>
+                    <option>Limpieza Post-Remodelación</option>
                     <option>Limpieza de Oficinas</option>
                     <option>Limpieza Comercial</option>
                     <option>Limpieza de Airbnb's</option>
@@ -2421,6 +2680,56 @@
             iniciarMovingAutoSlide();
         }
 
+
+        let remodelingIndex = 0;
+        let remodelingAutoSlide;
+
+        function actualizarRemodelingCarousel() {
+            const cards = document.querySelectorAll('.remodeling-image-card');
+            const total = cards.length;
+
+            if (!total) return;
+
+            cards.forEach((card, i) => {
+                card.classList.remove('active', 'next', 'prev', 'hidden-card');
+
+                const diff = (i - remodelingIndex + total) % total;
+
+                if (diff === 0) {
+                    card.classList.add('active');
+                } else if (diff === 1) {
+                    card.classList.add('next');
+                } else if (diff === total - 1) {
+                    card.classList.add('prev');
+                } else {
+                    card.classList.add('hidden-card');
+                }
+            });
+        }
+
+        function moverRemodelingCarousel(direction) {
+            const cards = document.querySelectorAll('.remodeling-image-card');
+            const total = cards.length;
+
+            if (!total) return;
+
+            remodelingIndex = (remodelingIndex + direction + total) % total;
+            actualizarRemodelingCarousel();
+            reiniciarRemodelingAutoSlide();
+        }
+
+        function iniciarRemodelingAutoSlide() {
+            remodelingAutoSlide = setInterval(() => {
+                moverRemodelingCarousel(1);
+            }, 5200);
+        }
+
+        function reiniciarRemodelingAutoSlide() {
+            clearInterval(remodelingAutoSlide);
+            iniciarRemodelingAutoSlide();
+        }
+
+
         document.addEventListener('DOMContentLoaded', () => {
             actualizarWhyCarousel();
             iniciarWhyAutoSlide();
@@ -2428,6 +2737,8 @@
             iniciarAirbnbAutoSlide();
             actualizarMovingCarousel();
             iniciarMovingAutoSlide();
+            actualizarRemodelingCarousel();
+            iniciarRemodelingAutoSlide();
         });
     </script>
 </body>
