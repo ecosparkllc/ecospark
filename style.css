@@ -449,42 +449,97 @@ textarea:focus {
     line-height: 1.8;
 }
 
-.why-grid {
+/* CARRUSEL STACK - ¿POR QUÉ ESCOGERNOS? */
+.why-carousel-wrap {
+    position: relative;
+    max-width: 760px;
+    min-height: 430px;
+    margin: 0 auto;
     display: flex;
-    gap: 22px;
-    width: max-content;
-    animation: whyCarouselMove 28s ease-in-out infinite alternate;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.why-grid:hover {
-    animation-play-state: paused;
+.why-grid {
+    position: relative !important;
+    width: 100% !important;
+    height: 350px !important;
+    display: block !important;
+    animation: none !important;
 }
 
 .why-card {
-    position: relative;
+    position: absolute !important;
+    top: 0;
+    left: 50%;
+    width: 360px !important;
+    min-width: 360px !important;
+    max-width: 360px !important;
+    min-height: 315px;
+    flex: none !important;
     overflow: hidden;
     background: linear-gradient(145deg, #ffffff 0%, #f8fbf8 100%);
     border-radius: 24px;
     padding: 28px 24px;
     box-shadow: 0 14px 35px rgba(0,0,0,0.07);
     border: 1px solid rgba(45, 90, 39, 0.08);
-    transition: transform 0.35s ease, box-shadow 0.35s ease;
-    animation: whyFadeUp 0.9s ease both;
-    min-width: 320px;
-    max-width: 320px;
-    flex: 0 0 320px;
+    transition: 
+        transform 0.75s ease,
+        opacity 0.75s ease,
+        filter 0.75s ease,
+        box-shadow 0.75s ease;
+    opacity: 0;
+    pointer-events: none;
+    animation: none !important;
 }
 
-.why-card:nth-child(1) { animation-delay: 0.05s; }
-.why-card:nth-child(2) { animation-delay: 0.12s; }
-.why-card:nth-child(3) { animation-delay: 0.19s; }
-.why-card:nth-child(4) { animation-delay: 0.26s; }
-.why-card:nth-child(5) { animation-delay: 0.33s; }
-.why-card:nth-child(6) { animation-delay: 0.40s; }
+.why-card.active {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+    z-index: 5;
+    pointer-events: auto;
+    filter: blur(0);
+    box-shadow: 0 22px 50px rgba(0,0,0,0.14);
+}
+
+.why-card.next {
+    transform: translateX(-15%) scale(0.88);
+    opacity: 0.55;
+    z-index: 4;
+    filter: blur(1px);
+}
+
+.why-card.prev {
+    transform: translateX(-85%) scale(0.88);
+    opacity: 0.55;
+    z-index: 4;
+    filter: blur(1px);
+}
+
+.why-card.far-next {
+    transform: translateX(5%) scale(0.76);
+    opacity: 0.22;
+    z-index: 3;
+    filter: blur(2px);
+}
+
+.why-card.far-prev {
+    transform: translateX(-105%) scale(0.76);
+    opacity: 0.22;
+    z-index: 3;
+    filter: blur(2px);
+}
+
+.why-card.hidden-card {
+    transform: translateX(-50%) scale(0.65);
+    opacity: 0;
+    z-index: 1;
+    filter: blur(3px);
+}
 
 .why-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 45px rgba(0,0,0,0.12);
+    box-shadow: 0 24px 55px rgba(0,0,0,0.16);
 }
 
 .why-card::before {
@@ -538,6 +593,33 @@ textarea:focus {
     color: #4b4b4b;
     font-size: 0.97rem;
     line-height: 1.75;
+}
+
+/* BOTONES DEL CARRUSEL */
+.why-carousel-controls {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 18px;
+}
+
+.why-carousel-btn {
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background: var(--primary-green);
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(45, 90, 39, 0.22);
+    transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.why-carousel-btn:hover {
+    background: #3e7a36;
+    transform: translateY(-3px);
 }
 
 /* SECCIÓN SERVICIOS */
@@ -934,58 +1016,6 @@ footer {
     }
 }
 
-@keyframes whyCarouselMove {
-    0% {
-        transform: translateX(0);
-    }
-
-    18% {
-        transform: translateX(0);
-    }
-
-    38% {
-        transform: translateX(-342px);
-    }
-
-    58% {
-        transform: translateX(-684px);
-    }
-
-    78% {
-        transform: translateX(-1026px);
-    }
-
-    100% {
-        transform: translateX(-1026px);
-    }
-}
-
-@keyframes whyCarouselMobile {
-    0% {
-        transform: translateX(0);
-    }
-
-    18% {
-        transform: translateX(0);
-    }
-
-    38% {
-        transform: translateX(-303px);
-    }
-
-    58% {
-        transform: translateX(-606px);
-    }
-
-    78% {
-        transform: translateX(-909px);
-    }
-
-    100% {
-        transform: translateX(-909px);
-    }
-}
-
 @keyframes servicesFadeUp {
     from {
         opacity: 0;
@@ -1098,19 +1128,45 @@ footer {
         line-height: 1.7;
     }
 
+    .why-carousel-wrap {
+        min-height: 465px;
+    }
+
     .why-grid {
-        display: flex;
-        gap: 18px;
-        width: max-content;
-        animation: whyCarouselMobile 26s ease-in-out infinite alternate;
+        position: relative !important;
+        width: 100% !important;
+        height: 390px !important;
+        display: block !important;
+        animation: none !important;
     }
 
     .why-card {
+        width: 285px !important;
+        min-width: 285px !important;
+        max-width: 285px !important;
+        min-height: 355px;
         padding: 24px 20px;
         border-radius: 22px;
-        min-width: 285px;
-        max-width: 285px;
-        flex: 0 0 285px;
+    }
+
+    .why-card.active {
+        transform: translateX(-50%) scale(1);
+    }
+
+    .why-card.next {
+        transform: translateX(-20%) scale(0.86);
+    }
+
+    .why-card.prev {
+        transform: translateX(-80%) scale(0.86);
+    }
+
+    .why-card.far-next {
+        transform: translateX(-5%) scale(0.74);
+    }
+
+    .why-card.far-prev {
+        transform: translateX(-95%) scale(0.74);
     }
 
     .why-card h3 {
@@ -1120,6 +1176,12 @@ footer {
     .why-card p {
         font-size: 0.94rem;
         line-height: 1.7;
+    }
+
+    .why-carousel-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.25rem;
     }
 
     .services-section {
