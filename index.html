@@ -15,7 +15,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database-compat.js"></script>
 
-    <!-- ESTILOS PARA HEADER, MENÚ, QUIÉNES SOMOS Y COTIZACIÓN -->
+    <!-- ESTILOS PARA HEADER, MENÚ, QUIÉNES SOMOS, POR QUÉ ESCOGERNOS Y COTIZACIÓN -->
     <style>
         /* HEADER BLANCO CON LOGO */
         .main-header {
@@ -298,6 +298,153 @@
             }
         }
 
+        /* SECCIÓN ¿POR QUÉ ESCOGERNOS? */
+        .why-section {
+            max-width: 1100px;
+            margin: 10px auto 45px;
+            padding: 0 15px;
+            scroll-margin-top: 120px;
+        }
+
+        .why-header {
+            text-align: center;
+            margin-bottom: 28px;
+            animation: whyFadeUp 0.8s ease both;
+        }
+
+        .why-badge {
+            display: inline-block;
+            background: rgba(45, 90, 39, 0.08);
+            color: #2d5a27;
+            font-weight: 700;
+            font-size: 0.78rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 9px 16px;
+            border-radius: 50px;
+            margin-bottom: 14px;
+            border: 1px solid rgba(45, 90, 39, 0.12);
+        }
+
+        .why-title {
+            color: #2d5a27;
+            font-size: 2rem;
+            margin: 0 0 10px;
+        }
+
+        .why-subtitle {
+            max-width: 760px;
+            margin: 0 auto;
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .why-card {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(145deg, #ffffff 0%, #f8fbf8 100%);
+            border-radius: 24px;
+            padding: 28px 24px;
+            box-shadow: 0 14px 35px rgba(0,0,0,0.07);
+            border: 1px solid rgba(45, 90, 39, 0.08);
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+            animation: whyFadeUp 0.9s ease both;
+        }
+
+        .why-card:nth-child(1) { animation-delay: 0.05s; }
+        .why-card:nth-child(2) { animation-delay: 0.12s; }
+        .why-card:nth-child(3) { animation-delay: 0.19s; }
+        .why-card:nth-child(4) { animation-delay: 0.26s; }
+        .why-card:nth-child(5) { animation-delay: 0.33s; }
+        .why-card:nth-child(6) { animation-delay: 0.40s; }
+
+        .why-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.12);
+        }
+
+        .why-card::before {
+            content: "";
+            position: absolute;
+            top: -35px;
+            right: -35px;
+            width: 100px;
+            height: 100px;
+            background: rgba(197, 160, 89, 0.10);
+            border-radius: 50%;
+        }
+
+        .why-icon {
+            width: 68px;
+            height: 68px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(45, 90, 39, 0.12), rgba(197, 160, 89, 0.18));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 2;
+            animation: whyFloat 4s ease-in-out infinite;
+        }
+
+        .why-icon svg {
+            width: 34px;
+            height: 34px;
+            stroke: #2d5a27;
+            stroke-width: 2.2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .why-card h3 {
+            position: relative;
+            z-index: 2;
+            margin: 0 0 12px;
+            color: #2d5a27;
+            font-size: 1.08rem;
+            line-height: 1.4;
+        }
+
+        .why-card p {
+            position: relative;
+            z-index: 2;
+            margin: 0;
+            color: #4b4b4b;
+            font-size: 0.97rem;
+            line-height: 1.75;
+        }
+
+        @keyframes whyFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes whyFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
+        }
+
         /* SECCIÓN DE COTIZACIÓN */
         .quote-card {
             border-top: 5px solid #28b463;
@@ -395,6 +542,40 @@
                 font-size: 0.96rem;
                 line-height: 1.75;
             }
+
+            .why-section {
+                margin: 5px auto 35px;
+                padding: 0;
+                scroll-margin-top: 100px;
+            }
+
+            .why-title {
+                font-size: 1.65rem;
+            }
+
+            .why-subtitle {
+                font-size: 0.95rem;
+                line-height: 1.7;
+            }
+
+            .why-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .why-card {
+                padding: 24px 20px;
+                border-radius: 22px;
+            }
+
+            .why-card h3 {
+                font-size: 1rem;
+            }
+
+            .why-card p {
+                font-size: 0.94rem;
+                line-height: 1.7;
+            }
         }
     </style>
 </head>
@@ -450,6 +631,104 @@
                     <p>
                         Nuestro equipo está capacitado para brindar un servicio detallado y organizado, cuidando cada espacio como si fuera propio. Más allá de limpiar, nuestro enfoque es brindar un servicio de limpieza eficiente, organizado y con altos estándares de calidad en cada visita.
                     </p>
+                </div>
+            </section>
+
+            <!-- SECCIÓN ¿POR QUÉ ESCOGERNOS? -->
+            <section class="why-section" id="porqueEscogernos">
+                <div class="why-header">
+                    <div class="why-badge">EcoSpark LLC</div>
+                    <h2 class="why-title">¿Por qué escogernos?</h2>
+                    <p class="why-subtitle">
+                        En EcoSpark LLC combinamos confianza, organización y altos estándares para ofrecer una experiencia de limpieza profesional, segura y consistente en cada servicio.
+                    </p>
+                </div>
+
+                <div class="why-grid">
+                    <div class="why-card">
+                        <div class="why-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"></path>
+                                <path d="M9.5 12l1.8 1.8L15 10.2"></path>
+                            </svg>
+                        </div>
+                        <h3>Personal confiable y verificado</h3>
+                        <p>
+                            Nuestro equipo pasa por un riguroso proceso de selección que incluye verificación de antecedentes (background check).
+                        </p>
+                    </div>
+
+                    <div class="why-card">
+                        <div class="why-icon">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="5" y="10" width="14" height="10" rx="2"></rect>
+                                <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+                                <circle cx="12" cy="15" r="1"></circle>
+                            </svg>
+                        </div>
+                        <h3>Seguridad y discreción</h3>
+                        <p>
+                            Respetamos su espacio y operamos con el más alto nivel de responsabilidad y profesionalismo.
+                        </p>
+                    </div>
+
+                    <div class="why-card">
+                        <div class="why-icon">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="3" y="6" width="18" height="12" rx="2"></rect>
+                                <path d="M3 10h18"></path>
+                                <path d="M7 15h3"></path>
+                            </svg>
+                        </div>
+                        <h3>Transacciones seguras</h3>
+                        <p>
+                            Procesamos pagos mediante ATH Móvil Negocios, una plataforma confiable, rápida y protegida.
+                        </p>
+                    </div>
+
+                    <div class="why-card">
+                        <div class="why-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M8 7h8"></path>
+                                <path d="M8 12h8"></path>
+                                <path d="M8 17h5"></path>
+                                <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                            </svg>
+                        </div>
+                        <h3>Estándares consistentes</h3>
+                        <p>
+                            Cada servicio se realiza siguiendo procesos definidos para asegurar uniformidad y calidad.
+                        </p>
+                    </div>
+
+                    <div class="why-card">
+                        <div class="why-icon">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="11" cy="11" r="6"></circle>
+                                <path d="M20 20l-4.2-4.2"></path>
+                                <path d="M9.5 11l1.2 1.2L13 9.8"></path>
+                            </svg>
+                        </div>
+                        <h3>Atención meticulosa</h3>
+                        <p>
+                            Ejecutamos cada limpieza con precisión, cuidando cada detalle.
+                        </p>
+                    </div>
+
+                    <div class="why-card">
+                        <div class="why-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 12a8 8 0 0 1 14-5"></path>
+                                <path d="M20 12a8 8 0 0 1-14 5"></path>
+                                <path d="M18 3v4h-4"></path>
+                                <path d="M6 21v-4h4"></path>
+                            </svg>
+                        </div>
+                        <h3>Coordinación eficiente</h3>
+                        <p>
+                            Ofrecemos comunicación clara, puntualidad y flexibilidad según sus necesidades.
+                        </p>
+                    </div>
                 </div>
             </section>
 
