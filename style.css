@@ -965,13 +965,14 @@ td {
 
 /* FOOTER PROFESIONAL */
 .main-footer {
-    background: linear-gradient(135deg, #2d5a27 0%, #1f421b 100%);
-    color: white;
+    background: linear-gradient(135deg, #dff5df 0%, #c8edc8 45%, #b7e3b7 100%);
+    color: #1f421b;
     padding: 45px 20px 35px;
     margin-top: 50px;
     text-align: center;
     border-radius: 45px 45px 0 0;
     box-shadow: 0 -12px 35px rgba(0,0,0,0.10);
+    border-top: 1px solid rgba(45, 90, 39, 0.10);
 }
 
 .footer-content {
@@ -983,11 +984,13 @@ td {
     gap: 25px;
 }
 
-.footer-brand img {
+.footer-brand img,
+.footer-logo {
     width: 115px;
     height: auto;
     margin-bottom: 10px;
-    filter: drop-shadow(0 8px 18px rgba(0,0,0,0.18));
+    filter: drop-shadow(0 8px 18px rgba(0,0,0,0.12));
+    mix-blend-mode: multiply;
 }
 
 .footer-brand p {
@@ -995,13 +998,14 @@ td {
     font-weight: 700;
     font-size: 1.1rem;
     letter-spacing: 1px;
+    color: #1f421b;
 }
 
 .footer-brand span {
     display: block;
     margin-top: 6px;
     font-size: 0.88rem;
-    color: rgba(255,255,255,0.78);
+    color: rgba(31, 66, 27, 0.78);
 }
 
 .footer-social {
@@ -1018,13 +1022,13 @@ td {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.20);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .instagram-link:hover {
     transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 18px 35px rgba(0,0,0,0.35);
+    box-shadow: 0 18px 35px rgba(0,0,0,0.28);
 }
 
 .instagram-link svg {
@@ -1044,24 +1048,37 @@ td {
 .footer-credit > span {
     display: block;
     font-size: 0.82rem;
-    color: rgba(255,255,255,0.75);
+    color: rgba(31, 66, 27, 0.75);
     margin-bottom: 4px;
 }
 
-.footer-credit strong {
-    font-size: 1.25rem;
-    letter-spacing: 1.5px;
+.geodev-link {
+    text-decoration: none;
+    display: inline-block;
+    animation: geodevPulse 2s ease-in-out infinite;
+}
+
+.geodev-link strong {
+    font-size: 1.35rem;
+    letter-spacing: 1.8px;
+    display: inline-block;
 }
 
 .geo-text {
     color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.25);
 }
 
 .dev-text {
-    background: linear-gradient(135deg, #3ca7ff, #8f45ff);
+    background: linear-gradient(135deg, #3ca7ff, #8f45ff, #5b2cff);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent !important;
+    text-shadow: none;
+}
+
+.geodev-link:hover {
+    transform: translateY(-3px) scale(1.06);
 }
 
 /* Animaciones */
@@ -1136,6 +1153,24 @@ td {
 
     100% {
         box-shadow: 0 0 0 0 rgba(112, 214, 120, 0), 0 14px 35px rgba(0,0,0,0.12);
+    }
+}
+
+@keyframes geodevPulse {
+    0% {
+        filter: drop-shadow(0 0 0 rgba(60, 167, 255, 0));
+        transform: scale(1);
+    }
+
+    50% {
+        filter: drop-shadow(0 0 14px rgba(143, 69, 255, 0.75))
+                drop-shadow(0 0 22px rgba(60, 167, 255, 0.55));
+        transform: scale(1.05);
+    }
+
+    100% {
+        filter: drop-shadow(0 0 0 rgba(60, 167, 255, 0));
+        transform: scale(1);
     }
 }
 
@@ -1341,7 +1376,12 @@ td {
         text-align: center;
     }
 
-    .footer-brand img {
+    .footer-brand img,
+    .footer-logo {
         width: 105px;
+    }
+
+    .geodev-link strong {
+        font-size: 1.25rem;
     }
 }
