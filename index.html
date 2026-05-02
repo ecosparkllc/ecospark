@@ -14,6 +14,73 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database-compat.js"></script>
+
+    <!-- ESTILOS PARA LA SECCIÓN DE COTIZACIÓN -->
+    <style>
+        .quote-card {
+            border-top: 5px solid #28b463;
+        }
+
+        .quote-intro {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .quote-form textarea {
+            width: 100%;
+            resize: vertical;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .quote-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .quote-form input[type="file"] {
+            background: #f8f8f8;
+            padding: 12px;
+            border: 1px dashed #aaa;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 12px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .quote-form input[type="file"]::file-selector-button {
+            background: #28b463;
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-right: 10px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .quote-note {
+            font-size: 13px;
+            color: #666;
+            margin-top: -5px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 700px) {
+            .quote-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -29,6 +96,84 @@
     <div class="container">
         <!-- VISTA CLIENTE -->
         <section id="clientSection">
+
+            <!-- SECCIÓN DE COTIZACIÓN -->
+            <div class="card quote-card">
+                <h2>Solicita una Cotización</h2>
+                <p class="quote-intro">
+                    Completa la información de la propiedad y adjunta imágenes para poder evaluar mejor el servicio.
+                </p>
+
+                <form 
+                    action="https://formsubmit.co/ecosparkcrew@gmail.com" 
+                    method="POST" 
+                    enctype="multipart/form-data"
+                    class="quote-form"
+                >
+                    <!-- Configuración del correo -->
+                    <input type="hidden" name="_subject" value="Nueva solicitud de cotización - EcoSpark LLC">
+                    <input type="hidden" name="_template" value="table">
+                    <input type="hidden" name="_captcha" value="false">
+
+                    <label>Nombre</label>
+                    <input type="text" name="Nombre" placeholder="Nombre completo" required>
+
+                    <label>Teléfono</label>
+                    <input type="tel" name="Telefono" placeholder="787-000-0000" required>
+
+                    <label>Pueblo</label>
+                    <input type="text" name="Pueblo" placeholder="Ej. San Juan, Bayamón, Carolina" required>
+
+                    <div class="quote-grid">
+                        <div>
+                            <label>Cantidad de Habitaciones</label>
+                            <input type="number" name="Cantidad de Habitaciones" min="0" placeholder="Ej. 3" required>
+                        </div>
+
+                        <div>
+                            <label>Cantidad de Baños</label>
+                            <input type="number" name="Cantidad de Banos" min="0" step="0.5" placeholder="Ej. 2" required>
+                        </div>
+
+                        <div>
+                            <label>Cantidad de Ventanas a Limpiar</label>
+                            <input type="number" name="Cantidad de Ventanas a Limpiar" min="0" placeholder="Ej. 10" required>
+                        </div>
+
+                        <div>
+                            <label>Niveles de la Casa</label>
+                            <select name="Niveles de la Casa" required>
+                                <option value="">Seleccione...</option>
+                                <option value="1 nivel">1 nivel</option>
+                                <option value="2 niveles">2 niveles</option>
+                                <option value="3 niveles o mas">3 niveles o más</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <label>Adjuntar imágenes</label>
+                    <p class="quote-note">
+                        Puedes adjuntar hasta 3 imágenes en formato JPG o PNG.
+                    </p>
+
+                    <input type="file" name="Imagen 1" accept="image/png, image/jpeg, image/jpg">
+                    <input type="file" name="Imagen 2" accept="image/png, image/jpeg, image/jpg">
+                    <input type="file" name="Imagen 3" accept="image/png, image/jpeg, image/jpg">
+
+                    <label>Notas adicionales</label>
+                    <textarea 
+                        name="Notas adicionales" 
+                        rows="4" 
+                        placeholder="Ej. áreas difíciles, ventanas altas, limpieza profunda, acceso a la propiedad, etc."
+                    ></textarea>
+
+                    <button type="submit" class="btn btn-reserve">
+                        ENVIAR COTIZACIÓN
+                    </button>
+                </form>
+            </div>
+
+            <!-- SECCIÓN DE RESERVA EXISTENTE -->
             <div class="card">
                 <h2>Reserva tu Cita</h2>
                 <label>Nombre Completo</label>
@@ -137,17 +282,21 @@
                 // Activamos el panel administrativo con la clase visible
                 document.getElementById('adminSection').classList.add('visible');
                 escucharNuevasCitas();
-            } else { alert("Acceso Incorrecto"); }
+            } else { 
+                alert("Acceso Incorrecto"); 
+            }
         }
 
         function cargarHorasCliente() {
             const f = document.getElementById('cFecha').value;
             if(!f) return;
+
             db.ref('bloqueos/' + f).on('value', snap => {
                 const b = snap.val() || {};
                 const s = document.getElementById('cHora');
                 s.innerHTML = "";
                 let count = 0;
+
                 ["9", "10", "11", "12"].forEach(h => {
                     if(!b[h]) {
                         const t = h === "12" ? "12:00 PM" : h + ":00 AM";
@@ -155,7 +304,10 @@
                         count++;
                     }
                 });
-                if(count === 0) s.options.add(new Option("Sin disponibilidad hoy", ""));
+
+                if(count === 0) {
+                    s.options.add(new Option("Sin disponibilidad hoy", ""));
+                }
             });
         }
 
@@ -166,9 +318,19 @@
             const h = document.getElementById('cHora').value;
             const s = document.getElementById('cServicio').value;
 
-            if(!n || !t || !f || !h || h === "") { alert("Por favor complete todos los datos"); return; }
+            if(!n || !t || !f || !h || h === "") { 
+                alert("Por favor complete todos los datos"); 
+                return; 
+            }
 
-            db.ref('listadoReservas').push({ nombre: n, tel: t, fecha: f, hora: h, servicio: s });
+            db.ref('listadoReservas').push({ 
+                nombre: n, 
+                tel: t, 
+                fecha: f, 
+                hora: h, 
+                servicio: s 
+            });
+
             db.ref('bloqueos/' + f + '/' + h).set(true).then(() => {
                 alert("¡Cita reservada con éxito!");
                 location.reload();
@@ -179,9 +341,17 @@
             db.ref('listadoReservas').on('value', snap => {
                 const tabla = document.getElementById('tablaCitasAdmin');
                 tabla.innerHTML = "";
+
                 snap.forEach(child => {
                     const d = child.val();
-                    tabla.innerHTML += `<tr><td>${d.nombre}</td><td>${d.tel}</td><td>${d.fecha} (${d.hora}:00)</td><td>${d.servicio}</td></tr>`;
+                    tabla.innerHTML += `
+                        <tr>
+                            <td>${d.nombre}</td>
+                            <td>${d.tel}</td>
+                            <td>${d.fecha} (${d.hora}:00)</td>
+                            <td>${d.servicio}</td>
+                        </tr>
+                    `;
                 });
             });
         }
@@ -189,12 +359,16 @@
         function cargarHorasAdmin() {
             const f = document.getElementById('fAdmin').value;
             if(!f) return;
+
             document.getElementById('adminGrid').style.display = 'grid';
+
             db.ref('bloqueos/' + f).on('value', snap => {
                 const b = snap.val() || {};
+
                 ["9", "10", "11", "12"].forEach(h => {
                     const el = document.getElementById('h-' + h);
                     const estaB = b[h];
+
                     el.innerText = estaB ? "BLOQUEADO" : "DISPONIBLE";
                     el.className = estaB ? "toggle bloqueado" : "toggle disponible";
                 });
@@ -204,9 +378,15 @@
         function cambiarEstado(h) {
             const f = document.getElementById('fAdmin').value;
             if(!f) return;
+
             const ref = db.ref('bloqueos/' + f + '/' + h);
+
             ref.once('value', snap => {
-                if(snap.exists()) ref.remove(); else ref.set(true);
+                if(snap.exists()) {
+                    ref.remove(); 
+                } else {
+                    ref.set(true);
+                }
             });
         }
     </script>
