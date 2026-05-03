@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cancelar Cita - EcoSpark LLC</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database-compat.js"></script>
+
+    <style>
+        :root {
+            --primary-green: #2d5a27;
+            --accent-gold: #c5a059;
+            --soft-white: #f8fbf8;
+            --dark-text: #1a1a1a;
+            --danger: #c0392b;
+            --success: #28b463;
+            --shadow: 0 18px 45px rgba(0,0,0,0.10);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+            background:
+                radial-gradient(circle at top right, rgba(197, 160, 89, 0.18), transparent 32%),
+                linear-gradient(135deg, #f8fbf8 0%, #eef7ee 100%);
+            color: var(--dark-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .cancel-wrapper {
+            width: 100%;
+            max-width: 620px;
+        }
+
+        .cancel-card {
+            position: relative;
+            overflow: hidden;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 38px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(45, 90, 39, 0.08);
+            text-align: center;
+        }
+
+        .cancel-card::before {
+            content: "";
+            position: absolute;
+            top: -90px;
+            right: -90px;
+            width: 210px;
+            height: 210px;
+            background: rgba(197, 160, 89, 0.12);
+            border-radius: 50%;
+        }
+
+        .cancel-card::after {
+            content: "";
+            position: absolute;
+            bottom: -90px;
+            left: -90px;
+            width: 190px;
+            height: 190px;
+            background: rgba(45, 90, 39, 0.08);
+            border-radius: 50%;
+        }
+
+        .cancel-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-box {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(248, 251, 248, 0.9);
+            border: 1px solid rgba(45, 90, 39, 0.08);
+            border-radius: 24px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+            padding: 18px;
+        }
+
+        .logo-box img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(197, 160, 89, 0.16);
+            color: var(--primary-green);
+            font-weight: 700;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 14px;
+            border-radius: 50px;
+            margin-bottom: 14px;
+        }
+
+        h1 {
+            color: var(--primary-green);
+            font-size: 2rem;
+            margin: 0 0 14px;
+        }
+
+        p {
+            color: #555;
+            line-height: 1.7;
+            font-size: 1rem;
+            margin: 0 0 18px;
+        }
+
+        .booking-box {
+            display: none;
+            text-align: left;
+            background: rgba(45, 90, 39, 0.06);
+            border: 1px solid rgba(45, 90, 39, 0.10);
+            border-radius: 18px;
+            padding: 18px;
+            margin: 22px 0;
+        }
+
+        .booking-box.active {
+            display: block;
+        }
+
+        .booking-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .booking-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .booking-row strong {
+            color: var(--primary-green);
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 22px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 50px;
+            padding: 15px 24px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, opacity 0.25s ease;
+        }
+
+        .btn-cancel {
+            background: var(--danger);
+            color: white;
+            box-shadow: 0 12px 28px rgba(192, 57, 43, 0.22);
+        }
+
+        .btn-cancel:hover {
+            transform: translateY(-3px);
+            background: #a93226;
+            box-shadow: 0 18px 35px rgba(192, 57, 43, 0.30);
+        }
+
+        .btn-home {
+            background: var(--primary-green);
+            color: white;
+            box-shadow: 0 12px 28px rgba(45, 90, 39, 0.22);
+        }
+
+        .btn-home:hover {
+            transform: translateY(-3px);
+            background: #3e7a36;
+            box-shadow: 0 18px 35px rgba(45, 90, 39, 0.30);
+        }
+
+        .btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            font-weight: 600;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .status.active {
+            display: block;
+        }
+
+        .status.loading {
+            background: rgba(197, 160, 89, 0.14);
+            color: #7a5a18;
+        }
+
+        .status.success {
+            background: rgba(40, 180, 99, 0.12);
+            color: #1f7a42;
+        }
+
+        .status.error {
+            background: rgba(192, 57, 43, 0.12);
+            color: #9b2d22;
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 16px;
+                align-items: flex-start;
+                padding-top: 35px;
+            }
+
+            .cancel-card {
+                padding: 28px 22px;
+                border-radius: 24px;
+            }
+
+            .logo-box {
+                width: 130px;
+                height: 130px;
+            }
+
+            h1 {
+                font-size: 1.55rem;
+            }
+
+            p {
+                font-size: 0.95rem;
+            }
+
+            .booking-row {
+                grid-template-columns: 1fr;
+                gap: 2px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="cancel-wrapper">
+        <section class="cancel-card">
+            <div class="cancel-content">
+                <div class="logo-box">
+                    <img src="EcoSpark_logo.png" alt="EcoSpark LLC Logo">
+                </div>
+
+                <span class="badge">EcoSpark LLC</span>
+
+                <h1>Cancelación de cita</h1>
+
+                <p id="mainMessage">
+                    Estamos verificando la información de su cita. Por favor espere unos segundos.
+                </p>
+
+                <div class="booking-box" id="bookingBox">
+                    <div class="booking-row">
+                        <strong>Nombre:</strong>
+                        <span id="bookingName">-</span>
+                    </div>
+
+                    <div class="booking-row">
+                        <strong>Servicio:</strong>
+                        <span id="bookingService">-</span>
+                    </div>
+
+                    <div class="booking-row">
+                        <strong>Fecha:</strong>
+                        <span id="bookingDate">-</span>
+                    </div>
+
+                    <div class="booking-row">
+                        <strong>Hora:</strong>
+                        <span id="bookingTime">-</span>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button type="button" class="btn btn-cancel" id="cancelBtn" onclick="cancelarCita()" disabled>
+                        Confirmar cancelación
+                    </button>
+
+                    <a href="index.html" class="btn btn-home">
+                        Volver al inicio
+                    </a>
+                </div>
+
+                <div class="status loading active" id="statusBox">
+                    Verificando cita...
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        /*
+            IMPORTANTE:
+            Copia aquí la misma configuración de Firebase que tienes en tu index.html.
+        */
+        const firebaseConfig = {
+            apiKey: "TU_API_KEY",
+            authDomain: "TU_AUTH_DOMAIN",
+            databaseURL: "TU_DATABASE_URL",
+            projectId: "TU_PROJECT_ID",
+            storageBucket: "TU_STORAGE_BUCKET",
+            messagingSenderId: "TU_MESSAGING_SENDER_ID",
+            appId: "TU_APP_ID"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        const params = new URLSearchParams(window.location.search);
+        const bookingId = params.get("id");
+        const token = params.get("token");
+
+        const mainMessage = document.getElementById("mainMessage");
+        const statusBox = document.getElementById("statusBox");
+        const cancelBtn = document.getElementById("cancelBtn");
+        const bookingBox = document.getElementById("bookingBox");
+
+        const bookingName = document.getElementById("bookingName");
+        const bookingService = document.getElementById("bookingService");
+        const bookingDate = document.getElementById("bookingDate");
+        const bookingTime = document.getElementById("bookingTime");
+
+        let currentBooking = null;
+
+        function setStatus(type, message) {
+            statusBox.className = "status active " + type;
+            statusBox.textContent = message;
+        }
+
+        function normalizarEstado(estado) {
+            return String(estado || "").toLowerCase().trim();
+        }
+
+        async function verificarCita() {
+            if (!bookingId || !token) {
+                mainMessage.textContent = "El enlace de cancelación no es válido.";
+                setStatus("error", "Falta información necesaria para verificar la cita.");
+                cancelBtn.disabled = true;
+                return;
+            }
+
+            try {
+                const snapshot = await database.ref("reservas/" + bookingId).once("value");
+
+                if (!snapshot.exists()) {
+                    mainMessage.textContent = "No encontramos una cita asociada a este enlace.";
+                    setStatus("error", "La cita no existe o el enlace ya no es válido.");
+                    cancelBtn.disabled = true;
+                    return;
+                }
+
+                currentBooking = snapshot.val();
+
+                if (!currentBooking.cancelToken || currentBooking.cancelToken !== token) {
+                    mainMessage.textContent = "No pudimos validar este enlace de cancelación.";
+                    setStatus("error", "El token de cancelación no coincide.");
+                    cancelBtn.disabled = true;
+                    return;
+                }
+
+                const estado = normalizarEstado(currentBooking.estado || currentBooking.status);
+
+                if (estado === "cancelada" || estado === "cancelado" || estado === "cancelled") {
+                    mainMessage.textContent = "Esta cita ya aparece como cancelada.";
+                    setStatus("success", "No es necesario realizar otra acción.");
+                    cancelBtn.disabled = true;
+                    mostrarDetalles(currentBooking);
+                    return;
+                }
+
+                mostrarDetalles(currentBooking);
+
+                mainMessage.textContent = "Verificamos su cita. Si desea cancelarla, presione el botón de confirmación.";
+                setStatus("loading", "Cita encontrada. Confirme la cancelación si desea continuar.");
+                cancelBtn.disabled = false;
+
+            } catch (error) {
+                console.error("Error verificando cita:", error);
+                mainMessage.textContent = "Ocurrió un error al verificar la cita.";
+                setStatus("error", "Intente nuevamente o comuníquese con EcoSpark LLC.");
+                cancelBtn.disabled = true;
+            }
+        }
+
+        function mostrarDetalles(data) {
+            bookingBox.classList.add("active");
+
+            bookingName.textContent = data.nombre || data.name || "-";
+            bookingService.textContent = data.servicio || data.service || "-";
+            bookingDate.textContent = data.fecha || data.date || "-";
+            bookingTime.textContent = data.hora || data.time || "-";
+        }
+
+        async function cancelarCita() {
+            if (!bookingId || !token || !currentBooking) {
+                setStatus("error", "No se puede cancelar la cita porque falta información.");
+                return;
+            }
+
+            const confirmar = confirm("¿Está seguro de que desea cancelar esta cita?");
+            if (!confirmar) return;
+
+            cancelBtn.disabled = true;
+            setStatus("loading", "Cancelando cita...");
+
+            try {
+                const snapshot = await database.ref("reservas/" + bookingId).once("value");
+
+                if (!snapshot.exists()) {
+                    setStatus("error", "La cita ya no existe.");
+                    return;
+                }
+
+                const latestBooking = snapshot.val();
+
+                if (!latestBooking.cancelToken || latestBooking.cancelToken !== token) {
+                    setStatus("error", "No se pudo validar el enlace de cancelación.");
+                    return;
+                }
+
+                await database.ref("reservas/" + bookingId).update({
+                    estado: "cancelada",
+                    canceladaEn: new Date().toISOString()
+                });
+
+                mainMessage.textContent = "Su cita fue cancelada correctamente.";
+                setStatus("success", "Cancelación completada. Gracias por notificarnos.");
+
+            } catch (error) {
+                console.error("Error cancelando cita:", error);
+                setStatus("error", "Ocurrió un error al cancelar la cita. Intente nuevamente o comuníquese con EcoSpark LLC.");
+                cancelBtn.disabled = false;
+            }
+        }
+
+        verificarCita();
+    </script>
+
+</body>
+</html>
