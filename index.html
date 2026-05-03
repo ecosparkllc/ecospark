@@ -1688,6 +1688,87 @@
         }
 
 
+        /* COTIZACIÓN POR WHATSAPP */
+        .quote-terms-box {
+            background: rgba(45, 90, 39, 0.06);
+            border: 1px solid rgba(45, 90, 39, 0.12);
+            border-radius: 16px;
+            padding: 18px;
+            margin: 22px 0 18px;
+        }
+
+        .quote-check-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            margin: 0;
+            color: #333;
+            text-transform: none;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .quote-check-label input {
+            width: 20px;
+            height: 20px;
+            margin: 3px 0 0;
+            accent-color: #2d5a27;
+            flex-shrink: 0;
+        }
+
+        .quote-check-label strong {
+            color: #2d5a27;
+        }
+
+        .quote-whatsapp-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 17px 22px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 12px 28px rgba(37, 211, 102, 0.25);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, opacity 0.25s ease;
+        }
+
+        .quote-whatsapp-btn svg {
+            width: 23px;
+            height: 23px;
+            fill: white;
+            flex-shrink: 0;
+        }
+
+        .quote-whatsapp-btn:hover:not(.disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 35px rgba(37, 211, 102, 0.32);
+            background: #1fbe5d;
+        }
+
+        .quote-whatsapp-btn.disabled {
+            background: #b7c7b7;
+            cursor: not-allowed;
+            opacity: 0.75;
+            box-shadow: none;
+        }
+
+        .quote-whatsapp-note {
+            text-align: center;
+            margin: 14px 0 0;
+            font-size: 0.88rem;
+            color: #666;
+            line-height: 1.5;
+        }
+
+
 
         /* SECCIÓN CONTACTO */
         .contact-section {
@@ -1979,6 +2060,21 @@
         @media (max-width: 700px) {
             .quote-grid {
                 grid-template-columns: 1fr;
+            }
+
+
+            .quote-terms-box {
+                padding: 16px;
+            }
+
+            .quote-check-label {
+                font-size: 0.9rem;
+            }
+
+            .quote-whatsapp-btn {
+                padding: 16px 18px;
+                font-size: 0.95rem;
+                border-radius: 40px;
             }
 
             .main-header {
@@ -2932,83 +3028,48 @@
 
             <!-- SECCIÓN DE COTIZACIÓN -->
             <div class="card quote-card" id="cotizacion">
-                <h2>Solicita una Cotización</h2>
+                <h2>Cotizaciones</h2>
+
                 <p class="quote-intro">
-                    Completa la información de la propiedad y adjunta imágenes para poder evaluar mejor el servicio.
+                    Todas nuestras cotizaciones se realizan de manera personalizada, tomando en consideración
+                    el tamaño de la propiedad, condición del espacio y el tipo de servicio requerido.
                 </p>
 
-                <form id="quoteForm" action="https://formsubmit.co/ecosparkcrew@gmail.com" method="POST" enctype="multipart/form-data" class="quote-form">
-                    <input type="hidden" name="_subject" value="Nueva solicitud de cotización - EcoSpark LLC">
-                    <input type="hidden" name="_template" value="table">
-                    <input type="hidden" name="_captcha" value="false">
+                <p class="quote-intro">
+                    Nuestros precios pueden variar según el alcance del trabajo y necesidades específicas.
+                    Para solicitar su cotización, puede comunicarse con nosotros por WhatsApp completando
+                    la información necesaria sobre su propiedad y el servicio que desea. Una vez recibido,
+                    nos comunicaremos directamente para brindarle un estimado y coordinar los próximos pasos.
+                </p>
 
-                    <label>Nombre</label>
-                    <input type="text" name="Nombre" placeholder="Nombre completo" required>
+                <div class="quote-terms-box">
+                    <label class="quote-check-label">
+                        <input type="checkbox" id="quoteTermsCheck">
+                        <span>
+                            He leído y acepto los <strong>términos de cotización</strong>. Entiendo que la
+                            cotización es personalizada y que el precio final puede variar según el tamaño de
+                            la propiedad, condición del espacio y tipo de servicio requerido.
+                        </span>
+                    </label>
+                </div>
 
-                    <label>Teléfono</label>
-                    <input type="tel" name="Telefono" placeholder="787-000-0000" required>
+                <button 
+                    type="button" 
+                    class="quote-whatsapp-btn disabled" 
+                    id="quoteWhatsappBtn"
+                    disabled
+                    onclick="enviarCotizacionWhatsApp()"
+                >
+                    <svg viewBox="0 0 32 32" aria-hidden="true">
+                        <path d="M19.11 17.39c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.65-2.05-.17-.3-.02-.47.13-.62.13-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.05 1.02-1.05 2.5s1.07 2.9 1.22 3.1c.15.2 2.1 3.2 5.08 4.48.71.3 1.26.48 1.69.62.71.23 1.35.2 1.86.12.57-.08 1.77-.72 2.02-1.42.25-.69.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35z"></path>
+                        <path d="M16.03 3.2c-6.99 0-12.67 5.67-12.67 12.66 0 2.23.58 4.41 1.69 6.33L3.2 28.8l6.77-1.77c1.86 1.01 3.96 1.54 6.06 1.54h.01c6.98 0 12.66-5.68 12.66-12.66 0-3.38-1.31-6.56-3.7-8.95-2.39-2.39-5.57-3.76-8.97-3.76zm0 23.24h-.01c-1.89 0-3.75-.51-5.38-1.48l-.38-.22-4.01 1.05 1.07-3.91-.25-.4a10.5 10.5 0 0 1-1.62-5.63c0-5.8 4.72-10.53 10.53-10.53 2.81 0 5.44 1.09 7.42 3.07a10.42 10.42 0 0 1 3.09 7.45c0 5.81-4.72 10.53-10.46 10.6z"></path>
+                    </svg>
+                    Solicitar cotización por WhatsApp
+                </button>
 
-                    <label>Pueblo</label>
-                    <input type="text" name="Pueblo" placeholder="Ej. San Juan, Bayamón, Carolina" required>
-
-                    <label>Servicio que desea cotizar</label>
-                    <select name="Servicio que desea cotizar" required>
-                        <option value="">Seleccione un servicio...</option>
-                        <option>Limpieza Basica</option>
-                        <option>Limpieza Profunda</option>
-                        <option>Limpieza Post-Remodelación</option>
-                        <option>Limpieza de Oficinas</option>
-                        <option>Limpieza Comercial</option>
-                        <option>Limpieza de Airbnb's</option>
-                        <option>Servicio de Organización</option>
-                        <option>Limpieza de Mudanza</option>
-                    </select>
-
-                    <div class="quote-grid">
-                        <div>
-                            <label>Cantidad de Habitaciones</label>
-                            <input type="number" name="Cantidad de Habitaciones" min="0" placeholder="Ej. 3" required>
-                        </div>
-
-                        <div>
-                            <label>Cantidad de Baños</label>
-                            <input type="number" name="Cantidad de Banos" min="0" step="0.5" placeholder="Ej. 2" required>
-                        </div>
-
-                        <div>
-                            <label>Cantidad de Ventanas a Limpiar</label>
-                            <input type="number" name="Cantidad de Ventanas a Limpiar" min="0" placeholder="Ej. 10" required>
-                        </div>
-
-                        <div>
-                            <label>Niveles de la Casa</label>
-                            <select name="Niveles de la Casa" required>
-                                <option value="">Seleccione...</option>
-                                <option value="1 nivel">1 nivel</option>
-                                <option value="2 niveles">2 niveles</option>
-                                <option value="3 niveles o más">3 niveles o más</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <label>Adjuntar imágenes</label>
-                    <p class="quote-note">
-                        Puedes adjuntar hasta 8 imágenes en formato JPG o PNG.
-                    </p>
-
-                    <input type="file" name="attachment" accept="image/png, image/jpeg, image/jpg" multiple>
-
-                    <label>Notas adicionales</label>
-                    <textarea 
-                        name="Notas adicionales" 
-                        rows="4" 
-                        placeholder="Ej. áreas difíciles, ventanas altas, limpieza profunda, acceso a la propiedad, etc."
-                    ></textarea>
-
-                    <button type="submit" class="btn btn-reserve">
-                        ENVIAR COTIZACIÓN
-                    </button>
-                </form>
+                <p class="quote-whatsapp-note" id="quoteWhatsappNote">
+                    Debe aceptar los términos de cotización para activar el botón de WhatsApp.
+                </p>
             </div>
 
             <!-- SECCIÓN DE RESERVA EXISTENTE -->
@@ -3201,14 +3262,47 @@
             abrirLogin();
         }
 
-        const quoteForm = document.getElementById('quoteForm');
+        const quoteTermsCheck = document.getElementById('quoteTermsCheck');
+        const quoteWhatsappBtn = document.getElementById('quoteWhatsappBtn');
+        const quoteWhatsappNote = document.getElementById('quoteWhatsappNote');
 
-        if (quoteForm) {
-            quoteForm.addEventListener('submit', function () {
-                quoteForm.setAttribute('method', 'POST');
-                quoteForm.setAttribute('enctype', 'multipart/form-data');
-                quoteForm.setAttribute('action', 'https://formsubmit.co/ecosparkcrew@gmail.com');
+        if (quoteTermsCheck && quoteWhatsappBtn) {
+            quoteTermsCheck.addEventListener('change', function () {
+                if (this.checked) {
+                    quoteWhatsappBtn.disabled = false;
+                    quoteWhatsappBtn.classList.remove('disabled');
+                    quoteWhatsappNote.textContent = 'Presione el botón para completar su solicitud por WhatsApp.';
+                } else {
+                    quoteWhatsappBtn.disabled = true;
+                    quoteWhatsappBtn.classList.add('disabled');
+                    quoteWhatsappNote.textContent = 'Debe aceptar los términos de cotización para activar el botón de WhatsApp.';
+                }
             });
+        }
+
+        function enviarCotizacionWhatsApp() {
+            const mensaje = `Hola EcoSpark LLC, deseo solicitar una cotización.
+
+Favor completar la siguiente información:
+
+Nombre:
+Teléfono:
+Pueblo:
+Tipo de servicio que necesita:
+Cantidad de habitaciones:
+Cantidad de baños:
+Cantidad de ventanas a limpiar:
+¿Cuántos niveles tiene la propiedad?:
+¿La propiedad está vacía u ocupada?:
+Condición actual del espacio:
+Fecha aproximada en que necesita el servicio:
+Comentarios adicionales:
+
+Entiendo que la cotización es personalizada y que el precio puede variar según el tamaño de la propiedad, condición del espacio y tipo de servicio requerido.`;
+
+            const numero = '17872239707';
+            const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
         }
 
         function abrirLogin() {
