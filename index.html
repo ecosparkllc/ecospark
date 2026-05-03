@@ -1687,6 +1687,159 @@
             margin-bottom: 15px;
         }
 
+
+
+        /* SECCIÓN CONTACTO */
+        .contact-section {
+            max-width: 1100px;
+            margin: 25px auto 45px;
+            padding: 0 15px;
+            scroll-margin-top: 120px;
+        }
+
+        .contact-card {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 28px;
+            align-items: center;
+            background: linear-gradient(145deg, #ffffff 0%, #f8fbf8 100%);
+            border-radius: 28px;
+            padding: 34px;
+            box-shadow: 0 18px 45px rgba(0,0,0,0.08);
+            border: 1px solid rgba(45, 90, 39, 0.08);
+            overflow: hidden;
+            position: relative;
+            animation: servicesFadeUp 0.9s ease both;
+        }
+
+        .contact-card::before {
+            content: "";
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 190px;
+            height: 190px;
+            background: rgba(197, 160, 89, 0.12);
+            border-radius: 50%;
+        }
+
+        .contact-card::after {
+            content: "";
+            position: absolute;
+            bottom: -85px;
+            left: -85px;
+            width: 180px;
+            height: 180px;
+            background: rgba(45, 90, 39, 0.08);
+            border-radius: 50%;
+        }
+
+        .contact-logo-box {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.72);
+            border: 1px solid rgba(45, 90, 39, 0.08);
+            border-radius: 24px;
+            min-height: 260px;
+            padding: 25px;
+            box-shadow: 0 14px 35px rgba(0,0,0,0.06);
+        }
+
+        .contact-logo {
+            max-width: 100%;
+            width: 220px;
+            height: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .contact-info {
+            position: relative;
+            z-index: 2;
+        }
+
+        .contact-badge {
+            display: inline-block;
+            background: rgba(197, 160, 89, 0.16);
+            color: #2d5a27;
+            font-weight: 700;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 14px;
+            border-radius: 50px;
+            margin-bottom: 14px;
+        }
+
+        .contact-info h2 {
+            text-align: left;
+            margin: 0 0 20px;
+            font-size: 2rem;
+            color: #2d5a27;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.72);
+            border: 1px solid rgba(45, 90, 39, 0.08);
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+        }
+
+        .contact-icon {
+            font-size: 1.2rem;
+            width: 28px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .contact-item a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            word-break: break-word;
+        }
+
+        .contact-item a:hover {
+            color: #2d5a27;
+        }
+
+        .contact-whatsapp-btn {
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 14px 22px;
+            border-radius: 50px;
+            font-weight: 700;
+            box-shadow: 0 12px 28px rgba(37, 211, 102, 0.25);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        }
+
+        .contact-whatsapp-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 35px rgba(37, 211, 102, 0.32);
+            background: #1fbe5d;
+        }
+
+        .contact-whatsapp-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: white;
+            flex-shrink: 0;
+        }
+
         /* FOOTER PROFESIONAL */
         .main-footer {
             background: linear-gradient(135deg, #dff5df 0%, #c8edc8 45%, #b7e3b7 100%);
@@ -2127,6 +2280,44 @@
 
             .commercial-image-box img {
                 height: 260px;
+            }
+
+
+
+            .contact-section {
+                margin: 5px auto 35px;
+                padding: 0;
+                scroll-margin-top: 100px;
+            }
+
+            .contact-card {
+                grid-template-columns: 1fr;
+                padding: 24px 20px;
+                border-radius: 24px;
+                gap: 22px;
+            }
+
+            .contact-logo-box {
+                min-height: 200px;
+                border-radius: 20px;
+            }
+
+            .contact-logo {
+                width: 180px;
+            }
+
+            .contact-info h2 {
+                font-size: 1.6rem;
+            }
+
+            .contact-item {
+                padding: 13px 14px;
+            }
+
+            .contact-whatsapp-btn {
+                width: 100%;
+                justify-content: center;
+                text-align: center;
             }
 
             .main-footer {
@@ -2851,6 +3042,44 @@
                 
                 <button class="btn btn-reserve" onclick="confirmarCita()">RESERVA YA</button>
             </div>
+
+            <!-- SECCIÓN CONTACTO -->
+            <section class="contact-section" id="contacto">
+                <div class="contact-card">
+                    <div class="contact-logo-box">
+                        <img src="EcoSpark_logo.png" alt="EcoSpark LLC Logo" class="contact-logo">
+                    </div>
+
+                    <div class="contact-info">
+                        <span class="contact-badge">Contacto</span>
+                        <h2>Contáctanos</h2>
+
+                        <div class="contact-item">
+                            <span class="contact-icon">📞</span>
+                            <a href="tel:+17872239707">(787)-223-9707</a>
+                        </div>
+
+                        <div class="contact-item">
+                            <span class="contact-icon">✉️</span>
+                            <a href="mailto:ecosparkcrew@gmail.com">ecosparkcrew@gmail.com</a>
+                        </div>
+
+                        <a 
+                            class="contact-whatsapp-btn" 
+                            href="https://wa.me/17872239707?text=Hola%20EcoSpark%20LLC,%20quisiera%20m%C3%A1s%20informaci%C3%B3n."
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Escribir por WhatsApp"
+                        >
+                            <svg viewBox="0 0 32 32" aria-hidden="true">
+                                <path d="M19.11 17.39c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.65-2.05-.17-.3-.02-.47.13-.62.13-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.05 1.02-1.05 2.5s1.07 2.9 1.22 3.1c.15.2 2.1 3.2 5.08 4.48.71.3 1.26.48 1.69.62.71.23 1.35.2 1.86.12.57-.08 1.77-.72 2.02-1.42.25-.69.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35z"></path>
+                                <path d="M16.03 3.2c-6.99 0-12.67 5.67-12.67 12.66 0 2.23.58 4.41 1.69 6.33L3.2 28.8l6.77-1.77c1.86 1.01 3.96 1.54 6.06 1.54h.01c6.98 0 12.66-5.68 12.66-12.66 0-3.38-1.31-6.56-3.7-8.95-2.39-2.39-5.57-3.76-8.97-3.76zm0 23.24h-.01c-1.89 0-3.75-.51-5.38-1.48l-.38-.22-4.01 1.05 1.07-3.91-.25-.4a10.5 10.5 0 0 1-1.62-5.63c0-5.8 4.72-10.53 10.53-10.53 2.81 0 5.44 1.09 7.42 3.07a10.42 10.42 0 0 1 3.09 7.45c0 5.81-4.72 10.53-10.46 10.6z"></path>
+                            </svg>
+                            Escríbenos por WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </section>
         </section>
 
         <!-- LOGIN (Oculto por CSS) -->
@@ -2899,7 +3128,7 @@
     </div>
 
     <!-- FOOTER -->
-    <footer id="contacto" class="main-footer">
+    <footer class="main-footer">
         <div class="footer-content">
             <div class="footer-brand">
                 <img src="EcoSpark_logo.png" alt="EcoSpark LLC Logo" class="footer-logo">
@@ -3370,7 +3599,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const revealElements = document.querySelectorAll(
-                ".about-card, .why-header, .why-carousel-wrap, .services-header, .service-detail-card, .quote-card, #sacarCita, .main-footer"
+                ".about-card, .why-header, .why-carousel-wrap, .services-header, .service-detail-card, .quote-card, #sacarCita, .contact-card, .main-footer"
             );
 
             revealElements.forEach((element, index) => {
