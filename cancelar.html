@@ -334,18 +334,13 @@
     </main>
 
     <script>
-        /*
-            IMPORTANTE:
-            Copia aquí la misma configuración de Firebase que tienes en tu index.html.
-        */
         const firebaseConfig = {
-            apiKey: "TU_API_KEY",
-            authDomain: "TU_AUTH_DOMAIN",
-            databaseURL: "TU_DATABASE_URL",
-            projectId: "TU_PROJECT_ID",
-            storageBucket: "TU_STORAGE_BUCKET",
-            messagingSenderId: "TU_MESSAGING_SENDER_ID",
-            appId: "TU_APP_ID"
+            apiKey: "AIzaSyBCsC16XwRHOO76eS4-BqhA0Y-8IH83maA",
+            authDomain: "ecosparkllc.firebaseapp.com",
+            projectId: "ecosparkllc",
+            storageBucket: "ecosparkllc.firebasestorage.app",
+            messagingSenderId: "403323212209",
+            appId: "1:403323212209:web:cf3a4adf96226a09d4ed90"
         };
 
         firebase.initializeApp(firebaseConfig);
@@ -376,6 +371,17 @@
             return String(estado || "").toLowerCase().trim();
         }
 
+        function formatearHora(hora) {
+            const h = String(hora || "").trim();
+
+            if (h === "9") return "9:00 AM";
+            if (h === "10") return "10:00 AM";
+            if (h === "11") return "11:00 AM";
+            if (h === "12") return "12:00 PM";
+
+            return h || "-";
+        }
+
         async function verificarCita() {
             if (!bookingId || !token) {
                 mainMessage.textContent = "El enlace de cancelación no es válido.";
@@ -385,7 +391,7 @@
             }
 
             try {
-                const snapshot = await database.ref("reservas/" + bookingId).once("value");
+                const snapshot = await database.ref("listadoReservas/" + bookingId).once("value");
 
                 if (!snapshot.exists()) {
                     mainMessage.textContent = "No encontramos una cita asociada a este enlace.";
@@ -433,7 +439,7 @@
             bookingName.textContent = data.nombre || data.name || "-";
             bookingService.textContent = data.servicio || data.service || "-";
             bookingDate.textContent = data.fecha || data.date || "-";
-            bookingTime.textContent = data.hora || data.time || "-";
+            bookingTime.textContent = formatearHora(data.hora || data.time);
         }
 
         async function cancelarCita() {
@@ -449,7 +455,7 @@
             setStatus("loading", "Cancelando cita...");
 
             try {
-                const snapshot = await database.ref("reservas/" + bookingId).once("value");
+                const snapshot = await database.ref("listadoReservas/" + bookingId).once("value");
 
                 if (!snapshot.exists()) {
                     setStatus("error", "La cita ya no existe.");
@@ -463,13 +469,21 @@
                     return;
                 }
 
-                await database.ref("reservas/" + bookingId).update({
+                const fechaReserva = latestBooking.fecha || latestBooking.date;
+                const horaReserva = latestBooking.hora || latestBooking.time;
+
+                await database.ref("listadoReservas/" + bookingId).update({
                     estado: "cancelada",
+                    status: "cancelada",
                     canceladaEn: new Date().toISOString()
                 });
 
+                if (fechaReserva && horaReserva) {
+                    await database.ref("bloqueos/" + fechaReserva + "/" + horaReserva).remove();
+                }
+
                 mainMessage.textContent = "Su cita fue cancelada correctamente.";
-                setStatus("success", "Cancelación completada. Gracias por notificarnos.");
+                setStatus("success", "Cancelación completada. El horario quedó disponible nuevamente.");
 
             } catch (error) {
                 console.error("Error cancelando cita:", error);
