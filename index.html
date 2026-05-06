@@ -15,6 +15,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database-compat.js"></script>
 
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
     <!-- ESTILOS PARA HEADER, MENÚ, QUIÉNES SOMOS, POR QUÉ ESCOGERNOS, SERVICIOS, COTIZACIÓN Y FOOTER -->
     <style>
         /* HEADER BLANCO CON LOGO */
@@ -3080,6 +3083,9 @@
                 
                 <label>Teléfono</label>
                 <input type="tel" id="cTel" placeholder="787-000-0000">
+
+                <label>Email</label>
+                <input type="email" id="cEmail" placeholder="cliente@email.com">
                 
                 <label>Fecha</label>
                 <input type="date" id="cFecha" onchange="cargarHorasCliente()">
@@ -3244,6 +3250,16 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        const EMAILJS_PUBLIC_KEY = "pJkmlETOvDdo80NY7";
+        const EMAILJS_SERVICE_ID = "service_vk8azhj";
+        const EMAILJS_TEMPLATE_ID = "template_rrot8bn";
+
+        if (typeof emailjs !== "undefined") {
+            emailjs.init({
+                publicKey: EMAILJS_PUBLIC_KEY
+            });
+        }
+
         // MENÚ HAMBURGER
         function toggleMenu() {
             document.getElementById('hamburgerBtn').classList.toggle('active');
@@ -3347,30 +3363,104 @@ Entiendo que la cotización es personalizada y que el precio puede variar según
             });
         }
 
-        function confirmarCita() {
-            const n = document.getElementById('cNombre').value;
-            const t = document.getElementById('cTel').value;
+        function generarCancelToken() {
+            if (window.crypto && crypto.randomUUID) {
+                return crypto.randomUUID();
+            }
+
+            return 'token-' + Date.now() + '-' + Math.random().toString(36).substring(2, 15);
+        }
+
+        function obtenerCancelUrl(bookingId, cancelToken) {
+            const currentPath = window.location.pathname;
+            const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+            return `${window.location.origin}${basePath}cancelar.html?id=${encodeURIComponent(bookingId)}&token=${encodeURIComponent(cancelToken)}`;
+        }
+
+        function formatoHoraReserva(hora) {
+            if (hora === "12") return "12:00 PM";
+            return `${hora}:00 AM`;
+        }
+
+        function esEmailValido(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        async function confirmarCita() {
+            const n = document.getElementById('cNombre').value.trim();
+            const t = document.getElementById('cTel').value.trim();
+            const e = document.getElementById('cEmail').value.trim();
             const f = document.getElementById('cFecha').value;
             const h = document.getElementById('cHora').value;
             const s = document.getElementById('cServicio').value;
 
-            if(!n || !t || !f || !h || h === "") { 
-                alert("Por favor complete todos los datos"); 
-                return; 
+            if(!n || !t || !e || !f || !h || h === "") {
+                alert("Por favor complete todos los datos, incluyendo el email.");
+                return;
             }
 
-            db.ref('listadoReservas').push({ 
-                nombre: n, 
-                tel: t, 
-                fecha: f, 
-                hora: h, 
-                servicio: s 
-            });
+            if (!esEmailValido(e)) {
+                alert("Por favor escriba un email válido.");
+                return;
+            }
 
-            db.ref('bloqueos/' + f + '/' + h).set(true).then(() => {
-                alert("¡Cita reservada con éxito!");
+            const reservarBtn = document.querySelector('#sacarCita .btn-reserve');
+            if (reservarBtn) {
+                reservarBtn.disabled = true;
+                reservarBtn.textContent = "PROCESANDO...";
+            }
+
+            const reservaRef = db.ref('listadoReservas').push();
+            const bookingId = reservaRef.key;
+            const cancelToken = generarCancelToken();
+            const cancelUrl = obtenerCancelUrl(bookingId, cancelToken);
+            const horaTexto = formatoHoraReserva(h);
+
+            const reservaData = {
+                nombre: n,
+                tel: t,
+                email: e,
+                fecha: f,
+                hora: h,
+                horaTexto: horaTexto,
+                servicio: s,
+                estado: "activa",
+                cancelToken: cancelToken,
+                cancelUrl: cancelUrl,
+                creadaEn: new Date().toISOString()
+            };
+
+            try {
+                await reservaRef.set(reservaData);
+                await db.ref('bloqueos/' + f + '/' + h).set(true);
+
+                if (typeof emailjs !== "undefined") {
+                    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                        to_email: e,
+                        nombre: n,
+                        telefono: t,
+                        servicio: s,
+                        fecha: f,
+                        hora: horaTexto,
+                        cancel_url: cancelUrl
+                    });
+
+                    alert("¡Cita reservada con éxito! Se envió un email de confirmación.");
+                } else {
+                    alert("¡Cita reservada con éxito! EmailJS no cargó, por eso no se pudo enviar el email de confirmación.");
+                }
+
                 location.reload();
-            });
+
+            } catch (error) {
+                console.error("Error al reservar o enviar email:", error);
+                alert("La cita no pudo completarse correctamente. Verifique la configuración de EmailJS o intente nuevamente.");
+
+                if (reservarBtn) {
+                    reservarBtn.disabled = false;
+                    reservarBtn.textContent = "RESERVA YA";
+                }
+            }
         }
 
         function escucharNuevasCitas() {
