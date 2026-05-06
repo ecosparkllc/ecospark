@@ -2649,29 +2649,31 @@ td {
 
 .footer-logo-box {
     width: 132px;
-    height: auto;
-    background: transparent !important;
-    border-radius: 0 !important;
+    height: 132px;
+    background: rgba(255,255,255,0.96);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 !important;
-    box-shadow: none !important;
-    border: none !important;
+    padding: 0;
+    box-shadow: 0 14px 34px rgba(0,0,0,0.20);
+    border: 1px solid rgba(255,255,255,0.18);
     flex-shrink: 0;
+    overflow: hidden;
 }
 
 .footer-logo {
     width: 100%;
-    height: auto;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     display: block;
     margin: 0;
     background: transparent !important;
-    border-radius: 0 !important;
+    border-radius: 50%;
     box-shadow: none !important;
-    filter: drop-shadow(0 10px 22px rgba(0,0,0,0.28));
-    mix-blend-mode: multiply;
+    filter: none;
+    mix-blend-mode: normal;
 }
 
 .footer-brand-text {
@@ -2851,18 +2853,22 @@ td {
 
     .footer-logo-box {
         width: 118px;
-        height: auto;
-        border-radius: 0 !important;
+        height: 118px;
+        border-radius: 50%;
         margin: 0 auto;
-        background: transparent !important;
-        padding: 0 !important;
-        box-shadow: none !important;
-        border: none !important;
+        background: rgba(255,255,255,0.96);
+        padding: 0;
+        box-shadow: 0 12px 28px rgba(0,0,0,0.20);
+        border: 1px solid rgba(255,255,255,0.18);
+        overflow: hidden;
     }
 
     .footer-logo {
         width: 100%;
-        height: auto;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 50%;
     }
 
     .footer-brand h3 {
@@ -2886,5 +2892,45 @@ td {
         text-align: center;
         gap: 12px;
         margin-top: 30px;
+    }
+}
+
+/* AJUSTE FINAL - LOGO DEL FOOTER CIRCULAR */
+.main-footer .footer-logo-box {
+    width: 132px !important;
+    height: 132px !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    background: rgba(255,255,255,0.96) !important;
+    padding: 0 !important;
+    box-shadow: 0 14px 34px rgba(0,0,0,0.20) !important;
+    border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+.main-footer .footer-logo {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    border-radius: 50% !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    mix-blend-mode: normal !important;
+    filter: none !important;
+}
+
+@media (max-width: 700px) {
+    .main-footer .footer-logo-box {
+        width: 118px !important;
+        height: 118px !important;
+        border-radius: 50% !important;
+        overflow: hidden !important;
+    }
+
+    .main-footer .footer-logo {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        border-radius: 50% !important;
     }
 }
