@@ -2890,24 +2890,7 @@ td {
 }
 
 
-/* =========================================================
-   FIX FINAL: SOLO LOGO DEL FOOTER CIRCULAR
-   Este bloque evita afectar logos del header, menú o contacto.
-   ========================================================= */
 
-/* Resetea logos fuera del footer para que NO queden circulares */
-.main-header .header-logo,
-.header-logo,
-.side-menu .menu-logo-box img,
-.menu-logo-box img,
-.contact-logo,
-.contact-logo-box img,
-.footer:not(.main-footer) img {
-    border-radius: 0 !important;
-    object-fit: contain !important;
-    object-position: center !important;
-    clip-path: none !important;
-}
 
 /* Solo el contenedor del logo dentro del footer */
 .main-footer .footer-logo-box {
@@ -2974,5 +2957,88 @@ td {
         height: 100% !important;
         object-fit: cover !important;
         border-radius: 50% !important;
+    }
+}
+
+
+/* =========================================================
+   AJUSTE FINAL FOOTER - LOGO TRANSPARENTE
+   Requiere que en el index.html el logo del footer use:
+   EcoSpark_logo_transparente.png
+   Este bloque solo afecta el logo del footer.
+   ========================================================= */
+
+.main-footer .footer-logo-box {
+    width: 135px !important;
+    height: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    max-height: none !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+
+.main-footer .footer-logo,
+.main-footer img.footer-logo {
+    width: 135px !important;
+    height: auto !important;
+    max-width: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    filter: drop-shadow(0 10px 22px rgba(0,0,0,0.28)) !important;
+    mix-blend-mode: normal !important;
+}
+
+/* Asegura que otros logos de la web no reciban estilos del footer */
+.main-header .header-logo,
+.header-logo,
+.side-menu .menu-logo-box img,
+.menu-logo-box img,
+.contact-logo,
+.contact-logo-box img {
+    border-radius: 0 !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    clip-path: none !important;
+}
+
+/* Responsive: solo logo del footer */
+@media (max-width: 700px) {
+    .main-footer .footer-logo-box {
+        width: 118px !important;
+        height: auto !important;
+        margin: 0 auto !important;
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        overflow: visible !important;
+    }
+
+    .main-footer .footer-logo,
+    .main-footer img.footer-logo {
+        width: 118px !important;
+        height: auto !important;
+        object-fit: contain !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        filter: drop-shadow(0 8px 18px rgba(0,0,0,0.25)) !important;
     }
 }
