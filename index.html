@@ -3780,17 +3780,47 @@ Entiendo que la cotización es personalizada y que el precio puede variar según
                 const tabla = document.getElementById('tablaCitasAdmin');
                 tabla.innerHTML = "";
 
+                let citasActivas = 0;
+
                 snap.forEach(child => {
                     const d = child.val();
+                    const estado = String(d.estado || "activa").toLowerCase().trim();
+
+                    // Mostrar solo citas activas.
+                    // Las citas canceladas permanecen guardadas en Firebase,
+                    // pero no aparecen en el panel admin para evitar confusión.
+                    if (
+                        estado === "cancelada" ||
+                        estado === "cancelado" ||
+                        estado === "cancelled" ||
+                        estado === "canceled"
+                    ) {
+                        return;
+                    }
+
+                    citasActivas++;
+
+                    const horaTexto = d.hora === "12" ? "12:00 PM" : `${d.hora}:00 AM`;
+
                     tabla.innerHTML += `
                         <tr>
-                            <td>${d.nombre}</td>
-                            <td>${d.tel}</td>
-                            <td>${d.fecha} (${d.hora}:00)</td>
-                            <td>${d.servicio}</td>
+                            <td>${d.nombre || ""}</td>
+                            <td>${d.tel || d.telefono || ""}</td>
+                            <td>${d.fecha || ""} (${horaTexto})</td>
+                            <td>${d.servicio || ""}</td>
                         </tr>
                     `;
                 });
+
+                if (citasActivas === 0) {
+                    tabla.innerHTML = `
+                        <tr>
+                            <td colspan="4" style="text-align:center; color:#666; font-weight:600;">
+                                No hay citas activas en este momento.
+                            </td>
+                        </tr>
+                    `;
+                }
             });
         }
 
