@@ -2752,6 +2752,67 @@
                 transition: none;
             }
         }
+
+        /* BOTONES DE IDIOMA */
+        .language-switch {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(45, 90, 39, 0.07);
+            border: 1px solid rgba(45, 90, 39, 0.12);
+            padding: 6px;
+            border-radius: 999px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            z-index: 1001;
+        }
+
+        .lang-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 10px 13px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            cursor: pointer;
+            background: transparent;
+            color: #2d5a27;
+            transition: all 0.25s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(45, 90, 39, 0.12);
+            transform: translateY(-1px);
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(135deg, #2d5a27, #3e7a36);
+            color: #ffffff;
+            box-shadow: 0 8px 18px rgba(45, 90, 39, 0.25);
+        }
+
+        @media (max-width: 700px) {
+            .language-switch {
+                right: 0;
+                gap: 5px;
+                padding: 5px;
+            }
+
+            .lang-btn {
+                padding: 8px 9px;
+                font-size: 0.68rem;
+                letter-spacing: 0.4px;
+            }
+
+            .header-logo {
+                max-width: 34vw;
+            }
+        }
+
 </style>
 </head>
 <body>
@@ -2785,6 +2846,11 @@
             </button>
 
             <img src="EcoSpark_logo.png" alt="EcoSpark LLC Logo" class="header-logo">
+
+            <div class="language-switch" aria-label="Selector de idioma">
+                <button type="button" class="lang-btn active" id="btnES" onclick="setLanguage('es')">ESP</button>
+                <button type="button" class="lang-btn" id="btnEN" onclick="setLanguage('en')">ENG</button>
+            </div>
         </div>
     </header>
 
@@ -3599,11 +3665,11 @@
                 if (this.checked) {
                     quoteWhatsappBtn.disabled = false;
                     quoteWhatsappBtn.classList.remove('disabled');
-                    quoteWhatsappNote.textContent = 'Presione el botón para completar su solicitud por WhatsApp.';
+                    quoteWhatsappNote.textContent = ecoT('Presione el botón para completar su solicitud por WhatsApp.');
                 } else {
                     quoteWhatsappBtn.disabled = true;
                     quoteWhatsappBtn.classList.add('disabled');
-                    quoteWhatsappNote.textContent = 'Debe aceptar los términos de cotización para activar el botón de WhatsApp.';
+                    quoteWhatsappNote.textContent = ecoT('Debe aceptar los términos de cotización para activar el botón de WhatsApp.');
                 }
             });
         }
@@ -3670,7 +3736,7 @@ Entiendo que la cotización es personalizada y que el precio puede variar según
                 });
 
                 if(count === 0) {
-                    s.options.add(new Option("Sin disponibilidad hoy", ""));
+                    s.options.add(new Option(ecoT('Sin disponibilidad hoy'), ""));
                 }
             });
         }
@@ -3757,7 +3823,7 @@ Entiendo que la cotización es personalizada y que el precio puede variar según
                         cancel_url: cancelUrl
                     });
 
-                    alert("¡Cita reservada con éxito! Se envió un email de confirmación.");
+                    alert(ecoT('¡Cita reservada con éxito! Se envió un email de confirmación.'));
                 } else {
                     alert("¡Cita reservada con éxito! EmailJS no cargó, por eso no se pudo enviar el email de confirmación.");
                 }
@@ -4151,5 +4217,272 @@ Entiendo que la cotización es personalizada y que el precio puede variar según
             revealElements.forEach((element) => revealObserver.observe(element));
         });
     </script>
+
+    <script>
+        const ecoTranslations = {
+            "¿Quiénes somos?": "Who We Are",
+            "¿Por qué escogernos?": "Why Choose Us?",
+            "Servicios": "Services",
+            "Cotización": "Estimate",
+            "Sacar Cita": "Book Appointment",
+            "Contacto": "Contact",
+            "Admin": "Admin",
+            "En EcoSpark LLC somos una empresa local comprometida con ofrecer servicios de limpieza confiables, consistentes y de alta calidad. Nos especializamos en el mantenimiento de propiedades residenciales, comerciales y alquileres a corto plazo, adaptándonos a las necesidades de cada cliente.": "At EcoSpark LLC, we are a local company committed to providing reliable, consistent, and high-quality cleaning services. We specialize in maintaining residential properties, commercial spaces, and short-term rentals, adapting to each client’s needs.",
+            "Nuestro equipo está capacitado para brindar un servicio detallado y organizado, cuidando cada espacio como si fuera propio. Más allá de limpiar, nuestro enfoque es brindar un servicio de limpieza eficiente, organizado y con altos estándares de calidad en cada visita.": "Our team is trained to provide detailed and organized service, caring for every space as if it were our own. Beyond cleaning, our focus is to deliver efficient, organized cleaning with high quality standards on every visit.",
+            "En EcoSpark LLC combinamos confianza, organización y altos estándares para ofrecer una experiencia de limpieza profesional, segura y consistente en cada servicio.": "At EcoSpark LLC, we combine trust, organization, and high standards to deliver a professional, safe, and consistent cleaning experience in every service.",
+            "Personal confiable y verificado": "Reliable and Verified Staff",
+            "Nuestro equipo pasa por un riguroso proceso de selección que incluye verificación de antecedentes (background check).": "Our team goes through a rigorous selection process that includes background checks.",
+            "Seguridad y discreción": "Security and Discretion",
+            "Respetamos su espacio y operamos con el más alto nivel de responsabilidad y profesionalismo.": "We respect your space and operate with the highest level of responsibility and professionalism.",
+            "Transacciones seguras": "Secure Transactions",
+            "Procesamos pagos mediante ATH Móvil Negocios, una plataforma confiable, rápida y protegida.": "We process payments through ATH Móvil Negocios, a trusted, fast, and protected platform.",
+            "Estándares consistentes": "Consistent Standards",
+            "Cada servicio se realiza siguiendo procesos definidos para asegurar uniformidad y calidad.": "Each service follows defined processes to ensure consistency and quality.",
+            "Atención meticulosa": "Meticulous Attention",
+            "Ejecutamos cada limpieza con precisión, cuidando cada detalle.": "We perform every cleaning with precision, taking care of every detail.",
+            "Coordinación eficiente": "Efficient Coordination",
+            "Ofrecemos comunicación clara, puntualidad y flexibilidad según sus necesidades.": "We offer clear communication, punctuality, and flexibility based on your needs.",
+            "Servicios EcoSpark LLC": "EcoSpark LLC Services",
+            "Conoce nuestros servicios de limpieza profesional diseñados para mantener cada espacio limpio, organizado y agradable.": "Explore our professional cleaning services designed to keep every space clean, organized, and pleasant.",
+            "Servicio más solicitado": "Most Requested Service",
+            "Limpieza Básica": "Basic Cleaning",
+            "Nuestra limpieza básica es el servicio más solicitado y está diseñado para el mantenimiento regular de su propiedad, manteniendo cada espacio limpio, organizado y agradable.": "Our basic cleaning is our most requested service and is designed for regular property maintenance, keeping each space clean, organized, and pleasant.",
+            "Este servicio incluye:": "This service includes:",
+            "Control de polvo en superficies accesibles": "Dust control on accessible surfaces",
+            "Limpieza general de baños: lavamanos, inodoros, duchas y espejos": "General bathroom cleaning: sinks, toilets, showers, and mirrors",
+            "Limpieza de cocina: countertops, exterior de gabinetes y exterior de enseres": "Kitchen cleaning: countertops, cabinet exteriors, and appliance exteriors",
+            "Sacar la basura": "Trash removal",
+            "Limpieza de espejos": "Mirror cleaning",
+            "Hacer las camas": "Making the beds",
+            "Limpieza de pisos": "Floor cleaning",
+            "Antes": "Before",
+            "Después": "After",
+            "Limpieza detallada": "Detailed Cleaning",
+            "Limpieza Profunda": "Deep Cleaning",
+            "Nuestra limpieza profunda está diseñada para una intervención más detallada y minuciosa, ideal para propiedades que requieren una atención adicional o no han sido limpiadas recientemente.": "Our deep cleaning is designed for a more detailed and thorough service, ideal for properties that require extra attention or have not been cleaned recently.",
+            "Este servicio incluye todo lo contemplado en nuestra limpieza básica, más los siguientes adicionales:": "This service includes everything in our basic cleaning, plus the following additional items:",
+            "Limpieza del interior de gabinetes": "Interior cabinet cleaning",
+            "Limpieza del interior de enseres": "Interior appliance cleaning",
+            "Limpieza de zócalos": "Baseboard cleaning",
+            "Limpieza detallada en todas las áreas": "Detailed cleaning in all areas",
+            "Movimiento de muebles para acceder y limpiar áreas de difícil alcance": "Moving furniture to access and clean hard-to-reach areas",
+            "Este servicio permite alcanzar un nivel de limpieza más completo, atendiendo acumulaciones de suciedad que no se cubren en una limpieza regular.": "This service provides a more complete level of cleaning by addressing dirt buildup not covered in a regular cleaning.",
+            "Alquileres a corto plazo": "Short-Term Rentals",
+            "Limpieza de Airbnb's": "Airbnb Cleaning",
+            "Nuestro servicio de limpieza para Airbnb está diseñado para mantener la propiedad en condiciones óptimas entre cada reserva, asegurando una experiencia impecable para cada huésped.": "Our Airbnb cleaning service is designed to keep the property in optimal condition between each booking, ensuring an impeccable experience for every guest.",
+            "Realizamos una limpieza semiprofunda enfocada en los detalles necesarios para que la propiedad esté limpia, organizada y lista para recibir al próximo huésped.": "We perform a semi-deep cleaning focused on the details needed to keep the property clean, organized, and ready for the next guest.",
+            "Limpieza general de todas las áreas": "General cleaning of all areas",
+            "Laundry de ropa de cama y toallas": "Laundry for bedding and towels",
+            "Preparación de camas estilo hotel": "Hotel-style bed preparation",
+            "Organización y acomodo de toallas": "Towel organization and setup",
+            "Limpieza de baños y cocina": "Bathroom and kitchen cleaning",
+            "Control de polvo y limpieza de superficies": "Dust control and surface cleaning",
+            "Limpieza de pisos: barrido y trapeado según corresponda": "Floor cleaning: sweeping and mopping as needed",
+            "Revisión general del espacio antes de la entrega": "General space review before delivery",
+            "Nos enfocamos en cada detalle para que la propiedad proyecte limpieza, orden y una presentación profesional que contribuya a obtener excelentes reseñas en la experiencia de estadía.": "We focus on every detail so the property reflects cleanliness, order, and a professional presentation that helps achieve excellent guest reviews.",
+            "Lista para huéspedes": "Guest Ready",
+            "Presentación estilo hotel": "Hotel-Style Presentation",
+            "Entrega impecable": "Impeccable Delivery",
+            "Propiedades vacías": "Empty Properties",
+            "Limpieza de Mudanza": "Move-In / Move-Out Cleaning",
+            "Nuestro servicio de limpieza de mudanza está diseñado para propiedades vacías, ya sea para entrega o para prepararlas antes de ser habitadas.": "Our move-in/move-out cleaning service is designed for empty properties, whether for final delivery or preparation before being occupied.",
+            "Este servicio incluye una limpieza completa y detallada en todas las áreas, trabajando cada espacio desde cero para dejarlo en condiciones óptimas.": "This service includes a complete and detailed cleaning in all areas, working each space from the ground up to leave it in optimal condition.",
+            "Limpieza del interior y exterior de gabinetes": "Interior and exterior cabinet cleaning",
+            "Limpieza del interior y exterior de enseres": "Interior and exterior appliance cleaning",
+            "Limpieza de todas las superficies": "Cleaning of all surfaces",
+            "Limpieza de baños y cocina a profundidad": "Deep bathroom and kitchen cleaning",
+            "Eliminación de polvo y residuos acumulados": "Removal of accumulated dust and debris",
+            "Limpieza general en áreas vacías para un acabado uniforme": "General cleaning in empty areas for a uniform finish",
+            "Este servicio está enfocado en dejar la propiedad lista para su próxima etapa, ya sea para entrega, venta o para ser habitada nuevamente.": "This service focuses on leaving the property ready for its next stage, whether for delivery, sale, or occupancy.",
+            "Propiedad lista": "Property Ready",
+            "Después de construcción o renovación": "After Construction or Renovation",
+            "Limpieza Post-Remodelación": "Post-Remodeling Cleaning",
+            "Nuestro servicio de limpieza post-remodelación está diseñado para transformar espacios recién construidos o renovados en áreas completamente limpias, seguras y listas para ser habitadas.": "Our post-remodeling cleaning service is designed to transform newly built or renovated spaces into fully clean, safe, and ready-to-use areas.",
+            "Nos encargamos de eliminar a fondo el polvo fino de cemento y residuos de construcción que suelen acumularse en todas las superficies, incluyendo paredes, techos, ventanas, marcos, pisos y rincones de difícil acceso.": "We thoroughly remove fine cement dust and construction debris that often accumulates on all surfaces, including walls, ceilings, windows, frames, floors, and hard-to-reach corners.",
+            "Realizamos una limpieza detallada de gabinetes, topes, puertas, molduras y cualquier área afectada por el proceso de remodelación para lograr un acabado limpio, pulido y profesional.": "We perform detailed cleaning of cabinets, countertops, doors, moldings, and any area affected by the remodeling process to achieve a clean, polished, and professional finish.",
+            "Eliminación de polvo fino de cemento": "Fine cement dust removal",
+            "Remoción de residuos de construcción": "Construction debris removal",
+            "Limpieza de paredes, techos y superficies visibles": "Cleaning of walls, ceilings, and visible surfaces",
+            "Limpieza de ventanas, marcos y rincones difíciles": "Cleaning of windows, frames, and difficult corners",
+            "Limpieza detallada de gabinetes: interior y exterior": "Detailed cabinet cleaning: interior and exterior",
+            "Limpieza de topes, puertas y molduras": "Countertop, door, and molding cleaning",
+            "Remoción de manchas, residuos adheridos y partículas de obra": "Removal of stains, stuck-on residue, and construction particles",
+            "Limpieza de pisos para un acabado limpio y profesional": "Floor cleaning for a clean and professional finish",
+            "El resultado es un espacio renovado que pasa de ser una zona de obra a un ambiente fresco, ordenado y listo para disfrutar.": "The result is a renovated space that goes from a construction zone to a fresh, organized environment ready to enjoy.",
+            "Zona de obra": "Work Area",
+            "Espacio renovado": "Renewed Space",
+            "Orden y funcionalidad": "Order and Functionality",
+            "Servicio de Organización": "Organization Service",
+            "Nuestro servicio de organización está diseñado para áreas con alto nivel de acumulación o utilizadas como almacenamiento, con el objetivo de optimizar el espacio y mejorar su funcionalidad.": "Our organization service is designed for areas with high levels of accumulation or spaces used for storage, with the goal of optimizing space and improving functionality.",
+            "Trabajamos en la reorganización de pertenencias y distribución de áreas para lograr un entorno más ordenado, accesible y aprovechable.": "We work on reorganizing belongings and arranging areas to create a more orderly, accessible, and usable environment.",
+            "Este servicio aplica a:": "This service applies to:",
+            "Closets": "Closets",
+            "Áreas de storage": "Storage areas",
+            "Habitaciones con acumulación": "Rooms with accumulation",
+            "Espacios que requieren reorganización para ser habitables": "Spaces that require reorganization to be usable",
+            "Nos enfocamos en transformar áreas saturadas en espacios estructurados y funcionales, facilitando su uso diario.": "We focus on transforming cluttered areas into structured and functional spaces that are easier to use daily.",
+            "Espacios de trabajo": "Workspaces",
+            "Limpieza de Oficinas": "Office Cleaning",
+            "Nuestro servicio de limpieza de oficinas está diseñado para mantener espacios de trabajo limpios, organizados y en condiciones óptimas para el día a día.": "Our office cleaning service is designed to keep workspaces clean, organized, and in optimal condition for daily operations.",
+            "Limpieza de superficies de trabajo: escritorios, mesas y áreas comunes": "Cleaning work surfaces: desks, tables, and common areas",
+            "Control de polvo en áreas accesibles": "Dust control in accessible areas",
+            "Limpieza de baños y áreas de uso común": "Cleaning bathrooms and shared areas",
+            "Limpieza de cocina o área de descanso, de aplicar": "Cleaning kitchen or break area, if applicable",
+            "Vaciado de zafacones": "Trash bin emptying",
+            "Organización ligera de documentos o materiales en escritorio según indicaciones del cliente": "Light organization of documents or desk materials according to client instructions",
+            "Nos enfocamos en mantener un ambiente de trabajo limpio y ordenado, contribuyendo a una mejor presentación y funcionamiento del espacio.": "We focus on maintaining a clean and organized work environment, contributing to better presentation and functionality of the space.",
+            "Oficinas limpias y organizadas": "Clean and Organized Offices",
+            "Negocios y espacios comerciales": "Businesses and Commercial Spaces",
+            "Limpieza Comercial": "Commercial Cleaning",
+            "En EcoSpark LLC ofrecemos servicios de limpieza comercial diseñados para mantener su negocio en óptimas condiciones, proyectando una imagen profesional, limpia y acogedora para sus clientes y empleados.": "At EcoSpark LLC, we offer commercial cleaning services designed to keep your business in optimal condition, projecting a professional, clean, and welcoming image for your clients and employees.",
+            "Nuestro servicio se adapta a oficinas, locales comerciales, tiendas, consultorios, Airbnb comerciales y espacios de alto tráfico. Trabajamos por paquetes personalizados según las necesidades de cada cliente.": "Our service adapts to offices, commercial spaces, stores, clinics, commercial Airbnbs, and high-traffic areas. We work with customized packages based on each client’s needs.",
+            "Limpieza y desinfección de superficies: escritorios, counters y mesas de trabajo": "Cleaning and disinfecting surfaces: desks, counters, and work tables",
+            "Limpieza de baños: inodoros, lavamanos, espejos y reposición básica si aplica": "Bathroom cleaning: toilets, sinks, mirrors, and basic restocking if applicable",
+            "Recolección de basura y cambio de bolsas": "Trash collection and bag replacement",
+            "Limpieza de áreas comunes y recepción": "Cleaning common areas and reception",
+            "Limpieza de cristales accesibles en interior": "Cleaning accessible interior glass",
+            "Barrido, aspirado y mapeo de pisos": "Sweeping, vacuuming, and mopping floors",
+            "Desinfección de áreas de alto contacto: manijas, interruptores y puertas": "Disinfection of high-touch areas: handles, switches, and doors",
+            "Organización ligera de áreas visibles: documentos y mobiliario": "Light organization of visible areas: documents and furniture",
+            "Servicios adicionales disponibles:": "Additional services available:",
+            "Limpieza profunda o deep cleaning": "Deep cleaning",
+            "Limpieza de alfombras": "Carpet cleaning",
+            "Limpieza de ventanas interior/exterior, cotizado por separado": "Interior/exterior window cleaning, quoted separately",
+            "Organización de archivos o espacios": "File or space organization",
+            "Limpieza post-construcción o remodelación": "Post-construction or remodeling cleaning",
+            "Nuestro objetivo es que su espacio no solo esté limpio, sino que refleje profesionalismo y genere confianza en cada persona que lo visite.": "Our goal is for your space not only to be clean, but also to reflect professionalism and build trust with every person who visits.",
+            "Espacios comerciales limpios": "Clean Commercial Spaces",
+            "Cotizaciones": "Estimates",
+            "Todas nuestras cotizaciones se realizan de manera personalizada, tomando en consideración el tamaño de la propiedad, condición del espacio y el tipo de servicio requerido.": "All of our estimates are personalized, taking into consideration the property size, space condition, and type of service required.",
+            "Nuestros precios pueden variar según el alcance del trabajo y necesidades específicas. Para solicitar su cotización, puede comunicarse con nosotros por WhatsApp completando la información necesaria sobre su propiedad y el servicio que desea. Una vez recibido, nos comunicaremos directamente para brindarle un estimado y coordinar los próximos pasos.": "Our prices may vary depending on the scope of work and specific needs. To request your estimate, you can contact us through WhatsApp by completing the necessary information about your property and the service you need. Once received, we will contact you directly to provide an estimate and coordinate the next steps.",
+            "He leído y acepto los": "I have read and accept the",
+            "términos de cotización": "estimate terms",
+            ". Entiendo que la cotización es personalizada y que el precio final puede variar según el tamaño de la propiedad, condición del espacio y tipo de servicio requerido.": ". I understand that the estimate is personalized and that the final price may vary depending on the property size, space condition, and type of service required.",
+            "Solicitar cotización por WhatsApp": "Request Estimate via WhatsApp",
+            "Debe aceptar los términos de cotización para activar el botón de WhatsApp.": "You must accept the estimate terms to activate the WhatsApp button.",
+            "Reserva tu Cita": "Book Your Appointment",
+            "Nombre Completo": "Full Name",
+            "Teléfono": "Phone",
+            "Fecha": "Date",
+            "Horarios Disponibles": "Available Times",
+            ecoT('Seleccione una fecha primero...'): "Select a date first...",
+            "Limpieza Basica": "Basic Cleaning",
+            "RESERVA YA": "BOOK NOW",
+            "Contáctanos": "Contact Us",
+            "Escríbenos por WhatsApp": "Message Us on WhatsApp",
+            "Acceso Administrativo": "Administrative Access",
+            "Entrar al Panel": "Enter Panel",
+            "Regresar": "Go Back",
+            "Citas Recibidas": "Received Appointments",
+            "Nombre": "Name",
+            "Tel.": "Phone",
+            "Fecha/Hora": "Date/Time",
+            "Servicio": "Service",
+            "Control de Disponibilidad": "Availability Control",
+            "DISPONIBLE": "AVAILABLE",
+            "Cerrar Sesión": "Log Out",
+            "Limpieza profesional": "Professional Cleaning",
+            "Servicios de limpieza residencial, comercial, Airbnb y espacios especializados en Puerto Rico.": "Residential, commercial, Airbnb, and specialized space cleaning services in Puerto Rico.",
+            "Síguenos": "Follow Us",
+            "© 2026 EcoSpark LLC. Todos los derechos reservados.": "© 2026 EcoSpark LLC. All rights reserved.",
+            "Hecho por": "Made by",
+            ecoT('Sin disponibilidad hoy'): "No availability today",
+            ecoT('No hay citas activas en este momento.'): "There are no active appointments at this time.",
+            ecoT('Por favor complete todos los datos'): "Please complete all required information",
+            ecoT('Por favor escriba un email válido'): "Please enter a valid email address",
+            ecoT('¡Cita reservada con éxito! Se envió un email de confirmación.'): "Appointment booked successfully! A confirmation email was sent.",
+            ecoT('¡Cita reservada con éxito! La cita se guardó, pero el email no pudo enviarse.'): "Appointment booked successfully! The appointment was saved, but the email could not be sent.",
+            "Presione el botón para completar su solicitud por WhatsApp.": "Press the button to complete your request through WhatsApp."
+};
+        let currentLanguage = localStorage.getItem('ecoLang') || 'es';
+
+        function normalizeTextForLang(value) {
+            return String(value || '').replace(/\s+/g, ' ').trim();
+        }
+
+        function translateTextValue(value, lang) {
+            const normalized = normalizeTextForLang(value);
+            if (!normalized) return value;
+
+            if (lang === 'en') {
+                return ecoTranslations[normalized] || value;
+            }
+
+            if (lang === 'es') {
+                for (const [spanish, english] of Object.entries(ecoTranslations)) {
+                    if (normalizeTextForLang(english) === normalized) {
+                        return spanish;
+                    }
+                }
+            }
+
+            return value;
+        }
+
+        function applyLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('ecoLang', lang);
+            document.documentElement.lang = lang === 'en' ? 'en' : 'es';
+
+            const walker = document.createTreeWalker(
+                document.body,
+                NodeFilter.SHOW_TEXT,
+                {
+                    acceptNode(node) {
+                        const parent = node.parentElement;
+                        if (!parent) return NodeFilter.FILTER_REJECT;
+                        if (['SCRIPT', 'STYLE', 'NOSCRIPT'].includes(parent.tagName)) return NodeFilter.FILTER_REJECT;
+                        if (!normalizeTextForLang(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+                        return NodeFilter.FILTER_ACCEPT;
+                    }
+                }
+            );
+
+            const textNodes = [];
+            while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+            textNodes.forEach(node => {
+                const original = node.nodeValue;
+                const leading = original.match(/^\s*/)[0];
+                const trailing = original.match(/\s*$/)[0];
+                const normalized = normalizeTextForLang(original);
+                const translated = translateTextValue(normalized, lang);
+                if (translated !== normalized && translated !== original) {
+                    node.nodeValue = leading + translated + trailing;
+                }
+            });
+
+            document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(el => {
+                el.placeholder = translateTextValue(el.placeholder, lang);
+            });
+
+            document.querySelectorAll('option').forEach(option => {
+                option.textContent = translateTextValue(option.textContent, lang);
+            });
+
+            const btnES = document.getElementById('btnES');
+            const btnEN = document.getElementById('btnEN');
+            if (btnES && btnEN) {
+                btnES.classList.toggle('active', lang === 'es');
+                btnEN.classList.toggle('active', lang === 'en');
+            }
+
+            const note = document.getElementById('quoteWhatsappNote');
+            if (note) note.textContent = translateTextValue(note.textContent, lang);
+        }
+
+        function setLanguage(lang) {
+            applyLanguage(lang);
+        }
+
+        function ecoT(spanishText) {
+            return currentLanguage === 'en' ? (ecoTranslations[spanishText] || spanishText) : spanishText;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyLanguage(currentLanguage);
+        });
+    </script>
+
 </body>
 </html>
