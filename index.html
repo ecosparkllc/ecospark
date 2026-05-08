@@ -2813,6 +2813,109 @@
             }
         }
 
+
+        /* TABS DE SERVICIOS */
+        .service-tabs-wrap {
+            max-width: 980px;
+            margin: 0 auto 16px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px;
+            background: rgba(255,255,255,0.78);
+            border: 1px solid rgba(45, 90, 39, 0.10);
+            border-radius: 24px;
+            box-shadow: 0 14px 35px rgba(0,0,0,0.06);
+            position: relative;
+            z-index: 5;
+        }
+
+        .service-tab-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 12px 17px;
+            background: #f5faf5;
+            color: #2d5a27;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+            border: 1px solid rgba(45, 90, 39, 0.09);
+            transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .service-tab-btn:hover {
+            transform: translateY(-2px);
+            background: rgba(45, 90, 39, 0.10);
+            box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+        }
+
+        .service-tab-btn.active {
+            background: linear-gradient(135deg, #2d5a27, #3e7a36);
+            color: #ffffff;
+            box-shadow: 0 12px 28px rgba(45, 90, 39, 0.24);
+        }
+
+        .service-tabs-helper {
+            text-align: center;
+            color: #666;
+            font-size: 0.92rem;
+            font-weight: 600;
+            margin: 0 auto 24px;
+            line-height: 1.6;
+        }
+
+        .service-tab-panel {
+            display: none !important;
+            opacity: 0;
+            transform: translateY(16px);
+        }
+
+        .service-tab-panel.active {
+            display: grid !important;
+            opacity: 1;
+            transform: translateY(0);
+            animation: serviceTabFade 0.45s ease both;
+        }
+
+        @keyframes serviceTabFade {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .service-tabs-wrap {
+                justify-content: flex-start;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding: 12px;
+                margin-bottom: 14px;
+                border-radius: 20px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: thin;
+            }
+
+            .service-tab-btn {
+                padding: 11px 15px;
+                font-size: 0.82rem;
+                flex: 0 0 auto;
+            }
+
+            .service-tabs-helper {
+                font-size: 0.86rem;
+                padding: 0 12px;
+            }
+        }
+
 </style>
 </head>
 <body>
@@ -2990,8 +3093,24 @@
                     </p>
                 </div>
 
+                <!-- TABS DE SERVICIOS -->
+                <div class="service-tabs-wrap" aria-label="Selector de servicios">
+                    <button type="button" class="service-tab-btn active" data-service-tab="basic" onclick="showServiceTab('basic')">Limpieza Básica</button>
+                    <button type="button" class="service-tab-btn" data-service-tab="deep" onclick="showServiceTab('deep')">Limpieza Profunda</button>
+                    <button type="button" class="service-tab-btn" data-service-tab="airbnb" onclick="showServiceTab('airbnb')">Airbnb</button>
+                    <button type="button" class="service-tab-btn" data-service-tab="moving" onclick="showServiceTab('moving')">Mudanza</button>
+                    <button type="button" class="service-tab-btn" data-service-tab="remodeling" onclick="showServiceTab('remodeling')">Post-Remodelación</button>
+                    <button type="button" class="service-tab-btn" data-service-tab="organization" onclick="showServiceTab('organization')">Organización</button>
+                    <button type="button" class="service-tab-btn" data-service-tab="office" onclick="showServiceTab('office')">Oficinas</button>
+                    <button type="button" class="service-tab-btn" data-service-tab="commercial" onclick="showServiceTab('commercial')">Comercial</button>
+                </div>
+
+                <div class="service-tabs-helper">
+                    Seleccione un servicio para ver los detalles completos.
+                </div>
+
                 <!-- LIMPIEZA BÁSICA -->
-                <div class="service-detail-card">
+                <div class="service-detail-card service-tab-panel active" data-service-panel="basic">
                     <div class="service-content">
                         <div class="service-label">Servicio más solicitado</div>
 
@@ -3028,7 +3147,7 @@
                 </div>
 
                 <!-- LIMPIEZA PROFUNDA -->
-                <div class="service-detail-card deep-service-card">
+                <div class="service-detail-card service-tab-panel deep-service-card" data-service-panel="deep">
                     <div class="service-content">
                         <div class="service-label">Limpieza detallada</div>
 
@@ -3072,7 +3191,7 @@
 
 
                 <!-- LIMPIEZA DE AIRBNB'S -->
-                <div class="service-detail-card airbnb-service-card">
+                <div class="service-detail-card service-tab-panel airbnb-service-card" data-service-panel="airbnb">
                     <div class="service-content">
                         <div class="service-label">Alquileres a corto plazo</div>
 
@@ -3131,7 +3250,7 @@
 
 
                 <!-- LIMPIEZA DE MUDANZA -->
-                <div class="service-detail-card moving-service-card">
+                <div class="service-detail-card service-tab-panel moving-service-card" data-service-panel="moving">
                     <div class="service-content">
                         <div class="service-label">Propiedades vacías</div>
 
@@ -3185,7 +3304,7 @@
 
 
                 <!-- LIMPIEZA POST-REMODELACIÓN -->
-                <div class="service-detail-card remodeling-service-card">
+                <div class="service-detail-card service-tab-panel remodeling-service-card" data-service-panel="remodeling">
                     <div class="service-content">
                         <div class="service-label">Después de construcción o renovación</div>
 
@@ -3243,7 +3362,7 @@
 
 
                 <!-- SERVICIO DE ORGANIZACIÓN -->
-                <div class="service-detail-card organization-service-card">
+                <div class="service-detail-card service-tab-panel organization-service-card" data-service-panel="organization">
                     <div class="service-content">
                         <div class="service-label">Orden y funcionalidad</div>
 
@@ -3293,7 +3412,7 @@
 
 
                 <!-- LIMPIEZA DE OFICINAS -->
-                <div class="service-detail-card office-service-card">
+                <div class="service-detail-card service-tab-panel office-service-card" data-service-panel="office">
                     <div class="service-content">
                         <div class="service-label">Espacios de trabajo</div>
 
@@ -3330,7 +3449,7 @@
 
 
                 <!-- LIMPIEZA COMERCIAL -->
-                <div class="service-detail-card commercial-service-card">
+                <div class="service-detail-card service-tab-panel commercial-service-card" data-service-panel="commercial">
                     <div class="service-content">
                         <div class="service-label">Negocios y espacios comerciales</div>
 
@@ -4173,7 +4292,27 @@ Entiendo que la cotización es personalizada y que el precio puede variar según
         }
 
 
+
+        function showServiceTab(serviceName) {
+            const tabs = document.querySelectorAll('.service-tab-btn');
+            const panels = document.querySelectorAll('.service-tab-panel');
+
+            tabs.forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.serviceTab === serviceName);
+            });
+
+            panels.forEach(panel => {
+                const isActive = panel.dataset.servicePanel === serviceName;
+                panel.classList.toggle('active', isActive);
+
+                if (isActive) {
+                    panel.classList.add('visible');
+                }
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            showServiceTab('basic');
             actualizarWhyCarousel();
             iniciarWhyAutoSlide();
             actualizarAirbnbCarousel();
@@ -4220,6 +4359,12 @@ Entiendo que la cotización es personalizada y que el precio puede variar según
 
     <script>
         const ecoTranslations = {
+            "Seleccione un servicio para ver los detalles completos.": "Select a service to view the full details.",
+            "Airbnb": "Airbnb",
+            "Mudanza": "Move",
+            "Organización": "Organization",
+            "Oficinas": "Offices",
+            "Comercial": "Commercial",
             "¿Quiénes somos?": "Who We Are",
             "¿Por qué escogernos?": "Why Choose Us?",
             "Servicios": "Services",
